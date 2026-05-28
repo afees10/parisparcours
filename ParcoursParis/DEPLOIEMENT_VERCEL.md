@@ -1,98 +1,77 @@
-# 🚀 Guide de déploiement sur Vercel - ParcoursParis
+# Guide de Déploiement Vercel - ParcoursParis (Mis à jour)
 
-Ce guide t'explique comment mettre **ParcoursParis** en ligne gratuitement sur Vercel en moins de 5 minutes.
+## Problème actuel : 404 NOT_FOUND
 
----
+Si tu as toujours l'erreur 404 après avoir poussé, c'est presque toujours à cause des réglages dans Vercel.
 
-## Option 1 : La plus simple (recommandée pour la présentation)
+## Configuration exacte à mettre dans Vercel
 
-### Méthode Drag & Drop (sans Git)
+Va dans ton projet → **Settings** → **General** → **Build & Development Settings**
 
-1. Va sur : [https://vercel.com](https://vercel.com)
-2. Connecte-toi avec ton compte **GitHub** (ou crée un compte gratuitement)
-3. Une fois connecté, clique sur le bouton **"Add New Project"**
-4. Dans la section **"Import Third-Party Git Repository"**, descends et clique sur **"Import Git Repository"** → puis choisis **"Continue with GitHub"** si demandé.
-5. **Méthode ultra-simple (sans repo) :**
-   - Va directement ici : [https://vercel.com/new](https://vercel.com/new)
-   - Clique sur **"Browse"** ou glisse-dépose le dossier entier `ParcoursParis`
-   - Vercel va détecter automatiquement `index.html`
-   - Clique sur **Deploy**
+Règle comme ceci :
 
-Tu auras une URL du type : `https://parcours-paris-xxx.vercel.app`
+- **Framework Preset** : `Other`
+- **Root Directory** : **Laisser VIDE** (supprime le `./` si présent !)
+- **Build Command** : Laisser **VIDE**
+- **Output Directory** : `.` (juste un point)
+- **Install Command** : Laisser **VIDE**
 
----
+Puis clique sur **Save**.
 
-## Option 2 : Méthode propre (recommandée à long terme)
+## Après avoir sauvegardé
 
-### Avec GitHub + Vercel
+1. Va dans l'onglet **Deployments**
+2. Clique sur les 3 points à côté du dernier déploiement
+3. Clique sur **Redeploy**
 
-**Étape 1 : Installer Git (si pas déjà fait)**
+## Analyse du log que tu as envoyé
 
-1. Télécharge Git ici : https://git-scm.com/download/win
-2. Installe-le avec les options par défaut.
-3. Redémarre ton terminal PowerShell après l'installation.
-
-**Étape 2 : Créer un repository GitHub**
-
-1. Va sur [https://github.com](https://github.com) et connecte-toi.
-2. Clique sur le bouton vert **"New"** (ou **"New repository"**).
-3. Nomme-le : `parcours-paris` (ou ce que tu veux).
-4. Laisse les options par défaut (Public ou Private selon ton choix).
-5. Clique sur **"Create repository"**.
-
-**Étape 3 : Initialiser Git localement**
-
-Ouvre PowerShell et exécute les commandes suivantes :
-
-```powershell
-cd "$env:USERPROFILE\Projets\ParcoursParis"
-
-git init
-git add .
-git commit -m "Initial commit - ParcoursParis ISAE-Supmeca"
+Le log montre :
+```
+Running "vercel build"
+Vercel CLI 54.4.1
 ```
 
-**Étape 4 : Lier à GitHub**
+**C’est le problème.** Vercel est en train d’essayer de lancer un build (via `vercel build`), alors que ton site est 100% statique (juste un `index.html`).
 
-Sur la page de ton nouveau repo GitHub, copie les commandes indiquées dans la section **"...or push an existing repository from the command line"**.
+### Solution prioritaire (à faire maintenant)
 
-Exemple :
+Va dans **Settings → General → Build & Development Settings** et mets :
 
-```powershell
-git remote add origin https://github.com/TON_PSEUDO/parcours-paris.git
-git branch -M main
-git push -u origin main
+- **Framework Preset** : Other
+- **Root Directory** : (vide) ou `./`
+- **Build Command** : **(vide)** ← vide complètement
+- **Output Directory** : `.`
+- **Install Command** : **(vide)** ← vide complètement
+
+Puis **Save**, et fais un **Redeploy** sur le dernier commit.
+
+---
+
+## Si ça ne marche toujours pas
+
+1. Supprime le projet actuel sur Vercel
+2. Recommence l'import depuis GitHub
+3. Sur l'écran d'import, mets exactement :
+   - Framework Preset : Other
+   - Root Directory : (vide)
+   - Build Command : (vide)
+   - Output Directory : .
+   - Install Command : (vide)
+
+## Fichier vercel.json recommandé
+
+Le fichier `vercel.json` dans le repo doit contenir :
+
+```json
+{
+  "outputDirectory": ".",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
 ```
 
-**Étape 5 : Déployer sur Vercel**
-
-1. Retourne sur [https://vercel.com](https://vercel.com)
-2. Clique sur **"Add New Project"**
-3. Tu devrais voir ton repo `parcours-paris` apparaître.
-4. Clique sur **Import**.
-5. Vercel va détecter automatiquement que c'est un site statique.
-6. Clique sur **Deploy**.
-
 ---
 
-## Après le déploiement
-
-- Vercel te donne une URL propre.
-- Tu peux la personnaliser dans les settings du projet (ex: `parcours-paris-isae.vercel.app`).
-- Chaque fois que tu pushes sur GitHub, Vercel redéploie automatiquement.
-
----
-
-## Conseils pour ta présentation
-
-1. **Change le nom du projet** dans Vercel (Settings → General → Project Name) pour avoir une URL plus belle.
-2. Ajoute éventuellement un petit footer avec le lien du repo GitHub pour montrer que c'est un vrai projet versionné.
-3. Teste bien le site sur mobile avant la présentation.
-
----
-
-## Besoin d'aide ?
-
-Si tu bloques à une étape, envoie-moi un message avec l'erreur que tu vois.
-
-Bonne présentation ! 🎓
+Dernière mise à jour : 28 mai 2026

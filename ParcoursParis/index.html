@@ -24,6 +24,8 @@
         
         body {
             font-family: 'Inter', system_ui, sans-serif;
+            background-color: #070A12; /* Dark like the hero */
+            color: #F8F9FA;
         }
         
         .heading-serif {
@@ -44,6 +46,7 @@
             --school-accent-dark: #E05200;
             --school-text: #F8F9FA;
             --school-muted: #A0AEC0;
+            --school-light-bg: #F8F7F4;    /* Soft warm off-white */
         }
 
         .paris-premium-gradient {
@@ -51,12 +54,21 @@
         }
 
         .activity-card {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
         
         .activity-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgb(15 23 42 / 0.12), 0 8px 10px -6px rgb(15 23 42 / 0.1);
+            border-color: #e2e8f0;
+        }
+
+        .card-image {
+            transition: transform 0.3s ease;
+        }
+        .activity-card:hover .card-image {
+            transform: scale(1.03);
         }
 
         .nav-link {
@@ -113,12 +125,18 @@
 
         .filter-btn {
             transition: all 0.1s ease;
+            color: #D1D5DB;
+            border-color: #374151;
         }
         
         .filter-btn.active {
             background-color: var(--school-accent);
             color: white;
             border-color: var(--school-accent);
+        }
+        
+        .filter-btn:not(.active) {
+            background-color: #1F2937;
         }
 
         .activity-time {
@@ -171,7 +189,7 @@
 
         .view-toggle {
             display: inline-flex;
-            background: #f1f5f9;
+            background: #1F2937;
             border-radius: 9999px;
             padding: 3px;
         }
@@ -182,12 +200,13 @@
             font-size: 0.875rem;
             font-weight: 600;
             transition: all 0.15s ease;
+            color: #9CA3AF;
         }
 
         .view-toggle button.active {
-            background: white;
-            box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
-            color: var(--school-accent);
+            background: #374151;
+            box-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
+            color: white;
             font-weight: 700;
         }
 
@@ -245,35 +264,36 @@
         .bg-accent-teal { background-color: #0F766E; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body class="bg-[#070A12] text-white">
     <!-- NAVBAR -->
-    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <nav class="bg-[#0B0F1C] border-b border-white/10 sticky top-0 z-50">
         <div class="max-w-screen-xl mx-auto">
             <div class="px-6 h-16 flex items-center justify-between">
                 <div class="flex items-center gap-x-3">
                     <div class="w-10 h-10 bg-[var(--school-accent)] rounded-2xl flex items-center justify-center">
                         <span class="text-white text-2xl font-bold tracking-tighter">PP</span>
                     </div>
-                    <div>
+                    <div class="flex items-center gap-x-2">
                         <span class="font-semibold text-2xl tracking-tighter">Parcours</span>
                         <span class="font-semibold text-2xl tracking-tighter text-[var(--school-accent)]">Paris</span>
+                        <span class="ml-2 text-[10px] px-2 py-0.5 bg-[var(--school-accent)] text-white rounded-full font-semibold tracking-wider">ISAE-SUPMÉCA</span>
                     </div>
                 </div>
 
                 <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
-                    <a href="#cette-semaine" class="nav-link text-slate-600 hover:text-slate-900">Cette semaine</a>
-                    <a href="#carte" class="nav-link text-slate-600 hover:text-slate-900">Carte</a>
-                    <a href="#parcours" class="nav-link text-slate-600 hover:text-slate-900">Les parcours</a>
-                    <a href="#planning" class="nav-link text-slate-600 hover:text-slate-900">Mon planning</a>
+                    <a href="#cette-semaine" class="nav-link text-slate-300 hover:text-white">Cette semaine</a>
+                    <a href="#carte" class="nav-link text-slate-300 hover:text-white">Carte</a>
+                    <a href="#parcours" class="nav-link text-slate-300 hover:text-white">Les parcours</a>
+                    <a href="#planning" class="nav-link text-slate-300 hover:text-white">Mon planning</a>
                 </div>
 
                 <div class="flex items-center gap-x-3">
-                    <div class="hidden sm:flex items-center bg-slate-100 rounded-full px-3 py-1.5 text-xs font-medium text-slate-600">
+                    <div class="hidden sm:flex items-center bg-white/10 rounded-full px-3 py-1.5 text-xs font-medium text-slate-300">
                         <div class="w-2 h-2 bg-[var(--school-accent)] rounded-full mr-2 animate-pulse"></div>
                         Semaine du 25-31 mai 2026
                     </div>
                     <button onclick="showQuiz()"
-                            class="px-4 py-2 text-sm font-semibold bg-white hover:bg-slate-50 border border-slate-300 rounded-2xl flex items-center gap-x-2 transition-colors">
+                            class="px-4 py-2 text-sm font-semibold bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-2xl flex items-center gap-x-2 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17.687a.75.75 0 01-.36-.127L3 14.25m9.663 3.437l.001-.001m0 0l9-5.25m-9 5.25v-8.25m9 8.25l-9-5.25m9-5.25l-9 5.25m0 0L3 9.75" />
                         </svg>
@@ -303,8 +323,8 @@
                 </h1>
                 
                 <p class="text-xl text-slate-300 max-w-md mb-9">
-                    L’application pensée pour les nouveaux étudiants de l’ISAE-Supmeca.<br>
-                    Activités sélectionnées, parcours prêts à l’emploi, tout est là.
+                    L’application des nouveaux étudiants ISAE-Supmeca.<br>
+                    Activités et événements réels de la Ville de Paris + parcours prêts à suivre.
                 </p>
 
                 <div class="flex flex-wrap gap-4">
@@ -337,39 +357,77 @@
     </div>
 
     <!-- STATS BAR -->
-    <div class="border-b border-slate-200 bg-white">
+    <div class="border-b border-white/10" style="background-color: #0B0F1C;">
         <div class="max-w-screen-xl mx-auto px-6 py-4">
-            <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-sm">
-                <div class="flex items-center gap-x-2 text-slate-600">
+            <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-sm text-slate-300">
+                <div class="flex items-center gap-x-2">
                     <span class="font-medium">Semaine du 25 au 31 mai 2026</span>
-                    <span class="text-slate-400">•</span>
+                    <span class="text-white/30">•</span>
                     <span class="text-[var(--school-accent)] font-medium">Météo : 19-24°C, ensoleillé</span>
                 </div>
-                <div class="text-slate-500 text-xs md:text-sm">
+                <div class="text-slate-300 text-xs md:text-sm">
                     Mis à jour aujourd'hui à 08:42 • Données ouvertes + curation étudiante
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- PAGE D'ACCUEIL / VALUE PROPOSITION -->
+    <div class="max-w-screen-xl mx-auto px-6 py-8" style="background-color: #0B0F1C;">
+        <div class="text-center max-w-2xl mx-auto">
+            <h2 class="text-3xl font-semibold tracking-tight mb-3 text-white">Bienvenue aux nouveaux étudiants de l'ISAE-Supmeca</h2>
+            <p class="text-slate-200 text-lg">
+                Application des nouveaux étudiants de l’ISAE-Supmeca. 
+                Nous tentons automatiquement de charger les vraies données de Paris Open Data au démarrage (jusqu’à 3 essais). 
+                Si ce n’est pas possible, une version de démonstration de qualité est utilisée.
+            </p>
+        </div>
+    </div>
+
+    <!-- COMMENT ÇA MARCHE -->
+    <div class="max-w-screen-xl mx-auto px-6 pt-6 pb-4">
+        <div class="text-center mb-8">
+            <span class="uppercase tracking-[2px] text-xs font-semibold text-[var(--school-accent)]">Simple comme bonjour</span>
+            <h2 class="text-3xl font-semibold tracking-tight mt-1 text-white">Comment ça marche ?</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-6">
+                <div class="w-9 h-9 rounded-2xl bg-[var(--school-accent)] text-white flex items-center justify-center font-bold mb-4">1</div>
+                <h3 class="font-semibold text-lg mb-2 text-white">Explore les activités</h3>
+                <p class="text-sm text-slate-200">Filtre par jour, catégorie ou prix. Toutes les activités sont issues de données ouvertes de la Ville de Paris.</p>
+            </div>
+            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-6">
+                <div class="w-9 h-9 rounded-2xl bg-[var(--school-accent)] text-white flex items-center justify-center font-bold mb-4">2</div>
+                <h3 class="font-semibold text-lg mb-2 text-white">Choisis ou suis un parcours</h3>
+                <p class="text-sm text-slate-200">Sélectionne un itinéraire thématique prêt à l’emploi (Street Art, Nature, Soirée étudiante…) ou crée ton propre planning.</p>
+            </div>
+            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-6">
+                <div class="w-9 h-9 rounded-2xl bg-[var(--school-accent)] text-white flex items-center justify-center font-bold mb-4">3</div>
+                <h3 class="font-semibold text-lg mb-2 text-white">Profite de ta semaine</h3>
+                <p class="text-sm text-slate-200">Ajoute tout à ton planning personnel. Tout est sauvegardé dans ton navigateur, prêt à être exporté.</p>
+            </div>
+        </div>
+    </div>
+
     <!-- CETTE SEMAINE -->
-    <div id="cette-semaine" class="max-w-screen-xl mx-auto px-6 pt-10 pb-8">
+    <div id="cette-semaine" class="max-w-screen-xl mx-auto px-6 pt-10 pb-8 bg-[#0B0F1C] rounded-3xl shadow-sm mt-4 border border-white/10">
         <div class="flex items-end justify-between mb-6">
             <div>
                 <span class="uppercase tracking-[1.5px] text-xs font-semibold text-[var(--school-accent)]">Semaine actuelle</span>
-                <h2 class="section-title font-semibold tracking-tight">Que faire cette semaine ?</h2>
+                <h2 class="section-title font-semibold tracking-tight text-white">Que faire cette semaine ?</h2>
             </div>
             
             <!-- Quick filters -->
             <div class="hidden md:flex items-center gap-x-2 text-sm">
-                <button onclick="filterByDay('all')" class="filter-btn active px-4 py-1.5 border border-slate-300 rounded-2xl text-sm font-medium" id="day-all">Tous les jours</button>
-                <button onclick="filterByDay('Lundi')" class="filter-btn px-4 py-1.5 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-medium" id="day-Lundi">Lun</button>
-                <button onclick="filterByDay('Mardi')" class="filter-btn px-4 py-1.5 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-medium" id="day-Mardi">Mar</button>
-                <button onclick="filterByDay('Mercredi')" class="filter-btn px-4 py-1.5 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-medium" id="day-Mercredi">Mer</button>
-                <button onclick="filterByDay('Jeudi')" class="filter-btn px-4 py-1.5 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-medium" id="day-Jeudi">Jeu</button>
-                <button onclick="filterByDay('Vendredi')" class="filter-btn px-4 py-1.5 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-medium" id="day-Vendredi">Ven</button>
-                <button onclick="filterByDay('Samedi')" class="filter-btn px-4 py-1.5 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-medium" id="day-Samedi">Sam</button>
-                <button onclick="filterByDay('Dimanche')" class="filter-btn px-4 py-1.5 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-medium" id="day-Dimanche">Dim</button>
+                <button onclick="filterByDay('all')" class="filter-btn active px-4 py-1.5 border border-white/20 rounded-2xl text-sm font-medium" id="day-all">Tous les jours</button>
+                <button onclick="filterByDay('Lundi')" class="filter-btn px-4 py-1.5 border border-white/10 hover:border-white/30 rounded-2xl text-sm font-medium" id="day-Lundi">Lun</button>
+                <button onclick="filterByDay('Mardi')" class="filter-btn px-4 py-1.5 border border-white/10 hover:border-white/30 rounded-2xl text-sm font-medium" id="day-Mardi">Mar</button>
+                <button onclick="filterByDay('Mercredi')" class="filter-btn px-4 py-1.5 border border-white/10 hover:border-white/30 rounded-2xl text-sm font-medium" id="day-Mercredi">Mer</button>
+                <button onclick="filterByDay('Jeudi')" class="filter-btn px-4 py-1.5 border border-white/10 hover:border-white/30 rounded-2xl text-sm font-medium" id="day-Jeudi">Jeu</button>
+                <button onclick="filterByDay('Vendredi')" class="filter-btn px-4 py-1.5 border border-white/10 hover:border-white/30 rounded-2xl text-sm font-medium" id="day-Vendredi">Ven</button>
+                <button onclick="filterByDay('Samedi')" class="filter-btn px-4 py-1.5 border border-white/10 hover:border-white/30 rounded-2xl text-sm font-medium" id="day-Samedi">Sam</button>
+                <button onclick="filterByDay('Dimanche')" class="filter-btn px-4 py-1.5 border border-white/10 hover:border-white/30 rounded-2xl text-sm font-medium" id="day-Dimanche">Dim</button>
             </div>
         </div>
 
@@ -378,14 +436,14 @@
             <div class="relative">
                 <input id="search-input" type="text" placeholder="Rechercher une activité..." 
                        onkeyup="filterActivities()"
-                       class="pl-10 pr-4 py-2.5 w-72 bg-white border border-slate-200 focus:border-slate-400 rounded-3xl text-sm placeholder:text-slate-400 outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 absolute left-4 top-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                       class="pl-10 pr-4 py-2.5 w-72 bg-[#1F2937] border border-white/10 focus:border-[var(--school-accent)] rounded-3xl text-sm placeholder:text-slate-300 text-white outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 absolute left-4 top-3.5 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
             </div>
 
             <select id="category-filter" onchange="filterActivities()" 
-                    class="px-4 py-2.5 bg-white border border-slate-200 rounded-3xl text-sm font-medium text-slate-700 outline-none">
+                    class="px-4 py-2.5 bg-[#1F2937] border border-white/10 rounded-3xl text-sm font-medium text-white outline-none">
                 <option value="">Toutes les catégories</option>
                 <option value="Culture">Culture &amp; Musées</option>
                 <option value="Nature">Nature &amp; Promenades</option>
@@ -397,7 +455,7 @@
             </select>
 
             <select id="price-filter" onchange="filterActivities()" 
-                    class="px-4 py-2.5 bg-white border border-slate-200 rounded-3xl text-sm font-medium text-slate-700 outline-none">
+                    class="px-4 py-2.5 bg-[#1F2937] border border-white/10 rounded-3xl text-sm font-medium text-white outline-none">
                 <option value="">Tous les prix</option>
                 <option value="gratuit">Gratuit</option>
                 <option value="low">Moins de 10€</option>
@@ -405,14 +463,14 @@
             </select>
 
             <button onclick="resetFilters()" 
-                    class="px-5 py-2.5 text-sm font-medium border border-slate-200 hover:bg-slate-50 rounded-3xl transition-colors flex items-center gap-x-2">
+                    class="px-5 py-2.5 text-sm font-medium border border-white/20 hover:bg-white/10 rounded-3xl transition-colors flex items-center gap-x-2 text-white">
                 <span>Réinitialiser</span>
             </button>
         </div>
 
         <!-- Activities Grid + View Toggle -->
         <div class="flex items-center justify-between mb-3">
-            <div class="text-sm font-medium text-slate-600">
+            <div class="text-sm font-medium text-slate-300">
                 <span id="results-count"></span>
             </div>
             
@@ -432,10 +490,10 @@
         <!-- CARTE INTERACTIVE -->
         <div id="map-view" class="hidden">
             <div class="map-section premium-shadow">
-                <div class="px-6 py-4 border-b flex items-center justify-between bg-slate-50">
+                <div class="px-6 py-4 border-b flex items-center justify-between" style="background-color: #111827; border-color: rgba(255,255,255,0.1);">
                     <div>
-                        <span class="font-semibold">Carte des activités</span>
-                        <span class="text-xs text-slate-500 ml-2">• Clique sur un marqueur pour voir les détails</span>
+                        <span class="font-semibold text-white">Carte des activités</span>
+                        <span class="text-xs text-slate-300 ml-2">• Clique sur un marqueur pour voir les détails</span>
                     </div>
                     <div class="text-xs text-[var(--school-accent)] font-medium flex items-center gap-x-1">
                         <div class="w-2 h-2 bg-[var(--school-accent)] rounded-full"></div>
@@ -443,9 +501,9 @@
                     </div>
                 </div>
                 <div id="leaflet-map" class="w-full h-[460px] z-10"></div>
-                <div class="px-6 py-3 bg-white border-t text-[11px] text-slate-500 flex items-center gap-x-4">
+                <div class="px-6 py-3 border-t text-[11px] text-slate-300 flex items-center gap-x-4" style="background-color: #0B0F1C; border-color: rgba(255,255,255,0.1);">
                     <div>Zoom sur Paris</div>
-                    <div class="flex-1 h-px bg-slate-100"></div>
+                    <div class="flex-1 h-px bg-white/10"></div>
                     <div class="font-medium">Les marqueurs sont synchronisés avec tes filtres</div>
                 </div>
             </div>
@@ -453,13 +511,13 @@
     </div>
 
     <!-- PARCOURS SECTION -->
-    <div id="parcours" class="bg-white border-t border-b border-slate-200 py-12">
+    <div id="parcours" class="border-t border-b border-white/10 py-12" style="background-color: #0B0F1C;">
         <div class="max-w-screen-xl mx-auto px-6">
             <div class="flex items-end justify-between mb-7">
                 <div>
                     <span class="uppercase tracking-[1.5px] text-xs font-semibold text-[var(--school-accent)]">Le vrai plus de l'appli</span>
                     <h2 class="section-title font-semibold tracking-tight">Des parcours déjà prêts</h2>
-                    <p class="text-slate-600 mt-1">4 itinéraires pensés pour les étudiants qui arrivent à Paris. Zéro organisation.</p>
+                    <p class="text-slate-300 mt-1">4 itinéraires pensés pour les étudiants qui arrivent à Paris. Zéro organisation.</p>
                 </div>
                 <a href="#" onclick="document.getElementById('parcours').scrollIntoView({behavior:'smooth'})" class="hidden md:block text-sm font-semibold text-[var(--school-accent)] hover:text-[var(--school-accent-dark)]">Voir tous →</a>
             </div>
@@ -471,15 +529,15 @@
     </div>
 
     <!-- PLANNING PERSONNEL -->
-    <div id="planning" class="max-w-screen-xl mx-auto px-6 py-12">
+    <div id="planning" class="max-w-screen-xl mx-auto px-6 py-12 bg-[#0B0F1C] rounded-3xl border border-white/10">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h2 class="section-title font-semibold tracking-tight">Ton planning de la semaine</h2>
+                <h2 class="section-title font-semibold tracking-tight text-white">Ton planning de la semaine</h2>
                 <span class="text-xs uppercase tracking-widest text-[var(--school-accent)] font-semibold">ISAE-Supmeca</span>
-                <p class="text-slate-600">Ajoute des activités et des parcours. Ton planning reste enregistré sur ton navigateur.</p>
+                <p class="text-slate-300">Ajoute des activités et des parcours. Ton planning reste enregistré sur ton navigateur.</p>
             </div>
             <button onclick="exportPlanning()" 
-                    class="flex items-center gap-x-2 px-5 h-10 text-sm font-semibold border border-slate-300 hover:border-[var(--school-accent)] hover:text-[var(--school-accent)] rounded-3xl transition-colors">
+                    class="flex items-center gap-x-2 px-5 h-10 text-sm font-semibold border border-white/20 hover:border-[var(--school-accent)] hover:text-[var(--school-accent)] rounded-3xl transition-colors text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13v6m0 0H7m10 0v-6m-5 0v6m-5-6v6" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7v12m0 0l-4-4m4 4l4-4" />
@@ -488,30 +546,30 @@
             </button>
         </div>
 
-        <div id="planning-content" class="bg-white border border-slate-200 rounded-3xl p-6 min-h-[200px]">
+        <div id="planning-content" class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-6 min-h-[200px]">
             <!-- Dynamic planning content -->
         </div>
     </div>
 
     <!-- FOOTER / INFO -->
-    <div class="border-t border-slate-200 bg-white">
-        <div class="max-w-screen-xl mx-auto px-6 py-8 text-xs text-slate-500">
+    <div class="border-t border-white/10" style="background-color: #070A12;">
+        <div class="max-w-screen-xl mx-auto px-6 py-8 text-xs text-slate-300">
             <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
                 <div>
-                    <span class="font-medium text-slate-700">Sources des données</span><br>
-                    <span id="data-status">Photos des lieux • Données Paris Open Data</span><br>
-                    <span class="text-[11px]">Projet étudiant ISAE-Supmeca 2026</span>
+                    <span class="font-medium text-white">Sources des données</span><br>
+                    <span id="data-status">Chargement automatique des données réelles...</span><br>
+                    <span class="text-[11px]">Projet étudiant ISAE-Supmeca 2026 • Mise à jour auto au démarrage</span>
                 </div>
 
                 <div class="flex items-center gap-x-3">
                     <button onclick="loadFromParisOpenData()" 
-                            class="px-4 py-2 bg-[var(--school-accent)] hover:bg-[var(--school-accent-dark)] text-white rounded-2xl text-xs font-semibold transition-colors">
-                        Mettre à jour depuis Paris Open Data
+                            class="flex items-center gap-x-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-2xl text-xs font-medium transition-colors">
+                        <span>🔄 Forcer une nouvelle tentative</span>
                     </button>
-                    <button onclick="showDataSources()" class="px-4 py-2 border border-slate-300 hover:bg-slate-50 rounded-2xl text-xs font-medium transition-colors">
+                    <button onclick="showDataSources()" class="px-4 py-2 border border-white/20 hover:bg-white/10 rounded-2xl text-xs font-medium transition-colors text-white">
                         Comment automatiser
                     </button>
-                    <button onclick="showAbout()" class="hover:text-slate-700 underline text-xs">À propos</button>
+                    <button onclick="showAbout()" class="hover:text-white underline text-xs">À propos</button>
                 </div>
             </div>
         </div>
@@ -519,7 +577,7 @@
 
     <!-- ACTIVITY MODAL -->
     <div id="activity-modal" onclick="if (event.target.id === 'activity-modal') closeModal()" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-        <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-lg rounded-3xl overflow-hidden modal">
+        <div onclick="event.stopImmediatePropagation()" class="bg-[#0B0F1C] border border-white/10 w-full max-w-lg rounded-3xl overflow-hidden modal">
             <div id="modal-content">
                 <!-- JS injected -->
             </div>
@@ -528,10 +586,10 @@
 
     <!-- QUIZ MODAL -->
     <div id="quiz-modal" onclick="if (event.target.id === 'quiz-modal') closeQuiz()" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[110] flex items-center justify-center p-4">
-        <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-md rounded-3xl overflow-hidden">
+        <div onclick="event.stopImmediatePropagation()" class="bg-[#0B0F1C] border border-white/10 w-full max-w-md rounded-3xl overflow-hidden">
             <div class="px-6 py-5 border-b flex items-center justify-between">
                 <div class="font-semibold text-lg">Trouve ton parcours idéal</div>
-                <button onclick="closeQuiz()" class="text-slate-400 hover:text-slate-600">✕</button>
+                <button onclick="closeQuiz()" class="text-slate-300 hover:text-white">✕</button>
             </div>
             <div id="quiz-content" class="p-6">
                 <!-- JS content -->
@@ -1140,7 +1198,7 @@
             if (filteredActivities.length === 0) {
                 container.innerHTML = `
                     <div class="col-span-full py-10 text-center">
-                        <p class="text-slate-500">Aucune activité ne correspond à tes filtres.</p>
+                        <p class="text-slate-300">Aucune activité ne correspond à tes filtres.</p>
                         <button onclick="resetFilters()" class="mt-4 text-sm text-[var(--school-accent)] font-medium hover:underline">Réinitialiser les filtres</button>
                     </div>
                 `;
@@ -1158,17 +1216,17 @@
                 const isFavorite = userFavorites.includes(activity.id);
 
                 const cardHTML = `
-                    <div class="activity-card bg-white border border-slate-200 rounded-3xl overflow-hidden flex flex-col h-full cursor-pointer" onclick="showActivityModal(${activity.id})">
+                    <div class="activity-card bg-[#0B0F1C] border border-white/10 rounded-3xl overflow-hidden flex flex-col h-full cursor-pointer" onclick="showActivityModal(${activity.id})">
                         <!-- Image Header -->
                         <div class="card-image rounded-t-3xl" style="background-image: url('${imgUrl}')">
-                            <div class="price-badge px-3 py-0.5 text-[11px] font-bold ${activity.price === 0 ? 'text-[var(--school-accent)]' : 'text-slate-800'}">
+                            <div class="price-badge px-3 py-0.5 text-[11px] font-bold ${activity.price === 0 ? 'text-[var(--school-accent)]' : 'text-white'} bg-black/50">
                                 ${activity.priceLabel}
                             </div>
                             
                             <!-- Favorite Heart -->
                             <button onclick="event.stopImmediatePropagation(); toggleFavorite(${activity.id}, this)" 
-                                    class="absolute top-3 left-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 backdrop-blur hover:bg-white transition-all">
-                                <span class="text-lg leading-none ${isFavorite ? 'text-red-500' : 'text-slate-400 hover:text-slate-600'}">♥</span>
+                                    class="absolute top-3 left-3 w-8 h-8 flex items-center justify-center rounded-full bg-black/60 backdrop-blur hover:bg-black/80 transition-all">
+                                <span class="text-lg leading-none ${isFavorite ? 'text-red-500' : 'text-slate-300 hover:text-slate-200'}">♥</span>
                             </button>
 
                             <div class="absolute bottom-3 left-3">
@@ -1176,19 +1234,19 @@
                             </div>
                         </div>
 
-                        <div class="px-4 pt-3.5 pb-2 flex-1 flex flex-col">
-                            <div class="flex items-start justify-between gap-2 mb-1">
-                                <h3 class="font-semibold text-[15px] leading-tight tracking-[-0.01em] line-clamp-2 flex-1">${activity.title}</h3>
+                        <div class="px-4 pt-4 pb-3 flex-1 flex flex-col">
+                            <div class="flex items-start justify-between gap-2 mb-1.5">
+                                <h3 class="font-semibold text-[15.5px] leading-tight tracking-[-0.015em] line-clamp-2 flex-1 pr-1">${activity.title}</h3>
                             </div>
                             
-                            <div class="flex items-center text-xs text-slate-500 mb-2.5">
+                            <div class="flex items-center text-xs text-slate-300 mb-3">
                                 <span class="font-medium tabular-nums">${activity.time}</span>
                                 <span class="mx-1.5 text-slate-300">•</span>
                                 <span>${activity.duration}</span>
                             </div>
 
-                            <div class="flex items-center text-sm text-slate-600 mb-auto">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 mr-1.5 flex-shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div class="flex items-center text-sm text-slate-200 mb-auto">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 mr-1.5 flex-shrink-0 text-[var(--school-accent)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314-11.314z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
@@ -1196,13 +1254,13 @@
                             </div>
                         </div>
 
-                        <div class="mt-auto border-t px-4 py-3 flex items-center justify-between bg-slate-50/60 text-xs">
-                            <div class="font-medium text-slate-500">
+                        <div class="mt-auto border-t px-4 py-3.5 flex items-center justify-between bg-white/5 text-xs">
+                            <div class="font-medium text-slate-300">
                                 ${activity.arrondissement}
                             </div>
                             
                             <div class="flex items-center gap-x-1" onclick="event.stopImmediatePropagation(); togglePlanning(${activity.id}, this)">
-                                <button class="text-xs font-semibold px-3.5 h-7 rounded-2xl flex items-center transition-all active:scale-[0.985] ${isInPlanning ? 'bg-[var(--school-accent)] text-white' : 'bg-white border border-slate-200 hover:bg-slate-50 text-slate-700'}">
+                                <button class="text-xs font-semibold px-4 h-8 rounded-2xl flex items-center transition-all active:scale-[0.985] ${isInPlanning ? 'bg-[var(--school-accent)] text-white' : 'bg-white/10 border border-white/20 hover:bg-white/20 text-white'}">
                                     ${isInPlanning ? '✓ Dans le planning' : '+ Ajouter'}
                                 </button>
                             </div>
@@ -1223,7 +1281,7 @@
                 'Histoire': 'bg-indigo-100 text-indigo-700',
                 'Art': 'bg-orange-100 text-orange-700'
             };
-            return colors[category] || 'bg-slate-100 text-slate-700';
+            return colors[category] || 'bg-white/10 text-slate-200';
         }
 
         // ==================== FILTERS ====================
@@ -1342,33 +1400,33 @@
                         <div class="flex items-start justify-between">
                             <h3 class="text-2xl font-semibold tracking-tight pr-4">${activity.title}</h3>
                             <button onclick="toggleFavorite(${activity.id}); renderActivities(getCurrentFilteredActivities());" 
-                                    class="text-2xl mt-0.5 ${isFav ? 'text-red-500' : 'text-slate-300 hover:text-slate-400'}">♥</button>
+                                    class="text-2xl mt-0.5 ${isFav ? 'text-red-500' : 'text-slate-300 hover:text-slate-300'}">♥</button>
                         </div>
                     
-                    <div class="flex items-center gap-x-3 text-sm mb-5 text-slate-500">
+                    <div class="flex items-center gap-x-3 text-sm mb-5 text-slate-300">
                         <div class="flex items-center">
-                            <span class="font-medium text-slate-700">${activity.time}</span>
+                            <span class="font-medium text-slate-200">${activity.time}</span>
                             <span class="mx-1.5">•</span>
                             <span>${activity.duration}</span>
                         </div>
                         <div class="font-medium ${activity.price === 0 ? 'text-[var(--school-accent)]' : ''}">${activity.priceLabel}</div>
                     </div>
 
-                    <div class="bg-slate-50 rounded-2xl p-4 mb-5">
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-4 mb-5">
                         <div class="flex gap-x-8 text-sm">
                             <div>
-                                <div class="text-xs uppercase tracking-widest text-slate-500">Lieu</div>
+                                <div class="text-xs uppercase tracking-widest text-slate-300">Lieu</div>
                                 <div class="font-medium">${activity.location}</div>
-                                <div class="text-xs text-slate-500">${activity.arrondissement} • ${activity.metro}</div>
+                                <div class="text-xs text-slate-300">${activity.arrondissement} • ${activity.metro}</div>
                             </div>
                             <div>
-                                <div class="text-xs uppercase tracking-widest text-slate-500">Places</div>
+                                <div class="text-xs uppercase tracking-widest text-slate-300">Places</div>
                                 <div class="font-medium text-[var(--school-accent)]">${activity.spots}</div>
                             </div>
                         </div>
                     </div>
 
-                    <p class="text-[15px] leading-relaxed text-slate-600">${activity.description}</p>
+                    <p class="text-[15px] leading-relaxed text-slate-200">${activity.description}</p>
 
                     <div class="mt-5 p-3.5 bg-amber-50 border border-amber-100 rounded-2xl text-sm">
                         <span class="font-semibold text-amber-800">Conseil étudiant :</span> 
@@ -1376,7 +1434,7 @@
                     </div>
                 </div>
 
-                <div class="border-t px-6 py-4 bg-slate-50 flex items-center justify-between gap-3">
+                <div class="border-t px-6 py-4 flex items-center justify-between gap-3" style="background-color: #111827;">
                     <button onclick="togglePlanning(${activity.id}, null, true); closeModal()" 
                             class="flex-1 h-11 rounded-2xl font-semibold text-sm transition-all 
                                    ${isPlanned ? 'bg-[var(--school-accent)]/10 text-[var(--school-accent)]' : 'bg-slate-900 text-white hover:bg-slate-800'}">
@@ -1450,7 +1508,7 @@
             // If element passed (from card), update it visually without full re-render
             if (element) {
                 const isNowFav = userFavorites.includes(activityId);
-                element.innerHTML = `<span class="text-lg leading-none ${isNowFav ? 'text-red-500' : 'text-slate-400 hover:text-slate-600'}">♥</span>`;
+                element.innerHTML = `<span class="text-lg leading-none ${isNowFav ? 'text-red-500' : 'text-slate-300 hover:text-slate-200'}">♥</span>`;
             }
         }
 
@@ -1548,12 +1606,10 @@
                 console.warn('Échec chargement données live (normal en local parfois) :', error);
 
                 if (!silent && statusEl) {
-                    statusEl.innerHTML = 'Données de démonstration (chargement live temporairement indisponible)';
+                    statusEl.innerHTML = 'Données de démonstration (données live temporairement indisponibles)';
                 }
 
-                if (!silent) {
-                    showToast('Impossible de charger les données live pour le moment. Version de démonstration utilisée.');
-                }
+                // On ne montre plus de toast d'erreur agressif, seulement un statut clair
                 return false;
             }
         }
@@ -1576,11 +1632,11 @@
             if (userPlanning.length === 0) {
                 container.innerHTML = `
                     <div class="text-center py-8">
-                        <div class="mx-auto w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-3">
+                        <div class="mx-auto w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-3">
                             📅
                         </div>
-                        <p class="font-medium text-slate-600">Ton planning est vide pour l'instant</p>
-                        <p class="text-sm text-slate-500 mt-1">Ajoute des activités depuis "Cette semaine" ou en suivant un parcours complet.</p>
+                        <p class="font-medium text-white">Ton planning est vide pour l'instant</p>
+                        <p class="text-sm text-slate-300 mt-1">Ajoute des activités depuis "Cette semaine" ou en suivant un parcours complet.</p>
                     </div>
                 `;
                 return;
@@ -1605,24 +1661,24 @@
                 html += `
                     <div>
                         <div class="flex items-center gap-x-3 mb-3">
-                            <span class="font-semibold text-base">${day}</span>
-                            <span class="text-xs px-2 py-0.5 bg-slate-100 text-slate-500 rounded-xl">${dayActs.length} activité${dayActs.length > 1 ? 's' : ''}</span>
+                            <span class="font-semibold text-base text-white">${day}</span>
+                            <span class="text-xs px-2 py-0.5 bg-white/10 text-slate-300 rounded-xl">${dayActs.length} activité${dayActs.length > 1 ? 's' : ''}</span>
                         </div>
                         <div class="space-y-2">
                 `;
 
                 dayActs.forEach(act => {
                     html += `
-                        <div class="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 group">
+                        <div class="flex items-center justify-between bg-white/5 border border-white/10 rounded-2xl px-4 py-3 group text-white">
                             <div class="flex items-center gap-x-3">
-                                <div class="font-mono text-sm tabular-nums font-medium w-11 text-slate-600">${act.time}</div>
+                                <div class="font-mono text-sm tabular-nums font-medium w-11 text-slate-200">${act.time}</div>
                                 <div>
                                     <div class="font-medium leading-tight">${act.title}</div>
-                                    <div class="text-xs text-slate-500">${act.location} • ${act.priceLabel}</div>
+                                    <div class="text-xs text-slate-300">${act.location} • ${act.priceLabel}</div>
                                 </div>
                             </div>
                             <button onclick="removeFromPlanning(${act.id})" 
-                                    class="opacity-40 group-hover:opacity-100 text-xs px-3 py-1 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all">Retirer</button>
+                                    class="opacity-40 group-hover:opacity-100 text-xs px-3 py-1 hover:bg-red-500/20 hover:text-red-400 rounded-xl transition-all">Retirer</button>
                         </div>
                     `;
                 });
@@ -1666,16 +1722,16 @@
 
             parcours.forEach(p => {
                 const html = `
-                    <div onclick="showParcoursDetail('${p.id}')" class="parcours-card cursor-pointer bg-white border border-slate-200 rounded-3xl p-5 flex flex-col h-full hover:border-slate-300">
+                    <div onclick="showParcoursDetail('${p.id}')" class="parcours-card cursor-pointer bg-[#0B0F1C] border border-white/10 rounded-3xl p-5 flex flex-col h-full hover:border-white/20">
                         <div class="${p.color} text-white text-xs font-semibold tracking-widest px-3 py-1 rounded-2xl w-fit mb-4">${p.duration}</div>
                         
                         <div class="font-semibold text-xl tracking-tight mb-1">${p.title}</div>
-                        <div class="text-sm text-slate-500 mb-4">${p.subtitle}</div>
+                        <div class="text-sm text-slate-300 mb-4">${p.subtitle}</div>
 
                         <div class="mt-auto">
                             <div class="flex items-center gap-x-2 mb-4">
-                                <div class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-2xl">Budget ${p.budget}</div>
-                                <div class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-2xl">${p.difficulty}</div>
+                                <div class="text-xs bg-white/10 text-slate-300 px-3 py-1 rounded-2xl">Budget ${p.budget}</div>
+                                <div class="text-xs bg-white/10 text-slate-300 px-3 py-1 rounded-2xl">${p.difficulty}</div>
                             </div>
                             
                             <div class="flex flex-wrap gap-1.5">
@@ -1701,7 +1757,7 @@
                         <div class="flex-shrink-0 w-9 h-9 rounded-2xl ${p.color} text-white flex items-center justify-center text-xs font-semibold tabular-nums">${step.time}</div>
                         <div class="flex-1 pt-0.5">
                             <div class="font-semibold">${step.title}</div>
-                            <div class="text-sm text-slate-500">${step.location} • ${step.duration} • ${step.cost}</div>
+                            <div class="text-sm text-slate-300">${step.location} • ${step.duration} • ${step.cost}</div>
                         </div>
                     </div>
                 `;
@@ -1713,24 +1769,24 @@
                         <div>
                             <span class="${p.color} text-white text-xs font-semibold px-3 py-1 rounded-2xl">${p.duration}</span>
                         </div>
-                        <button onclick="closeModal()" class="text-3xl leading-none text-slate-400 hover:text-slate-600 -mt-1">×</button>
+                        <button onclick="closeModal()" class="text-3xl leading-none text-slate-300 hover:text-slate-200 -mt-1">×</button>
                     </div>
 
                     <h3 class="text-3xl font-semibold tracking-tighter mt-3">${p.title}</h3>
-                    <p class="text-slate-600 mt-1">${p.subtitle}</p>
+                    <p class="text-slate-200 mt-1">${p.subtitle}</p>
 
                     <div class="flex gap-2 mt-4 mb-6">
-                        <div class="text-xs bg-slate-100 px-3 py-1 rounded-2xl">Budget : <span class="font-semibold">${p.budget}</span></div>
-                        <div class="text-xs bg-slate-100 px-3 py-1 rounded-2xl">${p.difficulty}</div>
+                        <div class="text-xs bg-white/10 px-3 py-1 rounded-2xl">Budget : <span class="font-semibold">${p.budget}</span></div>
+                        <div class="text-xs bg-white/10 px-3 py-1 rounded-2xl">${p.difficulty}</div>
                     </div>
 
-                    <div class="mb-2 text-xs uppercase tracking-[1px] font-semibold text-slate-500">Itinéraire du parcours</div>
+                    <div class="mb-2 text-xs uppercase tracking-[1px] font-semibold text-slate-300">Itinéraire du parcours</div>
                     <div class="mb-6">${stepsHTML}</div>
 
-                    <div class="text-sm text-slate-600 bg-slate-50 border border-slate-100 rounded-2xl p-4">${p.description}</div>
+                    <div class="text-sm text-slate-200 bg-white/5 border border-white/10 rounded-2xl p-4">${p.description}</div>
                 </div>
 
-                <div class="border-t mt-6 px-6 py-5 bg-slate-50 flex gap-3">
+                <div class="border-t mt-6 px-6 py-5 flex gap-3" style="background-color: #111827;">
                     <button onclick="followParcours('${p.id}'); closeModal()" 
                             class="flex-1 h-12 bg-slate-900 text-white font-semibold rounded-3xl active:scale-[0.985] transition-transform">
                         Suivre ce parcours (ajouter toutes les étapes)
@@ -1820,7 +1876,7 @@
                     <div class="text-center py-2">
                         <div class="text-4xl mb-4">🌍</div>
                         <div class="font-semibold text-xl mb-2">Bienvenue !</div>
-                        <p class="text-slate-600">Réponds à 4 questions rapides pour découvrir le parcours qui te correspond le mieux.</p>
+                        <p class="text-slate-200">Réponds à 4 questions rapides pour découvrir le parcours qui te correspond le mieux.</p>
                     </div>
                     <button onclick="nextQuizStep()" class="mt-8 w-full h-12 bg-slate-900 text-white font-semibold rounded-3xl">Commencer</button>
                 `;
@@ -1880,13 +1936,13 @@
                     <div class="text-center">
                         <div class="text-[var(--school-accent)] text-sm font-semibold tracking-widest mb-1">RECOMMANDATION</div>
                         <div class="font-semibold text-2xl mb-1">${recommendation.title}</div>
-                        <p class="text-sm text-slate-600 mb-6">${recommendation.subtitle}</p>
+                        <p class="text-sm text-slate-200 mb-6">${recommendation.subtitle}</p>
                         
                         <button onclick="selectRecommendedParcours('${recommendation.id}')" 
                                 class="w-full h-12 bg-[var(--school-accent)] hover:bg-[var(--school-accent-dark)] transition-colors text-white font-semibold rounded-3xl mb-2">
                             Voir ce parcours en détail
                         </button>
-                        <button onclick="closeQuiz()" class="text-sm text-slate-500 hover:text-slate-700">Non merci, je veux explorer seul</button>
+                        <button onclick="closeQuiz()" class="text-sm text-slate-300 hover:text-slate-200">Non merci, je veux explorer seul</button>
                     </div>
                 `;
             }
@@ -1930,34 +1986,37 @@
                 demoActivities = activities.slice();
             }
 
-            // Rendu initial rapide avec les données de démo (fiable pour présentation)
+            // === AUTOMATISATION FORTE DES DONNÉES ===
+            // On rend rapidement avec les belles données de démo (UI fluide)
             renderActivities(activities);
             renderParcours();
             renderPlanning();
 
-            // Statut initial
             const statusEl = document.getElementById('data-status');
+
+            // === AUTOMATISATION AMÉLIORÉE : 3 tentatives automatiques ===
             if (statusEl) {
-                statusEl.innerHTML = 'Chargement des données Paris Open Data...';
+                statusEl.innerHTML = 'Chargement automatique des données réelles...';
             }
 
-            // === AUTOMATISATION : Tentative de chargement des données officielles au démarrage ===
-            // On le fait en arrière-plan pour ne pas bloquer l'interface
             setTimeout(async () => {
-                const success = await loadFromParisOpenData({ silent: true });
+                let success = false;
 
-                if (success) {
-                    // Si ça a marché, on met à jour le statut
-                    if (statusEl) {
-                        statusEl.innerHTML = `✓ ${activities.length} activités en direct depuis Paris Open Data`;
+                for (let i = 1; i <= 3 && !success; i++) {
+                    if (i > 1 && statusEl) {
+                        statusEl.innerHTML = `Nouvelle tentative (${i}/3)...`;
+                        await new Promise(r => setTimeout(r, 900));
                     }
-                } else {
-                    // Retour aux belles données de démo
-                    if (statusEl) {
-                        statusEl.innerHTML = 'Données Paris Open Data (version de démonstration)';
-                    }
+
+                    success = await loadFromParisOpenData({ silent: true });
                 }
-            }, 1200); // petit délai pour que l'UI soit fluide
+
+                if (success && statusEl) {
+                    statusEl.innerHTML = `✓ ${activities.length} activités en direct depuis Paris Open Data`;
+                } else if (statusEl) {
+                    statusEl.innerHTML = 'Données de démonstration (basées sur Paris Open Data)';
+                }
+            }, 500);
 
             // Ensure results count is visible on load
             setTimeout(() => {
@@ -1994,15 +2053,15 @@
             const modal = document.getElementById('activity-modal');
             document.getElementById('modal-content').innerHTML = `
                 <div class="p-6">
-                    <button onclick="closeModal()" class="float-right text-3xl leading-none text-slate-400 hover:text-slate-600">×</button>
+                    <button onclick="closeModal()" class="float-right text-3xl leading-none text-slate-300 hover:text-slate-200">×</button>
                     <h3 class="font-semibold text-2xl tracking-tight">À propos de ParcoursParis</h3>
                     
-                    <div class="mt-5 space-y-4 text-sm text-slate-600 leading-relaxed">
+                    <div class="mt-5 space-y-4 text-sm text-slate-200 leading-relaxed">
                         <p>Ce projet a été réalisé dans le cadre d’un cours de <strong>Management de Projet</strong>.</p>
                         <p>L’objectif était de créer un outil simple et utile pour les étudiants arrivant à Paris : une application qui permet de découvrir rapidement les activités de la semaine et de suivre des parcours déjà construits.</p>
                         
                         <div>
-                            <div class="font-semibold text-slate-700 mb-1">Fonctionnalités principales</div>
+                            <div class="font-semibold text-slate-200 mb-1">Fonctionnalités principales</div>
                             <ul class="list-disc pl-5 space-y-0.5">
                                 <li>15 activités pour la semaine du 25 au 31 mai 2026</li>
                                 <li>5 parcours thématiques prêts à l’emploi</li>
@@ -2012,10 +2071,10 @@
                             </ul>
                         </div>
                         
-                        <p class="text-xs pt-3 text-slate-500">Prototype développé en HTML + Tailwind + JavaScript pur. Déploiement possible sur Vercel/Netlify en 30 secondes.</p>
+                        <p class="text-xs pt-3 text-slate-300">Prototype développé en HTML + Tailwind + JavaScript pur. Déploiement possible sur Vercel/Netlify en 30 secondes.</p>
                     </div>
                 </div>
-                <div class="border-t px-6 py-4 bg-slate-50 text-xs text-slate-500">
+                <div class="border-t px-6 py-4 bg-slate-50 text-xs text-slate-300">
                     Conçu pour être facilement maintenu et amélioré par une petite équipe étudiante.
                 </div>
             `;
@@ -2027,14 +2086,14 @@
             const modal = document.getElementById('activity-modal');
             document.getElementById('modal-content').innerHTML = `
                 <div class="p-6 max-h-[85vh] overflow-auto">
-                    <button onclick="closeModal()" class="float-right text-3xl leading-none text-slate-400 hover:text-slate-600">×</button>
+                    <button onclick="closeModal()" class="float-right text-3xl leading-none text-slate-300 hover:text-slate-200">×</button>
                     <h3 class="font-semibold text-2xl tracking-tight mb-1">Automatiser les données</h3>
-                    <p class="text-slate-600 mb-5">Voici comment connecter l’application à de vraies données officielles.</p>
+                    <p class="text-slate-200 mb-5">Voici comment connecter l’application à de vraies données officielles.</p>
 
                     <div class="space-y-6 text-sm">
                         <div>
                             <div class="font-semibold text-slate-800 mb-2">Source recommandée : Paris Open Data</div>
-                            <p class="text-slate-600">Le dataset officiel <strong>"Que faire à Paris ?"</strong> contient des centaines d’événements mis à jour régulièrement.</p>
+                            <p class="text-slate-200">Le dataset officiel <strong>"Que faire à Paris ?"</strong> contient des centaines d’événements mis à jour régulièrement.</p>
                             <a href="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/" target="_blank" class="text-[var(--school-accent)] underline">→ Voir le dataset</a>
                         </div>
 
@@ -2052,7 +2111,7 @@
 }</code></pre>
                         </div>
 
-                        <div class="text-xs text-slate-500 border-t pt-4 space-y-1">
+                        <div class="text-xs text-slate-300 border-t pt-4 space-y-1">
                             <div><strong>Pour la présentation :</strong> On utilise un proxy public temporaire pour que le bouton fonctionne.</div>
                             <div><strong>Pour un vrai projet / production :</strong> Il faut un backend contrôlé (Vercel Edge Function, Cloudflare Worker, ou petit serveur) pour éviter les problèmes de fiabilité et de sécurité du proxy public.</div>
                         </div>
