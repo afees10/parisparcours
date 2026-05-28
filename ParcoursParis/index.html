@@ -1515,7 +1515,7 @@
         // ==================== DONNÉES ORIGINELLES DE DÉMO (belles + photos réelles) ====================
         let demoActivities = [];
 
-        // ==================== LIVE DATA FROM PARIS OPEN DATA (automatisé) ====================
+        // ==================== LIVE DATA FROM PARIS OPEN DATA (automatisé avec plusieurs proxies) ====================
         async function loadFromParisOpenData({ silent = false } = {}) {
             const statusEl = document.getElementById('data-status');
 
@@ -1524,94 +1524,104 @@
             }
 
             const originalUrl = 'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/que-faire-a-paris-/records?limit=25&order_by=date_start%20DESC';
-            const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(originalUrl);
 
-            try {
-                const response = await fetch(proxyUrl, { 
-                    headers: { 'Accept': 'application/json' } 
-                });
-                
-                if (!response.ok) throw new Error('Proxy ou API a retourné une erreur');
+            // Liste de proxies publics (on en essaie plusieurs pour augmenter les chances)
+            const proxies = [
+                'https://corsproxy.io/?',
+                'https://api.allorigins.win/raw?url='
+            ];
 
-                const json = await response.json();
-                const records = json.results || json.response?.results || [];
+            let lastError = null;
 
-                if (!records || records.length === 0) throw new Error('Aucune donnée');
+            for (const proxy of proxies) {
+                const proxyUrl = proxy + encodeURIComponent(originalUrl);
 
-                const liveActivities = records
-                    .filter(r => r.title && r.date_start)
-                    .slice(0, 18)
-                    .map((r, index) => {
-                        const startDate = new Date(r.date_start);
-                        const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-                        const day = dayNames[startDate.getDay()] || 'Jeudi';
-                        const dateStr = startDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
-
-                        let price = 0;
-                        let priceLabel = 'Gratuit';
-                        if (r.price_type && r.price_type !== 'gratuit') {
-                            price = r.price_detail ? parseFloat(r.price_detail) || 10 : 8;
-                            priceLabel = r.price_detail ? r.price_detail + '€' : 'Payant';
-                        }
-
-                        return {
-                            id: 100 + index,
-                            title: r.title,
-                            day: day,
-                            date: dateStr,
-                            time: r.date_start ? r.date_start.substring(11, 16) : '14:00',
-                            duration: '1h30',
-                            category: mapCategory(r.category || r.tags || ''),
-                            price: price,
-                            priceLabel: priceLabel,
-                            location: r.address_name || r.place_name || r.address_street || 'Paris',
-                            arrondissement: r.address_zipcode ? r.address_zipcode + 'e' : 'Paris',
-                            description: (r.description || r.lead_text || 'Événement proposé par la Ville de Paris.').substring(0, 280),
-                            spots: 'Selon disponibilité',
-                            studentDiscount: true,
-                            coordinates: (r.latitude && r.longitude) ? 
-                                [parseFloat(r.latitude), parseFloat(r.longitude)] : 
-                                [48.8566 + (Math.random()-0.5)*0.04, 2.3522 + (Math.random()-0.5)*0.04],
-                            metro: r.transport || 'Voir sur place',
-                            tips: 'Donnée en direct • Paris Open Data'
-                        };
+                try {
+                    const response = await fetch(proxyUrl, { 
+                        headers: { 'Accept': 'application/json' } 
                     });
+                    
+                    if (!response.ok) throw new Error('Proxy a retourné une erreur');
 
-                // Sauvegarde des données de démo si pas encore fait
-                if (demoActivities.length === 0) {
-                    demoActivities = activities.slice();
+                    const json = await response.json();
+                    const records = json.results || json.response?.results || json.contents ? JSON.parse(json.contents).results : [];
+
+                    if (!records || records.length === 0) throw new Error('Aucune donnée');
+
+                    const liveActivities = records
+                        .filter(r => r.title && r.date_start)
+                        .slice(0, 18)
+                        .map((r, index) => {
+                            const startDate = new Date(r.date_start);
+                            const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+                            const day = dayNames[startDate.getDay()] || 'Jeudi';
+                            const dateStr = startDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+
+                            let price = 0;
+                            let priceLabel = 'Gratuit';
+                            if (r.price_type && r.price_type !== 'gratuit') {
+                                price = r.price_detail ? parseFloat(r.price_detail) || 10 : 8;
+                                priceLabel = r.price_detail ? r.price_detail + '€' : 'Payant';
+                            }
+
+                            return {
+                                id: 100 + index,
+                                title: r.title,
+                                day: day,
+                                date: dateStr,
+                                time: r.date_start ? r.date_start.substring(11, 16) : '14:00',
+                                duration: '1h30',
+                                category: mapCategory(r.category || r.tags || ''),
+                                price: price,
+                                priceLabel: priceLabel,
+                                location: r.address_name || r.place_name || r.address_street || 'Paris',
+                                arrondissement: r.address_zipcode ? r.address_zipcode + 'e' : 'Paris',
+                                description: (r.description || r.lead_text || 'Événement proposé par la Ville de Paris.').substring(0, 280),
+                                spots: 'Selon disponibilité',
+                                studentDiscount: true,
+                                coordinates: (r.latitude && r.longitude) ? 
+                                    [parseFloat(r.latitude), parseFloat(r.longitude)] : 
+                                    [48.8566 + (Math.random()-0.5)*0.04, 2.3522 + (Math.random()-0.5)*0.04],
+                                metro: r.transport || 'Voir sur place',
+                                tips: 'Donnée en direct • Paris Open Data'
+                            };
+                        });
+
+                    if (demoActivities.length === 0) {
+                        demoActivities = activities.slice();
+                    }
+
+                    activities.length = 0;
+                    liveActivities.forEach(a => activities.push(a));
+                    isUsingLiveData = true;
+
+                    resetFilters();
+                    if (currentView === 'map' && map) {
+                        updateMapMarkers(activities);
+                    }
+
+                    if (statusEl) {
+                        statusEl.innerHTML = `✓ ${activities.length} activités en direct depuis Paris Open Data`;
+                    }
+
+                    if (!silent) {
+                        showToast('Données mises à jour depuis Paris Open Data');
+                    }
+
+                    return true;
+
+                } catch (error) {
+                    lastError = error;
+                    console.warn(`Échec avec proxy ${proxy}:`, error);
                 }
-
-                // Remplacer
-                activities.length = 0;
-                liveActivities.forEach(a => activities.push(a));
-                isUsingLiveData = true;
-
-                resetFilters();
-                if (currentView === 'map' && map) {
-                    updateMapMarkers(activities);
-                }
-
-                if (statusEl) {
-                    statusEl.innerHTML = `✓ ${activities.length} activités en direct depuis Paris Open Data`;
-                }
-
-                if (!silent) {
-                    showToast('Données mises à jour depuis Paris Open Data');
-                }
-
-                return true; // succès
-
-            } catch (error) {
-                console.warn('Échec chargement données live (normal en local parfois) :', error);
-
-                if (!silent && statusEl) {
-                    statusEl.innerHTML = 'Données de démonstration (données live temporairement indisponibles)';
-                }
-
-                // On ne montre plus de toast d'erreur agressif, seulement un statut clair
-                return false;
             }
+
+            // Tous les proxies ont échoué
+            if (!silent && statusEl) {
+                statusEl.innerHTML = 'Données de démonstration (données live temporairement indisponibles)';
+            }
+
+            return false;
         }
 
         function mapCategory(rawCategory) {
@@ -1982,41 +1992,37 @@
             initTailwind();
 
             // Sauvegarde des données de démo originales (belles photos + curation)
-            if (demoActivities.length === 0) {
-                demoActivities = activities.slice();
-            }
-
-            // === AUTOMATISATION FORTE DES DONNÉES ===
-            // On rend rapidement avec les belles données de démo (UI fluide)
-            renderActivities(activities);
-            renderParcours();
-            renderPlanning();
-
             const statusEl = document.getElementById('data-status');
 
-            // === AUTOMATISATION AMÉLIORÉE : 3 tentatives automatiques ===
+            // === VRAIE AUTOMATISATION : On tente d'abord les vraies données ===
             if (statusEl) {
-                statusEl.innerHTML = 'Chargement automatique des données réelles...';
+                statusEl.innerHTML = 'Chargement des données réelles depuis Paris Open Data...';
             }
 
-            setTimeout(async () => {
-                let success = false;
-
-                for (let i = 1; i <= 3 && !success; i++) {
-                    if (i > 1 && statusEl) {
-                        statusEl.innerHTML = `Nouvelle tentative (${i}/3)...`;
-                        await new Promise(r => setTimeout(r, 900));
-                    }
-
-                    success = await loadFromParisOpenData({ silent: true });
+            // On essaie de charger les données live en premier (jusqu'à 3 tentatives)
+            let success = false;
+            for (let i = 1; i <= 3 && !success; i++) {
+                if (i > 1 && statusEl) {
+                    statusEl.innerHTML = `Tentative ${i}/3 des données réelles...`;
+                    await new Promise(r => setTimeout(r, 800));
                 }
+                success = await loadFromParisOpenData({ silent: true });
+            }
 
-                if (success && statusEl) {
+            if (success) {
+                // Les vraies données ont été chargées avec succès
+                if (statusEl) {
                     statusEl.innerHTML = `✓ ${activities.length} activités en direct depuis Paris Open Data`;
-                } else if (statusEl) {
+                }
+            } else {
+                // Fallback sur les données de démonstration seulement si tout a échoué
+                if (statusEl) {
                     statusEl.innerHTML = 'Données de démonstration (basées sur Paris Open Data)';
                 }
-            }, 500);
+                renderActivities(activities);
+                renderParcours();
+                renderPlanning();
+            }
 
             // Ensure results count is visible on load
             setTimeout(() => {
@@ -2086,34 +2092,25 @@
             const modal = document.getElementById('activity-modal');
             document.getElementById('modal-content').innerHTML = `
                 <div class="p-6 max-h-[85vh] overflow-auto">
-                    <button onclick="closeModal()" class="float-right text-3xl leading-none text-slate-300 hover:text-slate-200">×</button>
+                    <button onclick="closeModal()" class="float-right text-3xl leading-none text-slate-300 hover:text-white">×</button>
                     <h3 class="font-semibold text-2xl tracking-tight mb-1">Automatiser les données</h3>
-                    <p class="text-slate-200 mb-5">Voici comment connecter l’application à de vraies données officielles.</p>
+                    <p class="text-slate-200 mb-5">Comment récupérer les vraies données de la Ville de Paris.</p>
 
                     <div class="space-y-6 text-sm">
                         <div>
-                            <div class="font-semibold text-slate-800 mb-2">Source recommandée : Paris Open Data</div>
-                            <p class="text-slate-200">Le dataset officiel <strong>"Que faire à Paris ?"</strong> contient des centaines d’événements mis à jour régulièrement.</p>
-                            <a href="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/" target="_blank" class="text-[var(--school-accent)] underline">→ Voir le dataset</a>
+                            <div class="font-semibold text-white mb-1">Source officielle recommandée</div>
+                            <p class="text-slate-300">Le dataset <strong>"Que faire à Paris ?"</strong> sur Paris Open Data contient des centaines d’événements mis à jour régulièrement.</p>
+                            <a href="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/" target="_blank" class="text-[var(--school-accent)] underline text-sm">→ Voir le dataset</a>
                         </div>
 
                         <div>
-                            <div class="font-semibold text-slate-800 mb-2">Exemple de code pour charger automatiquement</div>
-                            <pre class="bg-slate-900 text-[var(--school-accent)] text-xs p-4 rounded-2xl overflow-x-auto"><code>async function loadRealActivities() {
-  const originalUrl = "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/que-faire-a-paris-/records?limit=20";
-  
-  // Pour la démo seulement (proxy public temporaire)
-  const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(originalUrl);
-  
-  const res = await fetch(proxyUrl);
-  const data = await res.json();
-  // Transformer data.results en format de ton app...
-}</code></pre>
+                            <div class="font-semibold text-white mb-1">Comment on fait actuellement dans l’application</div>
+                            <p class="text-slate-300 text-xs">On utilise un proxy public temporaire (corsproxy.io) pour contourner les restrictions CORS depuis le navigateur. L’application tente automatiquement plusieurs proxies au démarrage.</p>
                         </div>
 
-                        <div class="text-xs text-slate-300 border-t pt-4 space-y-1">
-                            <div><strong>Pour la présentation :</strong> On utilise un proxy public temporaire pour que le bouton fonctionne.</div>
-                            <div><strong>Pour un vrai projet / production :</strong> Il faut un backend contrôlé (Vercel Edge Function, Cloudflare Worker, ou petit serveur) pour éviter les problèmes de fiabilité et de sécurité du proxy public.</div>
+                        <div class="text-xs text-slate-300 border-t border-white/10 pt-4">
+                            <div class="mb-1"><strong>Pour cette présentation :</strong> On utilise un proxy public pour démontrer la connexion aux données réelles.</div>
+                            <div><strong>En production :</strong> Il faudrait un petit backend sécurisé (Vercel Edge Function ou Cloudflare Worker) pour que le chargement soit fiable et professionnel.</div>
                         </div>
                     </div>
                 </div>
