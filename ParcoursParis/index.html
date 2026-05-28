@@ -1,0 +1,2070 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParcoursParis • ISAE-Supmeca 2026</title>
+
+    <!-- SEO & Social Sharing -->
+    <meta name="description" content="Application pour les nouveaux étudiants de l'ISAE-Supmeca : activités et parcours à Paris pour la semaine du 25-31 mai 2026.">
+    <meta property="og:title" content="ParcoursParis • ISAE-Supmeca">
+    <meta property="og:description" content="Découvre Paris facilement avec des activités sélectionnées et des parcours prêts à l'emploi.">
+    <meta property="og:image" content="https://picsum.photos/id/1016/1200/630">
+    <meta property="og:type" content="website">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:wght@700&amp;display=swap');
+        
+        :root {
+            --primary: #0F172A;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .heading-serif {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .paris-gradient {
+            background: linear-gradient(135deg, #0F172A 0%, #1E2937 100%);
+        }
+
+        /* === ISAE-Supmeca Brand Colors === */
+        :root {
+            --school-dark: #0B0F1C;
+            --school-darker: #070A12;
+            --school-accent: #FF5C00;      /* Orange vif ISAE-Supmeca */
+            --school-accent-dark: #E05200;
+            --school-text: #F8F9FA;
+            --school-muted: #A0AEC0;
+        }
+
+        .paris-premium-gradient {
+            background: linear-gradient(145deg, #0B0F1C 0%, #111827 50%, #070A12 100%);
+        }
+
+        .activity-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .activity-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .nav-link {
+            transition: all 0.1s ease;
+        }
+        
+        .nav-link:hover {
+            color: #0F172A;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            line-height: 1.1;
+            letter-spacing: -0.04em;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.125rem 0.625rem;
+            border-radius: 9999px;
+        }
+
+        .modal {
+            animation: modalPop 0.2s ease-out forwards;
+        }
+
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.96) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .itinerary-step {
+            position: relative;
+        }
+        
+        .itinerary-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 42px;
+            bottom: -8px;
+            width: 3px;
+            background: #E2E8F0;
+        }
+
+        .paris-blue {
+            color: #0F172A;
+        }
+
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .filter-btn {
+            transition: all 0.1s ease;
+        }
+        
+        .filter-btn.active {
+            background-color: var(--school-accent);
+            color: white;
+            border-color: var(--school-accent);
+        }
+
+        .activity-time {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .map-container {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgb(15 23 42 / 0.1);
+        }
+
+        .parcours-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .parcours-card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* === PREMIUM VISUAL UPGRADES === */
+        .premium-shadow {
+            box-shadow: 0 10px 15px -3px rgb(15 23 42 / 0.08), 
+                       0 4px 6px -4px rgb(15 23 42 / 0.08);
+        }
+
+        .activity-card {
+            transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .activity-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 50px -12px rgb(15 23 42 / 0.15);
+            border-color: #cbd5e1;
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 16px !important;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1) !important;
+            border: none !important;
+        }
+
+        .map-section {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .view-toggle {
+            display: inline-flex;
+            background: #f1f5f9;
+            border-radius: 9999px;
+            padding: 3px;
+        }
+
+        .view-toggle button {
+            padding: 6px 18px;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.15s ease;
+        }
+
+        .view-toggle button.active {
+            background: white;
+            box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+            color: var(--school-accent);
+            font-weight: 700;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e2e8f0, transparent);
+        }
+
+        /* === PREMIUM CARD WITH IMAGE === */
+        .activity-card {
+            transition: all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .activity-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 70px -15px rgb(15 23 42 / 0.18), 
+                       0 10px 10px -5px rgb(15 23 42 / 0.08);
+            border-color: #cbd5e1;
+        }
+
+        .activity-card .card-image {
+            height: 138px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .activity-card .card-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 55%;
+            background: linear-gradient(to top, rgba(15,23,42,0.65), transparent);
+        }
+
+        .activity-card .card-image .price-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(8px);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 9px;
+            border-radius: 9999px;
+            box-shadow: 0 1px 2px rgb(0 0 0 / 0.1);
+        }
+
+        /* Refined Parisian palette accents */
+        .accent-teal { color: #0F766E; }
+        .bg-accent-teal { background-color: #0F766E; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <!-- NAVBAR -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-screen-xl mx-auto">
+            <div class="px-6 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-10 h-10 bg-[var(--school-accent)] rounded-2xl flex items-center justify-center">
+                        <span class="text-white text-2xl font-bold tracking-tighter">PP</span>
+                    </div>
+                    <div>
+                        <span class="font-semibold text-2xl tracking-tighter">Parcours</span>
+                        <span class="font-semibold text-2xl tracking-tighter text-[var(--school-accent)]">Paris</span>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="#cette-semaine" class="nav-link text-slate-600 hover:text-slate-900">Cette semaine</a>
+                    <a href="#carte" class="nav-link text-slate-600 hover:text-slate-900">Carte</a>
+                    <a href="#parcours" class="nav-link text-slate-600 hover:text-slate-900">Les parcours</a>
+                    <a href="#planning" class="nav-link text-slate-600 hover:text-slate-900">Mon planning</a>
+                </div>
+
+                <div class="flex items-center gap-x-3">
+                    <div class="hidden sm:flex items-center bg-slate-100 rounded-full px-3 py-1.5 text-xs font-medium text-slate-600">
+                        <div class="w-2 h-2 bg-[var(--school-accent)] rounded-full mr-2 animate-pulse"></div>
+                        Semaine du 25-31 mai 2026
+                    </div>
+                    <button onclick="showQuiz()"
+                            class="px-4 py-2 text-sm font-semibold bg-white hover:bg-slate-50 border border-slate-300 rounded-2xl flex items-center gap-x-2 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17.687a.75.75 0 01-.36-.127L3 14.25m9.663 3.437l.001-.001m0 0l9-5.25m-9 5.25v-8.25m9 8.25l-9-5.25m9-5.25l-9 5.25m0 0L3 9.75" />
+                        </svg>
+                        <span class="hidden sm:inline">Trouve ton style</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO - ISAE-Supmeca Branding -->
+    <div class="paris-premium-gradient text-white">
+        <div class="max-w-screen-xl mx-auto px-6 pt-14 pb-16">
+            <div class="max-w-3xl">
+                
+                <!-- School badge -->
+                <div class="inline-flex items-center gap-x-2 mb-6">
+                    <div class="flex items-center bg-white/10 backdrop-blur px-4 h-8 rounded-2xl text-sm font-medium tracking-wide border border-white/20">
+                        <span class="text-[var(--school-accent)] mr-2">●</span> 
+                        ISAE-SUPMÉCA • 2026
+                    </div>
+                </div>
+                
+                <h1 class="text-6xl md:text-[72px] leading-[1.0] tracking-[-0.045em] font-semibold heading-serif mb-6">
+                    Ta première<br>semaine à Paris.<br>
+                    <span class="text-[var(--school-accent)]">Sans prise de tête.</span>
+                </h1>
+                
+                <p class="text-xl text-slate-300 max-w-md mb-9">
+                    L’application pensée pour les nouveaux étudiants de l’ISAE-Supmeca.<br>
+                    Activités sélectionnées, parcours prêts à l’emploi, tout est là.
+                </p>
+
+                <div class="flex flex-wrap gap-4">
+                    <a href="#cette-semaine" 
+                       class="inline-flex items-center justify-center px-9 h-13 bg-[var(--school-accent)] hover:bg-[var(--school-accent-dark)] text-white font-semibold rounded-3xl transition-all active:scale-[0.985] text-[15px]">
+                        Découvrir cette semaine
+                    </a>
+                    <a href="#parcours" 
+                       class="inline-flex items-center justify-center px-9 h-13 bg-white/10 hover:bg-white/15 border border-white/30 backdrop-blur font-semibold rounded-3xl transition-all text-[15px]">
+                        Explorer les parcours
+                    </a>
+                </div>
+
+                <div class="mt-12 grid grid-cols-3 gap-8 max-w-md text-sm">
+                    <div>
+                        <div class="font-semibold text-4xl tracking-[-1.5px] text-white">18</div>
+                        <div class="text-[var(--school-muted)] mt-1 leading-tight">activités cette<br>semaine</div>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-4xl tracking-[-1.5px] text-white">5</div>
+                        <div class="text-[var(--school-muted)] mt-1 leading-tight">parcours<br>thématiques</div>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-4xl tracking-[-1.5px] text-white">67%</div>
+                        <div class="text-[var(--school-muted)] mt-1 leading-tight">activités<br>à moins de 10€</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATS BAR -->
+    <div class="border-b border-slate-200 bg-white">
+        <div class="max-w-screen-xl mx-auto px-6 py-4">
+            <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-sm">
+                <div class="flex items-center gap-x-2 text-slate-600">
+                    <span class="font-medium">Semaine du 25 au 31 mai 2026</span>
+                    <span class="text-slate-400">•</span>
+                    <span class="text-[var(--school-accent)] font-medium">Météo : 19-24°C, ensoleillé</span>
+                </div>
+                <div class="text-slate-500 text-xs md:text-sm">
+                    Mis à jour aujourd'hui à 08:42 • Données ouvertes + curation étudiante
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CETTE SEMAINE -->
+    <div id="cette-semaine" class="max-w-screen-xl mx-auto px-6 pt-10 pb-8">
+        <div class="flex items-end justify-between mb-6">
+            <div>
+                <span class="uppercase tracking-[1.5px] text-xs font-semibold text-[var(--school-accent)]">Semaine actuelle</span>
+                <h2 class="section-title font-semibold tracking-tight">Que faire cette semaine ?</h2>
+            </div>
+            
+            <!-- Quick filters -->
+            <div class="hidden md:flex items-center gap-x-2 text-sm">
+                <button onclick="filterByDay('all')" class="filter-btn active px-4 py-1.5 border border-slate-300 rounded-2xl text-sm font-medium" id="day-all">Tous les jours</button>
+                <button onclick="filterByDay('Lundi')" class="filter-btn px-4 py-1.5 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-medium" id="day-Lundi">Lun</button>
+                <button onclick="filterByDay('Mardi')" class="filter-btn px-4 py-1.5 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-medium" id="day-Mardi">Mar</button>
+                <button onclick="filterByDay('Mercredi')" class="filter-btn px-4 py-1.5 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-medium" id="day-Mercredi">Mer</button>
+                <button onclick="filterByDay('Jeudi')" class="filter-btn px-4 py-1.5 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-medium" id="day-Jeudi">Jeu</button>
+                <button onclick="filterByDay('Vendredi')" class="filter-btn px-4 py-1.5 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-medium" id="day-Vendredi">Ven</button>
+                <button onclick="filterByDay('Samedi')" class="filter-btn px-4 py-1.5 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-medium" id="day-Samedi">Sam</button>
+                <button onclick="filterByDay('Dimanche')" class="filter-btn px-4 py-1.5 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-medium" id="day-Dimanche">Dim</button>
+            </div>
+        </div>
+
+        <!-- Advanced filters -->
+        <div class="flex flex-wrap gap-2 mb-6">
+            <div class="relative">
+                <input id="search-input" type="text" placeholder="Rechercher une activité..." 
+                       onkeyup="filterActivities()"
+                       class="pl-10 pr-4 py-2.5 w-72 bg-white border border-slate-200 focus:border-slate-400 rounded-3xl text-sm placeholder:text-slate-400 outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 absolute left-4 top-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+
+            <select id="category-filter" onchange="filterActivities()" 
+                    class="px-4 py-2.5 bg-white border border-slate-200 rounded-3xl text-sm font-medium text-slate-700 outline-none">
+                <option value="">Toutes les catégories</option>
+                <option value="Culture">Culture &amp; Musées</option>
+                <option value="Nature">Nature &amp; Promenades</option>
+                <option value="Gastronomie">Gastronomie</option>
+                <option value="Sorties">Sorties &amp; Soirées</option>
+                <option value="Sport">Sport &amp; Bien-être</option>
+                <option value="Histoire">Histoire &amp; Patrimoine</option>
+                <option value="Art">Art de rue &amp; Créativité</option>
+            </select>
+
+            <select id="price-filter" onchange="filterActivities()" 
+                    class="px-4 py-2.5 bg-white border border-slate-200 rounded-3xl text-sm font-medium text-slate-700 outline-none">
+                <option value="">Tous les prix</option>
+                <option value="gratuit">Gratuit</option>
+                <option value="low">Moins de 10€</option>
+                <option value="medium">10€ – 20€</option>
+            </select>
+
+            <button onclick="resetFilters()" 
+                    class="px-5 py-2.5 text-sm font-medium border border-slate-200 hover:bg-slate-50 rounded-3xl transition-colors flex items-center gap-x-2">
+                <span>Réinitialiser</span>
+            </button>
+        </div>
+
+        <!-- Activities Grid + View Toggle -->
+        <div class="flex items-center justify-between mb-3">
+            <div class="text-sm font-medium text-slate-600">
+                <span id="results-count"></span>
+            </div>
+            
+            <!-- View Toggle -->
+            <div class="view-toggle">
+                <button onclick="switchView('list')" id="view-list-btn" class="active">Liste</button>
+                <button onclick="switchView('map')" id="view-map-btn">Carte</button>
+            </div>
+        </div>
+
+        <div id="list-view">
+            <div id="activities-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <!-- Populated dynamically by JS -->
+            </div>
+        </div>
+
+        <!-- CARTE INTERACTIVE -->
+        <div id="map-view" class="hidden">
+            <div class="map-section premium-shadow">
+                <div class="px-6 py-4 border-b flex items-center justify-between bg-slate-50">
+                    <div>
+                        <span class="font-semibold">Carte des activités</span>
+                        <span class="text-xs text-slate-500 ml-2">• Clique sur un marqueur pour voir les détails</span>
+                    </div>
+                    <div class="text-xs text-[var(--school-accent)] font-medium flex items-center gap-x-1">
+                        <div class="w-2 h-2 bg-[var(--school-accent)] rounded-full"></div>
+                        <span>15 activités cette semaine</span>
+                    </div>
+                </div>
+                <div id="leaflet-map" class="w-full h-[460px] z-10"></div>
+                <div class="px-6 py-3 bg-white border-t text-[11px] text-slate-500 flex items-center gap-x-4">
+                    <div>Zoom sur Paris</div>
+                    <div class="flex-1 h-px bg-slate-100"></div>
+                    <div class="font-medium">Les marqueurs sont synchronisés avec tes filtres</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PARCOURS SECTION -->
+    <div id="parcours" class="bg-white border-t border-b border-slate-200 py-12">
+        <div class="max-w-screen-xl mx-auto px-6">
+            <div class="flex items-end justify-between mb-7">
+                <div>
+                    <span class="uppercase tracking-[1.5px] text-xs font-semibold text-[var(--school-accent)]">Le vrai plus de l'appli</span>
+                    <h2 class="section-title font-semibold tracking-tight">Des parcours déjà prêts</h2>
+                    <p class="text-slate-600 mt-1">4 itinéraires pensés pour les étudiants qui arrivent à Paris. Zéro organisation.</p>
+                </div>
+                <a href="#" onclick="document.getElementById('parcours').scrollIntoView({behavior:'smooth'})" class="hidden md:block text-sm font-semibold text-[var(--school-accent)] hover:text-[var(--school-accent-dark)]">Voir tous →</a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4" id="parcours-grid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- PLANNING PERSONNEL -->
+    <div id="planning" class="max-w-screen-xl mx-auto px-6 py-12">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 class="section-title font-semibold tracking-tight">Ton planning de la semaine</h2>
+                <span class="text-xs uppercase tracking-widest text-[var(--school-accent)] font-semibold">ISAE-Supmeca</span>
+                <p class="text-slate-600">Ajoute des activités et des parcours. Ton planning reste enregistré sur ton navigateur.</p>
+            </div>
+            <button onclick="exportPlanning()" 
+                    class="flex items-center gap-x-2 px-5 h-10 text-sm font-semibold border border-slate-300 hover:border-[var(--school-accent)] hover:text-[var(--school-accent)] rounded-3xl transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13v6m0 0H7m10 0v-6m-5 0v6m-5-6v6" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7v12m0 0l-4-4m4 4l4-4" />
+                </svg>
+                <span>Exporter (PDF)</span>
+            </button>
+        </div>
+
+        <div id="planning-content" class="bg-white border border-slate-200 rounded-3xl p-6 min-h-[200px]">
+            <!-- Dynamic planning content -->
+        </div>
+    </div>
+
+    <!-- FOOTER / INFO -->
+    <div class="border-t border-slate-200 bg-white">
+        <div class="max-w-screen-xl mx-auto px-6 py-8 text-xs text-slate-500">
+            <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+                <div>
+                    <span class="font-medium text-slate-700">Sources des données</span><br>
+                    <span id="data-status">Photos des lieux • Données Paris Open Data</span><br>
+                    <span class="text-[11px]">Projet étudiant ISAE-Supmeca 2026</span>
+                </div>
+
+                <div class="flex items-center gap-x-3">
+                    <button onclick="loadFromParisOpenData()" 
+                            class="px-4 py-2 bg-[var(--school-accent)] hover:bg-[var(--school-accent-dark)] text-white rounded-2xl text-xs font-semibold transition-colors">
+                        Mettre à jour depuis Paris Open Data
+                    </button>
+                    <button onclick="showDataSources()" class="px-4 py-2 border border-slate-300 hover:bg-slate-50 rounded-2xl text-xs font-medium transition-colors">
+                        Comment automatiser
+                    </button>
+                    <button onclick="showAbout()" class="hover:text-slate-700 underline text-xs">À propos</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACTIVITY MODAL -->
+    <div id="activity-modal" onclick="if (event.target.id === 'activity-modal') closeModal()" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+        <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-lg rounded-3xl overflow-hidden modal">
+            <div id="modal-content">
+                <!-- JS injected -->
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ MODAL -->
+    <div id="quiz-modal" onclick="if (event.target.id === 'quiz-modal') closeQuiz()" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[110] flex items-center justify-center p-4">
+        <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-md rounded-3xl overflow-hidden">
+            <div class="px-6 py-5 border-b flex items-center justify-between">
+                <div class="font-semibold text-lg">Trouve ton parcours idéal</div>
+                <button onclick="closeQuiz()" class="text-slate-400 hover:text-slate-600">✕</button>
+            </div>
+            <div id="quiz-content" class="p-6">
+                <!-- JS content -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DATA ====================
+        const activities = [
+            {
+                id: 1,
+                title: "Balade photographique au coucher du soleil",
+                day: "Lundi",
+                date: "25 mai",
+                time: "19:30",
+                duration: "1h45",
+                category: "Nature",
+                price: 0,
+                priceLabel: "Gratuit",
+                location: "Trocadéro → Pont Alexandre III",
+                arrondissement: "16e / 7e",
+                description: "Un classique pour les nouveaux arrivants. Apprends à photographier Paris à la golden hour avec un étudiant en photo qui fait ça tous les mois.",
+                spots: "18 places restantes",
+                studentDiscount: true,
+                coordinates: [48.8619, 2.2886],
+                metro: "Trocadéro (6,9)",
+                tips: "Prends un trépied si tu en as un. L'idéal est d'arriver 15 min en avance pour le meilleur spot."
+            },
+            {
+                id: 2,
+                title: "Visite guidée 'Paris Secret' – Quartier Latin",
+                day: "Mardi",
+                date: "26 mai",
+                time: "17:00",
+                duration: "2h",
+                category: "Histoire",
+                price: 8,
+                priceLabel: "8€ (5€ étudiant)",
+                location: "Place Saint-Michel",
+                arrondissement: "5e",
+                description: "Parcours historique hors des sentiers battus : ruelles médiévales, passages cachés, anecdotes sur les étudiants du Moyen Âge. Guide doctorant en histoire.",
+                spots: "12 places restantes",
+                studentDiscount: true,
+                coordinates: [48.8529, 2.3439],
+                metro: "Saint-Michel (4)",
+                tips: "Parfait pour ton premier contact avec l'histoire de Paris. Très bon rapport qualité/prix."
+            },
+            {
+                id: 3,
+                title: "Atelier cuisine française étudiante",
+                day: "Mercredi",
+                date: "27 mai",
+                time: "18:30",
+                duration: "2h30",
+                category: "Gastronomie",
+                price: 15,
+                priceLabel: "15€ (étudiants)",
+                location: "Atelier des Chefs – Opéra",
+                arrondissement: "2e",
+                description: "Apprends à faire 3 plats iconiques (tarte tatin, poulet rôti aux herbes, salade niçoise revisitée) avec des produits de saison. Tu repars avec les recettes.",
+                spots: "8 places restantes",
+                studentDiscount: true,
+                coordinates: [48.8710, 2.3320],
+                metro: "Opéra (3,7,8)",
+                tips: "Le chef donne souvent des bons plans supermarchés pour étudiants. Amène un tablier si tu en as un."
+            },
+            {
+                id: 4,
+                title: "Exposition 'Lumières de Paris' – Petit Palais",
+                day: "Mercredi",
+                date: "27 mai",
+                time: "10:00",
+                duration: "1h30",
+                category: "Culture",
+                price: 0,
+                priceLabel: "Gratuit (étudiants)",
+                location: "Petit Palais",
+                arrondissement: "8e",
+                description: "Exposition temporaire exceptionnelle sur la représentation de la lumière dans la peinture parisienne (1850-1950). Très belle scénographie.",
+                spots: "Entrée libre toute la journée",
+                studentDiscount: true,
+                coordinates: [48.8665, 2.3145],
+                metro: "Champs-Élysées Clemenceau (1,13)",
+                tips: "Évite 12h-14h, c'est plein. Il y a un très beau jardin à l'arrière pour lire après la visite."
+            },
+            {
+                id: 5,
+                title: "Soirée jeux de société & rencontre internationale",
+                day: "Jeudi",
+                date: "28 mai",
+                time: "19:00",
+                duration: "3h",
+                category: "Sorties",
+                price: 0,
+                priceLabel: "Gratuit",
+                location: "Café des Arts – Canal Saint-Martin",
+                arrondissement: "10e",
+                description: "Soirée étudiante 100% internationale. Plus de 40 jeux (dont des versions multilingues). C'est l'endroit où beaucoup d'étudiants étrangers se font leurs premiers amis.",
+                spots: "Plus de 50 places",
+                studentDiscount: true,
+                coordinates: [48.8723, 2.3668],
+                metro: "Jacques Bonsergent (5)",
+                tips: "Va vers 19h30-20h00 si tu veux éviter le rush des premiers arrivés. Très chaleureux."
+            },
+            {
+                id: 6,
+                title: "Randonnée urbaine : Les Canaux de Paris à vélo",
+                day: "Vendredi",
+                date: "29 mai",
+                time: "14:00",
+                duration: "2h15",
+                category: "Sport",
+                price: 6,
+                priceLabel: "6€ (location Vélib incluse)",
+                location: "Bassin de la Villette",
+                arrondissement: "19e",
+                description: "Itinéraire plat et magnifique le long du canal de l'Ourcq jusqu'au parc de la Villette. Idéal pour découvrir Paris autrement. Niveau facile.",
+                spots: "22 places restantes",
+                studentDiscount: true,
+                coordinates: [48.8867, 2.3820],
+                metro: "Porte de Pantin (5)",
+                tips: "Prends une bouteille d'eau et de la crème solaire. Il y a un super spot pour pique-niquer à mi-chemin."
+            },
+            {
+                id: 7,
+                title: "Concert acoustique gratuit – Parc de la Villette",
+                day: "Vendredi",
+                date: "29 mai",
+                time: "20:30",
+                duration: "1h30",
+                category: "Sorties",
+                price: 0,
+                priceLabel: "Gratuit",
+                location: "Parc de la Villette – Prairie du Triangle",
+                arrondissement: "19e",
+                description: "Concert intimiste de jeunes artistes émergents (folk, jazz moderne, chanson française). Ambiance très étudiante et décontractée.",
+                spots: "Entrée libre",
+                studentDiscount: true,
+                coordinates: [48.8892, 2.3905],
+                metro: "Porte de Pantin (5)",
+                tips: "Apporte un plaid ou un coussin. Les gens restent souvent après pour discuter."
+            },
+            {
+                id: 8,
+                title: "Atelier Street Art & Graffiti – Belleville",
+                day: "Samedi",
+                date: "30 mai",
+                time: "10:30",
+                duration: "2h30",
+                category: "Art",
+                price: 12,
+                priceLabel: "12€ (matériel inclus)",
+                location: "Rue Dénoyez, Belleville",
+                arrondissement: "20e",
+                description: "Découvre l'histoire du street art parisien puis crée ta propre fresque sur toile avec un artiste local reconnu. Tu repars avec ton œuvre.",
+                spots: "10 places restantes",
+                studentDiscount: true,
+                coordinates: [48.8720, 2.3805],
+                metro: "Belleville (2,11)",
+                tips: "Le quartier est génial pour déjeuner après. Essaie le 'Chez Aline' ou 'Le Baratin'."
+            },
+            {
+                id: 9,
+                title: "Visite de la Sainte-Chapelle + conciergerie (tarif étudiant)",
+                day: "Samedi",
+                date: "30 mai",
+                time: "11:00",
+                duration: "1h45",
+                category: "Histoire",
+                price: 11.50,
+                priceLabel: "11,50€ (tarif étudiant)",
+                location: "Île de la Cité",
+                arrondissement: "1er",
+                description: "Les vitraux de la Sainte-Chapelle sont à voir absolument. Le billet combiné avec la Conciergerie permet de comprendre la Révolution française.",
+                spots: "Réservation fortement recommandée",
+                studentDiscount: true,
+                coordinates: [48.8554, 2.3450],
+                metro: "Cité (4)",
+                tips: "Prends le billet coupe-file étudiant. Le matin est plus calme que l'après-midi."
+            },
+            {
+                id: 10,
+                title: "Marché + Street Food à Saint-Ouen",
+                day: "Dimanche",
+                date: "31 mai",
+                time: "11:00",
+                duration: "2h",
+                category: "Gastronomie",
+                price: 0,
+                priceLabel: "Gratuit (achats sur place)",
+                location: "Marché aux Puces de Saint-Ouen",
+                arrondissement: "18e",
+                description: "Le plus grand marché aux puces du monde. On se concentre sur la partie alimentaire : fromages, épices, spécialités africaines et moyen-orientales. Ambiance unique.",
+                spots: "Libre accès",
+                studentDiscount: false,
+                coordinates: [48.9040, 2.3330],
+                metro: "Porte de Saint-Ouen (13) puis bus",
+                tips: "Va avec 15-20€ en poche. Tu peux très bien manger pour 7-8€. Évite les 'menus touristes'."
+            },
+            {
+                id: 11,
+                title: "Projection en plein air – Jardin du Luxembourg",
+                day: "Dimanche",
+                date: "31 mai",
+                time: "21:15",
+                duration: "2h",
+                category: "Culture",
+                price: 0,
+                priceLabel: "Gratuit",
+                location: "Jardin du Luxembourg (pelouse Est)",
+                arrondissement: "6e",
+                description: "Projection de 'Les Enfants du Paradis' en version restaurée. Ambiance magique. Apporte ton plaid et un petit en-cas.",
+                spots: "Libre accès (arrive tôt)",
+                studentDiscount: true,
+                coordinates: [48.8462, 2.3370],
+                metro: "Luxembourg (RER B)",
+                tips: "Les places se prennent vite. Arrive à 20h15 avec un pique-nique léger. Très romantique."
+            },
+            {
+                id: 12,
+                title: "Atelier improvisation théâtre en anglais/français",
+                day: "Lundi",
+                date: "25 mai",
+                time: "18:00",
+                duration: "2h",
+                category: "Sorties",
+                price: 7,
+                priceLabel: "7€ (étudiants)",
+                location: "Théâtre de la Loge – Bastille",
+                arrondissement: "11e",
+                description: "Atelier ultra bienveillant d'improvisation bilingue. Parfait pour sortir de ta zone de confort et rencontrer d'autres étudiants internationaux.",
+                spots: "14 places restantes",
+                studentDiscount: true,
+                coordinates: [48.8543, 2.3725],
+                metro: "Bastille (1,5,8)",
+                tips: "Même si tu n'es pas à l'aise en anglais, ils adaptent. C'est vraiment inclusif."
+            },
+            {
+                id: 13,
+                title: "Découverte du street food coréen à Porte de Vincennes",
+                day: "Mardi",
+                date: "26 mai",
+                time: "19:00",
+                duration: "1h30",
+                category: "Gastronomie",
+                price: 9,
+                priceLabel: "9€ (formule)",
+                location: "Marché des Puces de la Porte de Vincennes",
+                arrondissement: "20e / 12e",
+                description: "Le spot secret des étudiants pour la street food coréenne. Kimchi, tteokbokki, hotteok. Tu vas revenir.",
+                spots: "Libre accès",
+                studentDiscount: false,
+                coordinates: [48.8465, 2.4140],
+                metro: "Porte de Vincennes (1)",
+                tips: "Le stand 'Corée Street' est le meilleur. Va plutôt mardi ou jeudi soir."
+            },
+            {
+                id: 14,
+                title: "Visite du Musée d'Orsay (créneau étudiants)",
+                day: "Jeudi",
+                date: "28 mai",
+                time: "09:30",
+                duration: "2h",
+                category: "Culture",
+                price: 13,
+                priceLabel: "13€ (tarif étudiant)",
+                location: "Musée d'Orsay",
+                arrondissement: "7e",
+                description: "Le plus beau musée d'art du XIXe siècle au monde. Le jeudi matin est le meilleur moment pour éviter la foule. Impressionnistes au rendez-vous.",
+                spots: "Réservation conseillée",
+                studentDiscount: true,
+                coordinates: [48.8599, 2.3266],
+                metro: "Solférino (12)",
+                tips: "Le billet étudiant est valable toute la journée. Tu peux y retourner l'après-midi."
+            },
+            {
+                id: 15,
+                title: "Yoga au lever du soleil – Berges de Seine",
+                day: "Samedi",
+                date: "30 mai",
+                time: "06:45",
+                duration: "1h",
+                category: "Sport",
+                price: 5,
+                priceLabel: "5€ (étudiants)",
+                location: "Port de Javel Haut (15e)",
+                arrondissement: "15e",
+                description: "Session yoga vinyasa en extérieur face à la Seine avec vue sur la Statue de la Liberté. Matériel prêté. Ambiance zen garantie.",
+                spots: "18 places restantes",
+                studentDiscount: true,
+                coordinates: [48.8480, 2.2775],
+                metro: "Javel (RER C)",
+                tips: "C'est tôt mais magique. Apporte des vêtements chauds pour après. Café offert après la séance."
+            }
+        ];
+
+        // === VRAIES PHOTOS DES LIEUX (Unsplash - utilisation autorisée pour prototypes) ===
+        // Remplacées par des photos réelles des endroits mentionnés
+        const activityImages = {
+            1: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80",   // Trocadéro sunset Paris
+            2: "https://images.unsplash.com/photo-1520986606214-8b456906c813?w=800&q=80",   // Quartier Latin / historic Paris
+            3: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80",       // French cooking class
+            4: "https://images.unsplash.com/photo-1569949381669-ecf31ae8e613?w=800&q=80",   // Petit Palais / museum
+            5: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800&q=80",   // Social games evening
+            6: "https://images.unsplash.com/photo-1520984032042-162d526883e0?w=800&q=80",   // Canal Saint-Martin / bike
+            7: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80",   // Outdoor concert Paris
+            8: "https://images.unsplash.com/photo-1499002238440-d264edd596ec?w=800&q=80",   // Street art Belleville
+            9: "https://images.unsplash.com/photo-1590071089561-320d31e3db43?w=800&q=80",   // Sainte-Chapelle stained glass
+            10: "https://images.unsplash.com/photo-1555992336-fb0d29498b13?w=800&q=80",     // Paris market / food market
+            11: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",   // Jardin du Luxembourg evening
+            12: "https://images.unsplash.com/photo-1507679799987-c73779587db7?w=800&q=80",   // Theater / performance
+            13: "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800&q=80",     // Asian street food
+            14: "https://images.unsplash.com/photo-1569949381669-ecf31ae8e613?w=800&q=80",   // Musée d'Orsay
+            15: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80"      // Sunrise yoga outdoors
+        };
+
+        const parcours = [
+            {
+                id: "p1",
+                title: "Premier jour à Paris",
+                subtitle: "Les incontournables sans stress",
+                duration: "1 journée",
+                difficulty: "Facile",
+                budget: "18-25€",
+                color: "bg-[var(--school-accent)]",
+                description: "Le parcours idéal pour ton premier jour. Tu rentres le soir en te disant que Paris est vraiment magique.",
+                steps: [
+                    { time: "09:30", title: "Petit-déjeuner + vue", location: "Café de la Nouvelle Mairie (5e)", duration: "45 min", cost: "6€" },
+                    { time: "10:30", title: "Sainte-Chapelle", location: "Île de la Cité", duration: "1h", cost: "11,50€" },
+                    { time: "12:00", title: "Déjeuner dans le Marais", location: "L'As du Falafel ou Miznon", duration: "1h", cost: "8-10€" },
+                    { time: "14:00", title: "Centre Pompidou (vue + expo)", location: "4e", duration: "1h45", cost: "14€ (étudiant)" },
+                    { time: "17:30", title: "Promenade Berges de Seine", location: "Du Louvre au Pont Neuf", duration: "1h", cost: "Gratuit" }
+                ],
+                tags: ["Premiers pas", "Culture", "Incontournable"]
+            },
+            {
+                id: "p2",
+                title: "Paris Vert & Détente",
+                subtitle: "Nature, canaux et respiration",
+                duration: "1 journée",
+                difficulty: "Facile",
+                budget: "8-15€",
+                color: "bg-emerald-700",
+                description: "Pour quand tu as besoin de calme et de verdure. Parfait après les premiers jours intenses à Paris.",
+                steps: [
+                    { time: "10:00", title: "Parc des Buttes-Chaumont", location: "19e", duration: "1h15", cost: "Gratuit" },
+                    { time: "11:45", title: "Canal de l'Ourcq à pied", location: "Jusqu'à la Villette", duration: "45 min", cost: "Gratuit" },
+                    { time: "12:45", title: "Pique-nique au Parc de la Villette", location: "Prairie du Triangle", duration: "1h", cost: "8€" },
+                    { time: "15:00", title: "Cité des Sciences (jardins extérieurs)", location: "19e", duration: "1h", cost: "Gratuit" },
+                    { time: "17:00", title: "Canal Saint-Martin (retour)", location: "10e", duration: "1h30", cost: "Gratuit" }
+                ],
+                tags: ["Nature", "Calme", "Pique-nique"]
+            },
+            {
+                id: "p3",
+                title: "Soirée Étudiante",
+                subtitle: "Rencontres et vie nocturne douce",
+                duration: "Soirée (18h-minuit)",
+                difficulty: "Moyen",
+                budget: "10-20€",
+                color: "bg-violet-600",
+                description: "Le parcours parfait pour rencontrer d'autres étudiants sans te retrouver dans une boîte bruyante.",
+                steps: [
+                    { time: "18:30", title: "Apéro Canal Saint-Martin", location: "Chez Prune ou Le Petit Cambodge", duration: "1h", cost: "6-8€" },
+                    { time: "20:00", title: "Soirée jeux – Café des Arts", location: "10e", duration: "2h30", cost: "Gratuit" },
+                    { time: "22:45", title: "Bar à vin étudiant (Le Baron Rouge)", location: "12e", duration: "1h", cost: "5-7€" }
+                ],
+                tags: ["Rencontres", "Soirée", "International"]
+            },
+            {
+                id: "p4",
+                title: "Street Art & Créativité",
+                subtitle: "Belleville et la nouvelle scène parisienne",
+                duration: "Demi-journée + soirée",
+                difficulty: "Moyen",
+                budget: "15-22€",
+                color: "bg-orange-600",
+                description: "Pour ceux qui veulent voir la vraie création contemporaine et comprendre Paris au-delà des monuments.",
+                steps: [
+                    { time: "10:30", title: "Atelier Street Art Belleville", location: "20e", duration: "2h30", cost: "12€" },
+                    { time: "13:30", title: "Déjeuner rue de Belleville", location: "20e", duration: "1h", cost: "7€" },
+                    { time: "15:00", title: "Balade Street Art (rue Dénoyez + alentours)", location: "20e", duration: "1h15", cost: "Gratuit" },
+                    { time: "19:00", title: "Concert émergent au 100ECS", location: "11e", duration: "2h", cost: "8-12€" }
+                ],
+                tags: ["Art", "Créativité", "Quartier vivant"]
+            },
+            {
+                id: "p5",
+                title: "Week-end Classique Ralentit",
+                subtitle: "Les plus beaux spots sans la foule",
+                duration: "Samedi ou Dimanche",
+                difficulty: "Facile",
+                budget: "12-20€",
+                color: "bg-rose-600",
+                description: "Un week-end doux et esthétique. Idéal pour prendre de belles photos et te sentir vraiment à Paris.",
+                steps: [
+                    { time: "08:45", title: "Jardin du Luxembourg au lever du jour", location: "6e", duration: "50 min", cost: "Gratuit" },
+                    { time: "10:00", title: "Sainte-Chapelle (créneau calme)", location: "1er", duration: "1h", cost: "11,50€" },
+                    { time: "12:00", title: "Brunch / déjeuner Île Saint-Louis", location: "4e", duration: "1h", cost: "9-12€" },
+                    { time: "15:00", title: "Musée d'Orsay (après-midi calme)", location: "7e", duration: "1h45", cost: "13€" },
+                    { time: "18:30", title: "Golden hour – Pont Alexandre III", location: "7e/8e", duration: "45 min", cost: "Gratuit" }
+                ],
+                tags: ["Photos", "Classique", "Calme"]
+            }
+        ];
+
+        // ==================== STATE ====================
+        let currentFilters = { day: 'all', search: '', category: '', price: '' };
+        let userPlanning = JSON.parse(localStorage.getItem('parcoursParisPlanning') || '[]');
+        let userFavorites = JSON.parse(localStorage.getItem('parcoursParisFavorites') || '[]');
+        let isUsingLiveData = false;
+
+        // ==================== TAILWIND CONFIG ====================
+        function initTailwind() {
+            document.documentElement.style.setProperty('--accent', '#0F172A');
+        }
+
+        // ==================== CARTE INTERACTIVE (Leaflet) ====================
+        let map;
+        let currentMarkers = [];
+        let currentView = 'list';
+
+        function initMap() {
+            if (map) return; // already initialized
+
+            map = L.map('leaflet-map', {
+                zoomControl: true,
+                attributionControl: false
+            }).setView([48.8566, 2.3522], 12.4);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                className: 'map-tiles'
+            }).addTo(map);
+
+            // Add initial markers
+            updateMapMarkers(activities);
+        }
+
+        function updateMapMarkers(filteredActivities) {
+            if (!map) return;
+
+            // Clear existing markers
+            currentMarkers.forEach(m => map.removeLayer(m));
+            currentMarkers = [];
+
+            const bounds = [];
+
+            filteredActivities.forEach(activity => {
+                if (!activity.coordinates) return;
+
+                const marker = L.marker(activity.coordinates, {
+                    icon: L.divIcon({
+                        className: 'custom-marker',
+                        html: `
+                            <div style="background: #0F172A; width: 28px; height: 28px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.25);">
+                                <span style="color: white; font-size: 11px; font-weight: 700;">${activity.time.split(':')[0]}</span>
+                            </div>
+                        `,
+                        iconSize: [28, 28],
+                        iconAnchor: [14, 14],
+                        popupAnchor: [0, -14]
+                    })
+                });
+
+                const popupImg = activityImages[activity.id] || 'https://picsum.photos/id/1015/600/400';
+                const popupContent = `
+                    <div style="width: 260px; padding: 0; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <div style="height: 92px; background-image: url('${popupImg}'); background-size: cover; background-position: center; position: relative;">
+                            <div style="position: absolute; top: 8px; left: 8px; background: rgba(255,255,255,0.95); font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 999px;">
+                                ${activity.priceLabel}
+                            </div>
+                        </div>
+                        <div style="padding: 10px 12px 11px;">
+                            <div style="font-weight: 700; font-size: 14px; line-height: 1.25; color: #0F172A; margin-bottom: 3px;">
+                                ${activity.title}
+                            </div>
+                            <div style="font-size: 11.5px; color: #64748b; margin-bottom: 6px;">
+                                ${activity.day} • ${activity.time} • ${activity.duration}
+                            </div>
+                            <div style="font-size: 12px; color: #475569; margin-bottom: 9px;">
+                                📍 ${activity.location}
+                            </div>
+                            
+                            <div style="display: flex; gap: 6px;">
+                                <button onclick="showActivityModalFromMap(${activity.id});" 
+                                        style="flex: 1; background: #0F172A; color: white; font-size: 11.5px; font-weight: 600; padding: 7px 0; border-radius: 999px; border: none; cursor: pointer;">
+                                    Détails
+                                </button>
+                                <button onclick="quickAddToPlanning(${activity.id});" 
+                                        style="flex: 1; background: #f1f5f9; color: #0F172A; font-size: 11.5px; font-weight: 600; padding: 7px 0; border-radius: 999px; border: none; cursor: pointer;">
+                                    + Planning
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                marker.bindPopup(popupContent, {
+                    closeButton: true,
+                    offset: [0, -2]
+                });
+
+                marker.addTo(map);
+                currentMarkers.push(marker);
+                bounds.push(activity.coordinates);
+            });
+
+            // Auto fit bounds if we have points
+            if (bounds.length > 0) {
+                const latLngBounds = L.latLngBounds(bounds);
+                map.fitBounds(latLngBounds, { padding: [30, 30], maxZoom: 15 });
+            }
+        }
+
+        function showActivityModalFromMap(id) {
+            if (map) map.closePopup();
+            setTimeout(() => {
+                showActivityModal(id);
+            }, 120);
+        }
+
+        function quickAddToPlanning(id) {
+            if (map) map.closePopup();
+            
+            const activity = activities.find(a => a.id === id);
+            if (!activity) return;
+
+            if (!userPlanning.some(p => p.id === id)) {
+                userPlanning.push(activity);
+                localStorage.setItem('parcoursParisPlanning', JSON.stringify(userPlanning));
+            }
+
+            setTimeout(() => {
+                renderPlanning();
+                applyFilters();
+                showToast(`"${activity.title}" ajouté à ton planning`);
+            }, 180);
+        }
+
+        function switchView(view) {
+            currentView = view;
+
+            const listView = document.getElementById('list-view');
+            const mapView = document.getElementById('map-view');
+            const listBtn = document.getElementById('view-list-btn');
+            const mapBtn = document.getElementById('view-map-btn');
+
+            if (view === 'list') {
+                listView.classList.remove('hidden');
+                mapView.classList.add('hidden');
+                listBtn.classList.add('active');
+                mapBtn.classList.remove('active');
+            } else {
+                listView.classList.add('hidden');
+                mapView.classList.remove('hidden');
+                listBtn.classList.remove('active');
+                mapBtn.classList.add('active');
+
+                // Initialize map on first open
+                setTimeout(() => {
+                    initMap();
+                    // Apply current filters to map
+                    const filtered = getCurrentFilteredActivities();
+                    updateMapMarkers(filtered);
+                }, 80);
+            }
+        }
+
+        function getCurrentFilteredActivities() {
+            let filtered = [...activities];
+
+            if (currentFilters.day !== 'all') {
+                filtered = filtered.filter(a => a.day === currentFilters.day);
+            }
+            if (currentFilters.search) {
+                const s = currentFilters.search.toLowerCase();
+                filtered = filtered.filter(a => 
+                    a.title.toLowerCase().includes(s) || 
+                    a.description.toLowerCase().includes(s) ||
+                    a.location.toLowerCase().includes(s)
+                );
+            }
+            if (currentFilters.category) {
+                filtered = filtered.filter(a => a.category === currentFilters.category);
+            }
+            if (currentFilters.price) {
+                if (currentFilters.price === 'gratuit') filtered = filtered.filter(a => a.price === 0);
+                else if (currentFilters.price === 'low') filtered = filtered.filter(a => a.price > 0 && a.price < 10);
+                else if (currentFilters.price === 'medium') filtered = filtered.filter(a => a.price >= 10 && a.price <= 20);
+            }
+            return filtered;
+        }
+
+        // ==================== RENDER ACTIVITIES ====================
+        function renderActivities(filteredActivities) {
+            const container = document.getElementById('activities-grid');
+            container.innerHTML = '';
+
+            // Update results count
+            const countEl = document.getElementById('results-count');
+            if (countEl) {
+                countEl.innerHTML = `${filteredActivities.length} activité${filteredActivities.length > 1 ? 's' : ''} trouvée${filteredActivities.length > 1 ? 's' : ''}`;
+            }
+
+            if (filteredActivities.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full py-10 text-center">
+                        <p class="text-slate-500">Aucune activité ne correspond à tes filtres.</p>
+                        <button onclick="resetFilters()" class="mt-4 text-sm text-[var(--school-accent)] font-medium hover:underline">Réinitialiser les filtres</button>
+                    </div>
+                `;
+                // Also update map if visible
+                if (currentView === 'map' && map) {
+                    updateMapMarkers([]);
+                }
+                return;
+            }
+
+            filteredActivities.forEach(activity => {
+                const isInPlanning = userPlanning.some(p => p.id === activity.id);
+                
+                const imgUrl = activityImages[activity.id] || 'https://picsum.photos/id/1015/600/400';
+                const isFavorite = userFavorites.includes(activity.id);
+
+                const cardHTML = `
+                    <div class="activity-card bg-white border border-slate-200 rounded-3xl overflow-hidden flex flex-col h-full cursor-pointer" onclick="showActivityModal(${activity.id})">
+                        <!-- Image Header -->
+                        <div class="card-image rounded-t-3xl" style="background-image: url('${imgUrl}')">
+                            <div class="price-badge px-3 py-0.5 text-[11px] font-bold ${activity.price === 0 ? 'text-[var(--school-accent)]' : 'text-slate-800'}">
+                                ${activity.priceLabel}
+                            </div>
+                            
+                            <!-- Favorite Heart -->
+                            <button onclick="event.stopImmediatePropagation(); toggleFavorite(${activity.id}, this)" 
+                                    class="absolute top-3 left-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 backdrop-blur hover:bg-white transition-all">
+                                <span class="text-lg leading-none ${isFavorite ? 'text-red-500' : 'text-slate-400 hover:text-slate-600'}">♥</span>
+                            </button>
+
+                            <div class="absolute bottom-3 left-3">
+                                <span class="tag ${getCategoryColor(activity.category)} shadow-sm">${activity.category}</span>
+                            </div>
+                        </div>
+
+                        <div class="px-4 pt-3.5 pb-2 flex-1 flex flex-col">
+                            <div class="flex items-start justify-between gap-2 mb-1">
+                                <h3 class="font-semibold text-[15px] leading-tight tracking-[-0.01em] line-clamp-2 flex-1">${activity.title}</h3>
+                            </div>
+                            
+                            <div class="flex items-center text-xs text-slate-500 mb-2.5">
+                                <span class="font-medium tabular-nums">${activity.time}</span>
+                                <span class="mx-1.5 text-slate-300">•</span>
+                                <span>${activity.duration}</span>
+                            </div>
+
+                            <div class="flex items-center text-sm text-slate-600 mb-auto">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 mr-1.5 flex-shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314-11.314z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <span class="line-clamp-1 text-xs">${activity.location}</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-auto border-t px-4 py-3 flex items-center justify-between bg-slate-50/60 text-xs">
+                            <div class="font-medium text-slate-500">
+                                ${activity.arrondissement}
+                            </div>
+                            
+                            <div class="flex items-center gap-x-1" onclick="event.stopImmediatePropagation(); togglePlanning(${activity.id}, this)">
+                                <button class="text-xs font-semibold px-3.5 h-7 rounded-2xl flex items-center transition-all active:scale-[0.985] ${isInPlanning ? 'bg-[var(--school-accent)] text-white' : 'bg-white border border-slate-200 hover:bg-slate-50 text-slate-700'}">
+                                    ${isInPlanning ? '✓ Dans le planning' : '+ Ajouter'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        function getCategoryColor(category) {
+            const colors = {
+                'Culture': 'bg-blue-100 text-blue-700',
+                'Nature': 'bg-emerald-100 text-emerald-800',
+                'Gastronomie': 'bg-amber-100 text-amber-700',
+                'Sorties': 'bg-violet-100 text-violet-700',
+                'Sport': 'bg-rose-100 text-rose-700',
+                'Histoire': 'bg-indigo-100 text-indigo-700',
+                'Art': 'bg-orange-100 text-orange-700'
+            };
+            return colors[category] || 'bg-slate-100 text-slate-700';
+        }
+
+        // ==================== FILTERS ====================
+        function filterActivities() {
+            const search = document.getElementById('search-input').value.toLowerCase().trim();
+            const category = document.getElementById('category-filter').value;
+            const price = document.getElementById('price-filter').value;
+
+            currentFilters.search = search;
+            currentFilters.category = category;
+            currentFilters.price = price;
+
+            applyFilters();
+
+            // If map is open, refresh markers too
+            if (currentView === 'map' && map) {
+                const filtered = getCurrentFilteredActivities();
+                updateMapMarkers(filtered);
+            }
+        }
+
+        function filterByDay(day) {
+            // Update active button styles
+            document.querySelectorAll('[id^="day-"]').forEach(btn => btn.classList.remove('active', 'border-slate-900'));
+            document.querySelectorAll('[id^="day-"]').forEach(btn => btn.classList.add('border-slate-200'));
+
+            const btnId = day === 'all' ? 'day-all' : `day-${day}`;
+            const activeBtn = document.getElementById(btnId);
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'border-slate-900');
+                activeBtn.classList.remove('border-slate-200');
+            }
+
+            currentFilters.day = day;
+            applyFilters();
+        }
+
+        function applyFilters() {
+            let filtered = [...activities];
+
+            if (currentFilters.day !== 'all') {
+                filtered = filtered.filter(a => a.day === currentFilters.day);
+            }
+
+            if (currentFilters.search) {
+                filtered = filtered.filter(a => 
+                    a.title.toLowerCase().includes(currentFilters.search) || 
+                    a.description.toLowerCase().includes(currentFilters.search) ||
+                    a.location.toLowerCase().includes(currentFilters.search)
+                );
+            }
+
+            if (currentFilters.category) {
+                filtered = filtered.filter(a => a.category === currentFilters.category);
+            }
+
+            if (currentFilters.price) {
+                if (currentFilters.price === 'gratuit') {
+                    filtered = filtered.filter(a => a.price === 0);
+                } else if (currentFilters.price === 'low') {
+                    filtered = filtered.filter(a => a.price > 0 && a.price < 10);
+                } else if (currentFilters.price === 'medium') {
+                    filtered = filtered.filter(a => a.price >= 10 && a.price <= 20);
+                }
+            }
+
+            renderActivities(filtered);
+
+            // Sync map if currently visible
+            if (currentView === 'map' && map) {
+                updateMapMarkers(filtered);
+            }
+        }
+
+        function resetFilters() {
+            currentFilters = { day: 'all', search: '', category: '', price: '' };
+            
+            document.getElementById('search-input').value = '';
+            document.getElementById('category-filter').value = '';
+            document.getElementById('price-filter').value = '';
+
+            document.querySelectorAll('[id^="day-"]').forEach(btn => btn.classList.remove('active', 'border-slate-900'));
+            document.getElementById('day-all').classList.add('active', 'border-slate-900');
+
+            renderActivities(activities);
+
+            // Sync map
+            if (currentView === 'map' && map) {
+                updateMapMarkers(activities);
+            }
+        }
+
+        // ==================== MODAL ====================
+        function showActivityModal(id) {
+            const activity = activities.find(a => a.id === id);
+            if (!activity) return;
+
+            const isPlanned = userPlanning.some(p => p.id === id);
+
+            const modalImg = activityImages[activity.id] || 'https://picsum.photos/id/1015/600/400';
+            const isFav = userFavorites.includes(activity.id);
+
+            const modalHTML = `
+                <div>
+                    <!-- Modal Image -->
+                    <div class="h-48 w-full relative" style="background-image: url('${modalImg}'); background-size: cover; background-position: center;">
+                        <div class="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40"></div>
+                        <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center text-white text-2xl leading-none bg-black/30 hover:bg-black/50 rounded-full">×</button>
+                        
+                        <div class="absolute bottom-4 left-5">
+                            <span class="tag ${getCategoryColor(activity.category)} shadow">${activity.category}</span>
+                        </div>
+                    </div>
+
+                    <div class="px-6 pt-5 pb-5">
+                        <div class="flex items-start justify-between">
+                            <h3 class="text-2xl font-semibold tracking-tight pr-4">${activity.title}</h3>
+                            <button onclick="toggleFavorite(${activity.id}); renderActivities(getCurrentFilteredActivities());" 
+                                    class="text-2xl mt-0.5 ${isFav ? 'text-red-500' : 'text-slate-300 hover:text-slate-400'}">♥</button>
+                        </div>
+                    
+                    <div class="flex items-center gap-x-3 text-sm mb-5 text-slate-500">
+                        <div class="flex items-center">
+                            <span class="font-medium text-slate-700">${activity.time}</span>
+                            <span class="mx-1.5">•</span>
+                            <span>${activity.duration}</span>
+                        </div>
+                        <div class="font-medium ${activity.price === 0 ? 'text-[var(--school-accent)]' : ''}">${activity.priceLabel}</div>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-2xl p-4 mb-5">
+                        <div class="flex gap-x-8 text-sm">
+                            <div>
+                                <div class="text-xs uppercase tracking-widest text-slate-500">Lieu</div>
+                                <div class="font-medium">${activity.location}</div>
+                                <div class="text-xs text-slate-500">${activity.arrondissement} • ${activity.metro}</div>
+                            </div>
+                            <div>
+                                <div class="text-xs uppercase tracking-widest text-slate-500">Places</div>
+                                <div class="font-medium text-[var(--school-accent)]">${activity.spots}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-[15px] leading-relaxed text-slate-600">${activity.description}</p>
+
+                    <div class="mt-5 p-3.5 bg-amber-50 border border-amber-100 rounded-2xl text-sm">
+                        <span class="font-semibold text-amber-800">Conseil étudiant :</span> 
+                        <span class="text-amber-700">${activity.tips}</span>
+                    </div>
+                </div>
+
+                <div class="border-t px-6 py-4 bg-slate-50 flex items-center justify-between gap-3">
+                    <button onclick="togglePlanning(${activity.id}, null, true); closeModal()" 
+                            class="flex-1 h-11 rounded-2xl font-semibold text-sm transition-all 
+                                   ${isPlanned ? 'bg-[var(--school-accent)]/10 text-[var(--school-accent)]' : 'bg-slate-900 text-white hover:bg-slate-800'}">
+                        ${isPlanned ? '✓ Déjà dans ton planning' : '+ Ajouter à mon planning'}
+                    </button>
+                    
+                    <button onclick="closeModal()" 
+                            class="h-11 px-6 text-sm font-medium border border-slate-200 hover:bg-white rounded-2xl">
+                        Fermer
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('modal-content').innerHTML = modalHTML;
+            document.getElementById('activity-modal').classList.remove('hidden');
+            document.getElementById('activity-modal').classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('activity-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            // Refresh planning and grid in case we added something
+            renderPlanning();
+            applyFilters();
+        }
+
+        // ==================== PLANNING ====================
+        function togglePlanning(activityId, element = null, fromModal = false) {
+            const activity = activities.find(a => a.id === activityId);
+            if (!activity) return;
+
+            const index = userPlanning.findIndex(p => p.id === activityId);
+
+            if (index > -1) {
+                userPlanning.splice(index, 1);
+            } else {
+                userPlanning.push(activity);
+            }
+
+            localStorage.setItem('parcoursParisPlanning', JSON.stringify(userPlanning));
+
+            // Refresh UI
+            renderPlanning();
+            
+            if (!fromModal) {
+                applyFilters();
+            }
+
+            // If called from card, we need to refresh the specific card (simple way: re-render all)
+            if (element) {
+                applyFilters();
+            }
+        }
+
+        // ==================== FAVORITES ====================
+        function toggleFavorite(activityId, element = null) {
+            const index = userFavorites.indexOf(activityId);
+
+            if (index > -1) {
+                userFavorites.splice(index, 1);
+            } else {
+                userFavorites.push(activityId);
+            }
+
+            localStorage.setItem('parcoursParisFavorites', JSON.stringify(userFavorites));
+
+            // Refresh UI
+            applyFilters();
+
+            // If element passed (from card), update it visually without full re-render
+            if (element) {
+                const isNowFav = userFavorites.includes(activityId);
+                element.innerHTML = `<span class="text-lg leading-none ${isNowFav ? 'text-red-500' : 'text-slate-400 hover:text-slate-600'}">♥</span>`;
+            }
+        }
+
+        // ==================== DONNÉES ORIGINELLES DE DÉMO (belles + photos réelles) ====================
+        let demoActivities = [];
+
+        // ==================== LIVE DATA FROM PARIS OPEN DATA (automatisé) ====================
+        async function loadFromParisOpenData({ silent = false } = {}) {
+            const statusEl = document.getElementById('data-status');
+
+            if (!silent && statusEl) {
+                statusEl.innerHTML = 'Chargement des données depuis Paris Open Data...';
+            }
+
+            const originalUrl = 'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/que-faire-a-paris-/records?limit=25&order_by=date_start%20DESC';
+            const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(originalUrl);
+
+            try {
+                const response = await fetch(proxyUrl, { 
+                    headers: { 'Accept': 'application/json' } 
+                });
+                
+                if (!response.ok) throw new Error('Proxy ou API a retourné une erreur');
+
+                const json = await response.json();
+                const records = json.results || json.response?.results || [];
+
+                if (!records || records.length === 0) throw new Error('Aucune donnée');
+
+                const liveActivities = records
+                    .filter(r => r.title && r.date_start)
+                    .slice(0, 18)
+                    .map((r, index) => {
+                        const startDate = new Date(r.date_start);
+                        const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+                        const day = dayNames[startDate.getDay()] || 'Jeudi';
+                        const dateStr = startDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+
+                        let price = 0;
+                        let priceLabel = 'Gratuit';
+                        if (r.price_type && r.price_type !== 'gratuit') {
+                            price = r.price_detail ? parseFloat(r.price_detail) || 10 : 8;
+                            priceLabel = r.price_detail ? r.price_detail + '€' : 'Payant';
+                        }
+
+                        return {
+                            id: 100 + index,
+                            title: r.title,
+                            day: day,
+                            date: dateStr,
+                            time: r.date_start ? r.date_start.substring(11, 16) : '14:00',
+                            duration: '1h30',
+                            category: mapCategory(r.category || r.tags || ''),
+                            price: price,
+                            priceLabel: priceLabel,
+                            location: r.address_name || r.place_name || r.address_street || 'Paris',
+                            arrondissement: r.address_zipcode ? r.address_zipcode + 'e' : 'Paris',
+                            description: (r.description || r.lead_text || 'Événement proposé par la Ville de Paris.').substring(0, 280),
+                            spots: 'Selon disponibilité',
+                            studentDiscount: true,
+                            coordinates: (r.latitude && r.longitude) ? 
+                                [parseFloat(r.latitude), parseFloat(r.longitude)] : 
+                                [48.8566 + (Math.random()-0.5)*0.04, 2.3522 + (Math.random()-0.5)*0.04],
+                            metro: r.transport || 'Voir sur place',
+                            tips: 'Donnée en direct • Paris Open Data'
+                        };
+                    });
+
+                // Sauvegarde des données de démo si pas encore fait
+                if (demoActivities.length === 0) {
+                    demoActivities = activities.slice();
+                }
+
+                // Remplacer
+                activities.length = 0;
+                liveActivities.forEach(a => activities.push(a));
+                isUsingLiveData = true;
+
+                resetFilters();
+                if (currentView === 'map' && map) {
+                    updateMapMarkers(activities);
+                }
+
+                if (statusEl) {
+                    statusEl.innerHTML = `✓ ${activities.length} activités en direct depuis Paris Open Data`;
+                }
+
+                if (!silent) {
+                    showToast('Données mises à jour depuis Paris Open Data');
+                }
+
+                return true; // succès
+
+            } catch (error) {
+                console.warn('Échec chargement données live (normal en local parfois) :', error);
+
+                if (!silent && statusEl) {
+                    statusEl.innerHTML = 'Données de démonstration (chargement live temporairement indisponible)';
+                }
+
+                if (!silent) {
+                    showToast('Impossible de charger les données live pour le moment. Version de démonstration utilisée.');
+                }
+                return false;
+            }
+        }
+
+        function mapCategory(rawCategory) {
+            const cat = (rawCategory || '').toLowerCase();
+            if (cat.includes('musée') || cat.includes('exposition') || cat.includes('culture')) return 'Culture';
+            if (cat.includes('concert') || cat.includes('spectacle') || cat.includes('soirée')) return 'Sorties';
+            if (cat.includes('visite') || cat.includes('histoire') || cat.includes('patrimoine')) return 'Histoire';
+            if (cat.includes('atelier') || cat.includes('cuisine') || cat.includes('gastronomie')) return 'Gastronomie';
+            if (cat.includes('sport') || cat.includes('yoga') || cat.includes('randonnée')) return 'Sport';
+            if (cat.includes('nature') || cat.includes('parc') || cat.includes('jardin')) return 'Nature';
+            if (cat.includes('street') || cat.includes('art') || cat.includes('graffiti')) return 'Art';
+            return 'Culture';
+        }
+
+        function renderPlanning() {
+            const container = document.getElementById('planning-content');
+
+            if (userPlanning.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="mx-auto w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-3">
+                            📅
+                        </div>
+                        <p class="font-medium text-slate-600">Ton planning est vide pour l'instant</p>
+                        <p class="text-sm text-slate-500 mt-1">Ajoute des activités depuis "Cette semaine" ou en suivant un parcours complet.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Group by day
+            const grouped = {};
+            userPlanning.forEach(act => {
+                if (!grouped[act.day]) grouped[act.day] = [];
+                grouped[act.day].push(act);
+            });
+
+            const daysOrder = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+            
+            let html = `<div class="space-y-6">`;
+
+            daysOrder.forEach(day => {
+                if (!grouped[day]) return;
+
+                const dayActs = grouped[day].sort((a, b) => a.time.localeCompare(b.time));
+
+                html += `
+                    <div>
+                        <div class="flex items-center gap-x-3 mb-3">
+                            <span class="font-semibold text-base">${day}</span>
+                            <span class="text-xs px-2 py-0.5 bg-slate-100 text-slate-500 rounded-xl">${dayActs.length} activité${dayActs.length > 1 ? 's' : ''}</span>
+                        </div>
+                        <div class="space-y-2">
+                `;
+
+                dayActs.forEach(act => {
+                    html += `
+                        <div class="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 group">
+                            <div class="flex items-center gap-x-3">
+                                <div class="font-mono text-sm tabular-nums font-medium w-11 text-slate-600">${act.time}</div>
+                                <div>
+                                    <div class="font-medium leading-tight">${act.title}</div>
+                                    <div class="text-xs text-slate-500">${act.location} • ${act.priceLabel}</div>
+                                </div>
+                            </div>
+                            <button onclick="removeFromPlanning(${act.id})" 
+                                    class="opacity-40 group-hover:opacity-100 text-xs px-3 py-1 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all">Retirer</button>
+                        </div>
+                    `;
+                });
+
+                html += `</div></div>`;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function removeFromPlanning(id) {
+            userPlanning = userPlanning.filter(p => p.id !== id);
+            localStorage.setItem('parcoursParisPlanning', JSON.stringify(userPlanning));
+            renderPlanning();
+            applyFilters();
+        }
+
+        function exportPlanning() {
+            if (userPlanning.length === 0) {
+                alert("Ton planning est vide. Ajoute d'abord des activités !");
+                return;
+            }
+
+            const content = `PARCOURSPARIS - Mon planning semaine 25-31 mai 2026\n\n` +
+                userPlanning.map(a => `${a.day} ${a.date} — ${a.time} | ${a.title}\n   ${a.location} | ${a.priceLabel}\n`).join('\n');
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Mon_Planning_ParcoursParis.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // ==================== PARCOURS ====================
+        function renderParcours() {
+            const container = document.getElementById('parcours-grid');
+            container.innerHTML = '';
+
+            parcours.forEach(p => {
+                const html = `
+                    <div onclick="showParcoursDetail('${p.id}')" class="parcours-card cursor-pointer bg-white border border-slate-200 rounded-3xl p-5 flex flex-col h-full hover:border-slate-300">
+                        <div class="${p.color} text-white text-xs font-semibold tracking-widest px-3 py-1 rounded-2xl w-fit mb-4">${p.duration}</div>
+                        
+                        <div class="font-semibold text-xl tracking-tight mb-1">${p.title}</div>
+                        <div class="text-sm text-slate-500 mb-4">${p.subtitle}</div>
+
+                        <div class="mt-auto">
+                            <div class="flex items-center gap-x-2 mb-4">
+                                <div class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-2xl">Budget ${p.budget}</div>
+                                <div class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-2xl">${p.difficulty}</div>
+                            </div>
+                            
+                            <div class="flex flex-wrap gap-1.5">
+                                ${p.tags.map(tag => `<span class="text-[10px] px-2 py-0.5 bg-slate-900 text-white rounded-xl">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        function showParcoursDetail(parcoursId) {
+            const p = parcours.find(x => x.id === parcoursId);
+            if (!p) return;
+
+            const modal = document.getElementById('activity-modal');
+            
+            let stepsHTML = '';
+            p.steps.forEach((step, i) => {
+                stepsHTML += `
+                    <div class="itinerary-step flex gap-4 pb-5">
+                        <div class="flex-shrink-0 w-9 h-9 rounded-2xl ${p.color} text-white flex items-center justify-center text-xs font-semibold tabular-nums">${step.time}</div>
+                        <div class="flex-1 pt-0.5">
+                            <div class="font-semibold">${step.title}</div>
+                            <div class="text-sm text-slate-500">${step.location} • ${step.duration} • ${step.cost}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const content = `
+                <div class="px-6 pt-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="${p.color} text-white text-xs font-semibold px-3 py-1 rounded-2xl">${p.duration}</span>
+                        </div>
+                        <button onclick="closeModal()" class="text-3xl leading-none text-slate-400 hover:text-slate-600 -mt-1">×</button>
+                    </div>
+
+                    <h3 class="text-3xl font-semibold tracking-tighter mt-3">${p.title}</h3>
+                    <p class="text-slate-600 mt-1">${p.subtitle}</p>
+
+                    <div class="flex gap-2 mt-4 mb-6">
+                        <div class="text-xs bg-slate-100 px-3 py-1 rounded-2xl">Budget : <span class="font-semibold">${p.budget}</span></div>
+                        <div class="text-xs bg-slate-100 px-3 py-1 rounded-2xl">${p.difficulty}</div>
+                    </div>
+
+                    <div class="mb-2 text-xs uppercase tracking-[1px] font-semibold text-slate-500">Itinéraire du parcours</div>
+                    <div class="mb-6">${stepsHTML}</div>
+
+                    <div class="text-sm text-slate-600 bg-slate-50 border border-slate-100 rounded-2xl p-4">${p.description}</div>
+                </div>
+
+                <div class="border-t mt-6 px-6 py-5 bg-slate-50 flex gap-3">
+                    <button onclick="followParcours('${p.id}'); closeModal()" 
+                            class="flex-1 h-12 bg-slate-900 text-white font-semibold rounded-3xl active:scale-[0.985] transition-transform">
+                        Suivre ce parcours (ajouter toutes les étapes)
+                    </button>
+                    <button onclick="closeModal()" class="px-8 border border-slate-300 font-medium rounded-3xl">Fermer</button>
+                </div>
+            `;
+
+            document.getElementById('modal-content').innerHTML = content;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function followParcours(parcoursId) {
+            const p = parcours.find(x => x.id === parcoursId);
+            if (!p) return;
+
+            // Find corresponding activities and add them
+            let added = 0;
+
+            p.steps.forEach(step => {
+                // Try to match activity by location or title keywords
+                const matchingActivity = activities.find(a => 
+                    a.location.toLowerCase().includes(step.location.toLowerCase().split(' ')[0]) ||
+                    step.title.toLowerCase().includes(a.title.toLowerCase().split(' ')[0]) ||
+                    (step.title.toLowerCase().includes('sainte-chapelle') && a.title.toLowerCase().includes('sainte-chapelle')) ||
+                    (step.title.toLowerCase().includes('musée d\'orsay') && a.title.toLowerCase().includes('orsay')) ||
+                    (step.title.toLowerCase().includes('centre pompidou') && a.title.toLowerCase().includes('pompidou'))
+                );
+
+                if (matchingActivity) {
+                    if (!userPlanning.some(pl => pl.id === matchingActivity.id)) {
+                        userPlanning.push(matchingActivity);
+                        added++;
+                    }
+                }
+            });
+
+            localStorage.setItem('parcoursParisPlanning', JSON.stringify(userPlanning));
+            
+            // Close modal and refresh
+            closeModal();
+            renderPlanning();
+            applyFilters();
+
+            // Nice toast
+            showToast(`${added} activités du parcours ont été ajoutées à ton planning.`);
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-3xl shadow-xl text-sm flex items-center gap-x-2 z-[200]`;
+            toast.innerHTML = `<span>${message}</span>`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.transition = 'all 0.2s';
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 200);
+            }, 2600);
+        }
+
+        // ==================== QUIZ ====================
+        let quizStep = 0;
+        let quizAnswers = {};
+
+        function showQuiz() {
+            quizStep = 0;
+            quizAnswers = {};
+            const modal = document.getElementById('quiz-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            renderQuizStep();
+        }
+
+        function closeQuiz() {
+            const modal = document.getElementById('quiz-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function renderQuizStep() {
+            const container = document.getElementById('quiz-content');
+
+            if (quizStep === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-2">
+                        <div class="text-4xl mb-4">🌍</div>
+                        <div class="font-semibold text-xl mb-2">Bienvenue !</div>
+                        <p class="text-slate-600">Réponds à 4 questions rapides pour découvrir le parcours qui te correspond le mieux.</p>
+                    </div>
+                    <button onclick="nextQuizStep()" class="mt-8 w-full h-12 bg-slate-900 text-white font-semibold rounded-3xl">Commencer</button>
+                `;
+            } else if (quizStep === 1) {
+                container.innerHTML = `
+                    <div>
+                        <div class="text-xs text-[var(--school-accent)] font-semibold mb-2">QUESTION 1/4</div>
+                        <div class="font-semibold text-xl mb-5">Tu arrives à Paris... quelle est ta priorité ?</div>
+                        <div class="space-y-2">
+                            <div onclick="answerQuiz(1, 'culture')" class="cursor-pointer p-4 border rounded-2xl hover:border-[var(--school-accent)]">Découvrir l’histoire et la culture</div>
+                            <div onclick="answerQuiz(1, 'nature')" class="cursor-pointer p-4 border rounded-2xl hover:border-[var(--school-accent)]">Me poser dans des beaux endroits calmes</div>
+                            <div onclick="answerQuiz(1, 'social')" class="cursor-pointer p-4 border rounded-2xl hover:border-[var(--school-accent)]">Rencontrer d’autres étudiants</div>
+                            <div onclick="answerQuiz(1, 'art')" class="cursor-pointer p-4 border rounded-2xl hover:border-[var(--school-accent)]">Voir la scène créative et alternative</div>
+                        </div>
+                    </div>
+                `;
+            } else if (quizStep === 2) {
+                container.innerHTML = `
+                    <div>
+                        <div class="text-xs text-[var(--school-accent)] font-semibold mb-2">QUESTION 2/4</div>
+                        <div class="font-semibold text-xl mb-5">Ton budget pour une journée d’activités ?</div>
+                        <div class="space-y-2">
+                            <div onclick="answerQuiz(2, 'low')" class="cursor-pointer p-4 border rounded-2xl hover:border-[var(--school-accent)]">Le plus gratuit possible (&lt; 10€)</div>
+                            <div onclick="answerQuiz(2, 'medium')" class="cursor-pointer p-4 border rounded-2xl hover:border-[var(--school-accent)]">Je peux mettre 15-25€</div>
+                            <div onclick="answerQuiz(2, 'high')" class="cursor-pointer p-4 border rounded-2xl hover:border-[var(--school-accent)]">Peu importe, je veux le meilleur</div>
+                        </div>
+                    </div>
+                `;
+            } else if (quizStep === 3) {
+                container.innerHTML = `
+                    <div>
+                        <div class="text-xs text-[var(--school-accent)] font-semibold mb-2">QUESTION 3/4</div>
+                        <div class="font-semibold text-xl mb-5">Tu préfères plutôt...</div>
+                        <div class="space-y-2">
+                            <div onclick="answerQuiz(3, 'morning')" class="cursor-pointer p-4 border rounded-2xl hover:border-[var(--school-accent)]">Commencer tôt le matin (8h-9h)</div>
+                            <div onclick="answerQuiz(3, 'afternoon')" class="cursor-pointer p-4 border rounded-2xl hover:border-[var(--school-accent)]">Prendre mon temps l’après-midi</div>
+                            <div onclick="answerQuiz(3, 'evening')" class="cursor-pointer p-4 border rounded-2xl hover:border-[var(--school-accent)]">Les soirées et coucher de soleil</div>
+                        </div>
+                    </div>
+                `;
+            } else if (quizStep === 4) {
+                container.innerHTML = `
+                    <div>
+                        <div class="text-xs text-[var(--school-accent)] font-semibold mb-2">QUESTION 4/4</div>
+                        <div class="font-semibold text-xl mb-5">Avec qui tu viens à Paris ?</div>
+                        <div class="space-y-2">
+                            <div onclick="answerQuiz(4, 'alone')" class="cursor-pointer p-4 border rounded-2xl hover:border-[var(--school-accent)]">Je suis seul(e) et je veux rencontrer du monde</div>
+                            <div onclick="answerQuiz(4, 'couple')" class="cursor-pointer p-4 border rounded-2xl hover:border-[var(--school-accent)]">En couple ou avec un proche</div>
+                            <div onclick="answerQuiz(4, 'friends')" class="cursor-pointer p-4 border rounded-2xl hover:border-[var(--school-accent)]">Avec des amis</div>
+                        </div>
+                    </div>
+                `;
+            } else if (quizStep === 5) {
+                const recommendation = getQuizRecommendation();
+                
+                container.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-[var(--school-accent)] text-sm font-semibold tracking-widest mb-1">RECOMMANDATION</div>
+                        <div class="font-semibold text-2xl mb-1">${recommendation.title}</div>
+                        <p class="text-sm text-slate-600 mb-6">${recommendation.subtitle}</p>
+                        
+                        <button onclick="selectRecommendedParcours('${recommendation.id}')" 
+                                class="w-full h-12 bg-[var(--school-accent)] hover:bg-[var(--school-accent-dark)] transition-colors text-white font-semibold rounded-3xl mb-2">
+                            Voir ce parcours en détail
+                        </button>
+                        <button onclick="closeQuiz()" class="text-sm text-slate-500 hover:text-slate-700">Non merci, je veux explorer seul</button>
+                    </div>
+                `;
+            }
+        }
+
+        function answerQuiz(question, answer) {
+            quizAnswers[question] = answer;
+            nextQuizStep();
+        }
+
+        function nextQuizStep() {
+            quizStep++;
+            renderQuizStep();
+        }
+
+        function getQuizRecommendation() {
+            // Simple logic
+            const {1: q1, 2: q2, 3: q3, 4: q4} = quizAnswers;
+
+            if (q1 === 'culture' || q1 === 'histoire') return { id: 'p1', title: "Premier jour à Paris", subtitle: "Le parcours parfait pour bien commencer" };
+            if (q1 === 'nature') return { id: 'p2', title: "Paris Vert & Détente", subtitle: "Le plus calme et ressourçant" };
+            if (q1 === 'social' || q4 === 'alone') return { id: 'p3', title: "Soirée Étudiante", subtitle: "Idéal pour rencontrer du monde" };
+            if (q1 === 'art') return { id: 'p4', title: "Street Art & Créativité", subtitle: "Pour découvrir la vraie création parisienne" };
+            
+            return { id: 'p5', title: "Week-end Classique Ralentit", subtitle: "Beau, calme et photogénique" };
+        }
+
+        function selectRecommendedParcours(parcoursId) {
+            closeQuiz();
+            setTimeout(() => {
+                showParcoursDetail(parcoursId);
+            }, 280);
+        }
+
+        // ==================== INITIALIZATION ====================
+        function initializeApp() {
+            initTailwind();
+
+            // Sauvegarde des données de démo originales (belles photos + curation)
+            if (demoActivities.length === 0) {
+                demoActivities = activities.slice();
+            }
+
+            // Rendu initial rapide avec les données de démo (fiable pour présentation)
+            renderActivities(activities);
+            renderParcours();
+            renderPlanning();
+
+            // Statut initial
+            const statusEl = document.getElementById('data-status');
+            if (statusEl) {
+                statusEl.innerHTML = 'Chargement des données Paris Open Data...';
+            }
+
+            // === AUTOMATISATION : Tentative de chargement des données officielles au démarrage ===
+            // On le fait en arrière-plan pour ne pas bloquer l'interface
+            setTimeout(async () => {
+                const success = await loadFromParisOpenData({ silent: true });
+
+                if (success) {
+                    // Si ça a marché, on met à jour le statut
+                    if (statusEl) {
+                        statusEl.innerHTML = `✓ ${activities.length} activités en direct depuis Paris Open Data`;
+                    }
+                } else {
+                    // Retour aux belles données de démo
+                    if (statusEl) {
+                        statusEl.innerHTML = 'Données Paris Open Data (version de démonstration)';
+                    }
+                }
+            }, 1200); // petit délai pour que l'UI soit fluide
+
+            // Ensure results count is visible on load
+            setTimeout(() => {
+                const countEl = document.getElementById('results-count');
+                if (countEl && countEl.innerHTML === '') {
+                    countEl.innerHTML = `${activities.length} activités cette semaine`;
+                }
+            }, 50);
+
+            // Set default filter button active
+            const allBtn = document.getElementById('day-all');
+            if (allBtn) allBtn.classList.add('active', 'border-slate-900');
+
+            // Keyboard support for search
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') filterActivities();
+            });
+
+            // Welcome toast for first time visitors (demo)
+            if (!localStorage.getItem('parcoursParisSeen')) {
+                setTimeout(() => {
+                    if (userPlanning.length === 0) {
+                        // Optional hint
+                    }
+                    localStorage.setItem('parcoursParisSeen', 'true');
+                }, 6500);
+            }
+
+            console.log('%c[ParcoursParis] Application initialisée — données automatisées (live si possible)', 'color:#64748b');
+        }
+
+        function showAbout() {
+            const modal = document.getElementById('activity-modal');
+            document.getElementById('modal-content').innerHTML = `
+                <div class="p-6">
+                    <button onclick="closeModal()" class="float-right text-3xl leading-none text-slate-400 hover:text-slate-600">×</button>
+                    <h3 class="font-semibold text-2xl tracking-tight">À propos de ParcoursParis</h3>
+                    
+                    <div class="mt-5 space-y-4 text-sm text-slate-600 leading-relaxed">
+                        <p>Ce projet a été réalisé dans le cadre d’un cours de <strong>Management de Projet</strong>.</p>
+                        <p>L’objectif était de créer un outil simple et utile pour les étudiants arrivant à Paris : une application qui permet de découvrir rapidement les activités de la semaine et de suivre des parcours déjà construits.</p>
+                        
+                        <div>
+                            <div class="font-semibold text-slate-700 mb-1">Fonctionnalités principales</div>
+                            <ul class="list-disc pl-5 space-y-0.5">
+                                <li>15 activités pour la semaine du 25 au 31 mai 2026</li>
+                                <li>5 parcours thématiques prêts à l’emploi</li>
+                                <li>Carte interactive + synchronisation filtres</li>
+                                <li>Favoris + Planning personnel</li>
+                                <li>Quiz de recommandation</li>
+                            </ul>
+                        </div>
+                        
+                        <p class="text-xs pt-3 text-slate-500">Prototype développé en HTML + Tailwind + JavaScript pur. Déploiement possible sur Vercel/Netlify en 30 secondes.</p>
+                    </div>
+                </div>
+                <div class="border-t px-6 py-4 bg-slate-50 text-xs text-slate-500">
+                    Conçu pour être facilement maintenu et amélioré par une petite équipe étudiante.
+                </div>
+            `;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function showDataSources() {
+            const modal = document.getElementById('activity-modal');
+            document.getElementById('modal-content').innerHTML = `
+                <div class="p-6 max-h-[85vh] overflow-auto">
+                    <button onclick="closeModal()" class="float-right text-3xl leading-none text-slate-400 hover:text-slate-600">×</button>
+                    <h3 class="font-semibold text-2xl tracking-tight mb-1">Automatiser les données</h3>
+                    <p class="text-slate-600 mb-5">Voici comment connecter l’application à de vraies données officielles.</p>
+
+                    <div class="space-y-6 text-sm">
+                        <div>
+                            <div class="font-semibold text-slate-800 mb-2">Source recommandée : Paris Open Data</div>
+                            <p class="text-slate-600">Le dataset officiel <strong>"Que faire à Paris ?"</strong> contient des centaines d’événements mis à jour régulièrement.</p>
+                            <a href="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/" target="_blank" class="text-[var(--school-accent)] underline">→ Voir le dataset</a>
+                        </div>
+
+                        <div>
+                            <div class="font-semibold text-slate-800 mb-2">Exemple de code pour charger automatiquement</div>
+                            <pre class="bg-slate-900 text-[var(--school-accent)] text-xs p-4 rounded-2xl overflow-x-auto"><code>async function loadRealActivities() {
+  const originalUrl = "https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/que-faire-a-paris-/records?limit=20";
+  
+  // Pour la démo seulement (proxy public temporaire)
+  const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(originalUrl);
+  
+  const res = await fetch(proxyUrl);
+  const data = await res.json();
+  // Transformer data.results en format de ton app...
+}</code></pre>
+                        </div>
+
+                        <div class="text-xs text-slate-500 border-t pt-4 space-y-1">
+                            <div><strong>Pour la présentation :</strong> On utilise un proxy public temporaire pour que le bouton fonctionne.</div>
+                            <div><strong>Pour un vrai projet / production :</strong> Il faut un backend contrôlé (Vercel Edge Function, Cloudflare Worker, ou petit serveur) pour éviter les problèmes de fiabilité et de sécurité du proxy public.</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // Start the app
+        window.onload = initializeApp;
+    </script>
+</body>
+</html>
