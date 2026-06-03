@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ParcoursParis • Paris 2026</title>
 
-    <!-- SEO & Social Sharing -->
     <meta name="description" content="Application pour découvrir Paris : activités et parcours pour la semaine du 1-7 juin 2026.">
     <meta property="og:title" content="ParcoursParis • Paris">
     <meta property="og:description" content="Découvre Paris facilement avec des activités sélectionnées et des parcours prêts à l'emploi.">
@@ -160,7 +159,7 @@
         /* === PREMIUM VISUAL UPGRADES === */
         .premium-shadow {
             box-shadow: 0 10px 15px -3px rgb(15 23 42 / 0.08), 
-                       0 4px 6px -4px rgb(15 23 42 / 0.08);
+                        0 4px 6px -4px rgb(15 23 42 / 0.08);
         }
 
         .activity-card {
@@ -330,17 +329,17 @@
         /* --- Particules flottantes dans le hero --- */
         @keyframes float1 {
             0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.4; }
-            33%       { transform: translateY(-18px) translateX(8px); opacity: 0.7; }
-            66%       { transform: translateY(-8px) translateX(-6px); opacity: 0.5; }
+            33%        { transform: translateY(-18px) translateX(8px); opacity: 0.7; }
+            66%        { transform: translateY(-8px) translateX(-6px); opacity: 0.5; }
         }
         @keyframes float2 {
             0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.3; }
-            50%       { transform: translateY(-22px) translateX(-10px); opacity: 0.6; }
+            50%        { transform: translateY(-22px) translateX(-10px); opacity: 0.6; }
         }
         @keyframes float3 {
             0%, 100% { transform: translateY(0px); opacity: 0.25; }
-            40%       { transform: translateY(-14px) translateX(12px); opacity: 0.55; }
-            80%       { transform: translateY(-6px) translateX(-4px); opacity: 0.35; }
+            40%        { transform: translateY(-14px) translateX(12px); opacity: 0.55; }
+            80%        { transform: translateY(-6px) translateX(-4px); opacity: 0.35; }
         }
 
         .particle { position: absolute; border-radius: 50%; pointer-events: none; }
@@ -356,7 +355,7 @@
         /* --- Étoile scintillante --- */
         @keyframes twinkle {
             0%, 100% { opacity: 0.1; transform: scale(0.8); }
-            50%       { opacity: 0.7; transform: scale(1.2); }
+            50%        { opacity: 0.7; transform: scale(1.2); }
         }
         .star {
             position: absolute; pointer-events: none;
@@ -371,7 +370,7 @@
         /* --- Logo flottant --- */
         @keyframes floatCard {
             0%, 100% { transform: translateY(0px); }
-            50%       { transform: translateY(-6px); }
+            50%        { transform: translateY(-6px); }
         }
         .hero-logos > div { animation: floatCard 4s ease-in-out infinite; }
 
@@ -458,7 +457,7 @@
         /* --- Stats bar pulse --- */
         @keyframes pulseGlow {
             0%, 100% { box-shadow: 0 0 0 0 rgba(255,92,0,0); }
-            50%       { box-shadow: 0 0 12px 3px rgba(255,92,0,0.15); }
+            50%        { box-shadow: 0 0 12px 3px rgba(255,92,0,0.15); }
         }
 
         /* --- Section headers slide in --- */
@@ -536,7 +535,7 @@
 
         @keyframes loaderPulse {
             0%, 100% { transform: scale(1); opacity: 1; }
-            50%       { transform: scale(1.15); opacity: 0.7; }
+            50%        { transform: scale(1.15); opacity: 0.7; }
         }
         #page-loader .loader-logo {
             animation: loaderPulse 0.9s ease-in-out infinite;
@@ -545,7 +544,6 @@
 </head>
 <body class="bg-[#070A12] text-white">
 
-    <!-- Page loader -->
     <div id="page-loader">
         <div class="loader-logo flex flex-col items-center gap-3">
             <div class="w-14 h-14 bg-[#FF5C00] rounded-2xl flex items-center justify-center">
@@ -554,9 +552,8 @@
             <span class="text-white/40 text-sm font-medium tracking-widest uppercase">Chargement…</span>
         </div>
     </div>
-    <!-- VERTICAL SIDEBAR NAV (left) -->
+    
     <aside class="sidebar fixed top-0 left-0 h-screen flex flex-col z-50 hidden lg:flex">
-        <!-- Logo -->
         <div class="px-6 py-7 border-b border-white/10">
             <div class="flex items-center gap-x-3 mb-4">
                 <div class="w-11 h-11 bg-[#FF5C00] rounded-2xl flex items-center justify-center flex-shrink-0">
@@ -566,19 +563,15 @@
                     <div class="font-semibold text-2xl tracking-tighter">Parcours<span class="text-[#FF5C00]">Paris</span></div>
                 </div>
             </div>
-            <!-- Logos partenaires -->
             <div class="flex items-center gap-3 bg-white rounded-xl px-3 py-2">
-                <!-- ISAE-Supmeca -->
                 <svg viewBox="0 0 120 60" class="h-8 flex-shrink-0" xmlns="http://www.w3.org/2000/svg">
                     <text x="2" y="22" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#2D3358" letter-spacing="2">Isae</text>
                     <line x1="2" y1="30" x2="118" y2="30" stroke="#E8421A" stroke-width="2.5"/>
                     <text x="2" y="50" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#2D3358" letter-spacing="1">supméca</text>
-                    <!-- Bird silhouette simplified -->
                     <path d="M72 8 Q80 3 90 6 Q95 8 92 12 Q88 10 82 11 Z" fill="#2D3358"/>
                     <path d="M88 5 L96 2 L94 8 Z" fill="#2D3358"/>
                 </svg>
                 <div class="w-px h-8 bg-gray-300"></div>
-                <!-- UIMM / Mécavenir -->
                 <svg viewBox="0 0 130 55" class="h-8 flex-shrink-0" xmlns="http://www.w3.org/2000/svg">
                     <rect x="0" y="0" width="50" height="55" fill="#0078BF"/>
                     <rect x="0" y="28" width="50" height="27" fill="#E8421A"/>
@@ -594,7 +587,6 @@
             </div>
         </div>
 
-        <!-- Navigation Links -->
         <div class="flex-1 px-2 pt-6">
             <nav class="space-y-1">
                 <a href="#cette-semaine" class="sidebar-link">
@@ -620,7 +612,6 @@
             </nav>
         </div>
 
-        <!-- Bottom section -->
         <div class="p-4 border-t border-white/10 mt-auto">
             <div class="bg-white/5 rounded-2xl p-3 text-xs mb-3">
                 <div class="flex items-center gap-2 text-emerald-400" id="sidebar-data-status">
@@ -636,7 +627,6 @@
         </div>
     </aside>
 
-    <!-- Top mobile bar (visible only on small screens) -->
     <div class="lg:hidden bg-[#0B0F1C] border-b border-white/10 px-5 h-14 flex items-center justify-between sticky top-0 z-50">
         <div class="flex items-center gap-x-2">
             <div class="w-8 h-8 bg-[#FF5C00] rounded-xl flex items-center justify-center">
@@ -645,7 +635,6 @@
             <span class="font-semibold tracking-tighter text-xl">Parcours<span class="text-[#FF5C00]">Paris</span></span>
         </div>
         <div class="flex items-center gap-2">
-            <!-- Logos partenaires mobile -->
             <div class="flex items-center gap-1.5 bg-white rounded-lg px-2 py-1">
                 <span class="text-[#2D3358] font-bold text-[9px] tracking-wide leading-tight">Isae<br><span class="text-[8px] font-semibold">supméca</span></span>
                 <div class="w-px h-5 bg-gray-300"></div>
@@ -658,28 +647,21 @@
         </div>
     </div>
 
-    <!-- MAIN CONTENT (shifted for sidebar) -->
     <div class="main-content">
 
-    <!-- HERO - Clean Photographic + Eiffel Tower Focus -->
     <div id="home-top" class="relative overflow-hidden text-white" style="background: linear-gradient(145deg, #0B0F1C 0%, #111827 50%, #070A12 100%);">
         
-        <!-- Background with real Paris imagery (Eiffel Tower focused) -->
         <div class="absolute inset-0 pointer-events-none">
             
-            <!-- Main Paris photo — opacité augmentée pour plus de visibilité -->
             <div class="absolute inset-0 bg-cover bg-center"
                  style="background-image: url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1600&q=80'); 
                         opacity: 0.52; 
                         filter: contrast(1.05) brightness(0.7) saturate(0.8);">
             </div>
             
-            <!-- Dégradé gauche fort pour lisibilité du texte -->
             <div class="absolute inset-0 bg-gradient-to-r from-[#0B0F1C] via-[#0B0F1C]/80 to-transparent"></div>
-            <!-- Dégradé haut/bas léger -->
             <div class="absolute inset-0 bg-gradient-to-b from-[#0B0F1C]/30 via-transparent to-[#070A12]"></div>
 
-            <!-- Particules flottantes -->
             <div class="particle p1"></div>
             <div class="particle p2"></div>
             <div class="particle p3"></div>
@@ -689,7 +671,6 @@
             <div class="particle p7"></div>
             <div class="particle p8"></div>
 
-            <!-- Étoiles scintillantes -->
             <div class="star s1"></div>
             <div class="star s2"></div>
             <div class="star s3"></div>
@@ -700,9 +681,7 @@
         <div class="max-w-screen-xl mx-auto px-6 pt-14 pb-16 relative z-10">
             <div class="flex items-start justify-between gap-12">
                 
-                <!-- Colonne gauche : texte -->
                 <div class="max-w-xl">
-                    <!-- Badge -->
                     <div class="hero-badge inline-flex items-center gap-x-2 mb-6">
                         <div class="flex items-center bg-white/10 backdrop-blur px-4 h-8 rounded-2xl text-sm font-medium tracking-wide border border-white/20">
                             <span class="text-[var(--school-accent)] mr-2">●</span> 
@@ -746,15 +725,12 @@
                     </div>
                 </div>
 
-                <!-- Colonne droite : logos partenaires (desktop uniquement) -->
                 <div class="hero-logos hidden lg:flex flex-col items-end justify-start pt-4 gap-4 flex-shrink-0">
                     <div class="bg-white/95 backdrop-blur rounded-2xl px-5 py-4 shadow-xl flex flex-col items-center gap-3">
                         <div class="text-[10px] text-gray-400 uppercase tracking-widest font-semibold">Projet réalisé à</div>
-                        <!-- ISAE-Supmeca -->
                         <div class="flex flex-col items-center">
                             <svg viewBox="0 0 180 72" class="w-44" xmlns="http://www.w3.org/2000/svg">
                                 <text x="4" y="30" font-family="Arial,sans-serif" font-size="26" font-weight="700" fill="#2D3358" letter-spacing="3">Isae</text>
-                                <!-- oiseau simplifié -->
                                 <path d="M100 10 Q115 4 128 8 Q134 11 130 16 Q124 13 116 15 L105 18 Z" fill="#2D3358"/>
                                 <path d="M125 5 L138 1 L135 10 Z" fill="#2D3358"/>
                                 <path d="M105 18 Q112 22 120 19" stroke="#2D3358" stroke-width="1.5" fill="none"/>
@@ -763,7 +739,6 @@
                             </svg>
                         </div>
                         <div class="w-full h-px bg-gray-200"></div>
-                        <!-- UIMM Mécavenir -->
                         <div class="flex items-center gap-3">
                             <svg viewBox="0 0 58 60" class="h-12" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="0" y="0" width="58" height="60" rx="4" fill="#0078BF"/>
@@ -787,7 +762,6 @@
         </div>
     </div>
 
-    <!-- STATS BAR -->
     <div class="border-b border-white/10" style="background-color: #0B0F1C;">
         <div class="max-w-screen-xl mx-auto px-6 py-4">
             <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-sm text-slate-300">
@@ -800,14 +774,12 @@
         </div>
     </div>
 
-    <!-- PAGE D'ACCUEIL / VALUE PROPOSITION -->
     <div class="max-w-screen-xl mx-auto px-6 py-8" style="background-color: #0B0F1C;">
         <div class="text-center max-w-2xl mx-auto">
             <h2 class="text-3xl font-semibold tracking-tight mb-3 text-white">Bienvenue à Paris</h2>
         </div>
     </div>
 
-    <!-- COMMENT ÇA MARCHE -->
     <div class="max-w-screen-xl mx-auto px-6 pt-6 pb-4">
         <div class="text-center mb-8">
             <span class="uppercase tracking-[2px] text-xs font-semibold text-[var(--school-accent)]">Simple comme bonjour</span>
@@ -833,7 +805,6 @@
         </div>
     </div>
 
-    <!-- LES INCONTOURNABLES DE PARIS -->
     <div id="incontournables" class="max-w-screen-xl mx-auto px-6 py-12">
         <div class="text-center mb-8">
             <span class="uppercase tracking-[2px] text-xs font-semibold text-[var(--school-accent)]">À voir absolument</span>
@@ -843,7 +814,6 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             
-            <!-- Tour Eiffel -->
             <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
@@ -857,7 +827,6 @@
                 <a href="https://www.toureiffel.paris/" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
             </div>
 
-            <!-- Arc de Triomphe -->
             <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
@@ -871,7 +840,6 @@
                 <a href="https://www.paris-arc-de-triomphe.fr/" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
             </div>
 
-            <!-- Louvre -->
             <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
@@ -885,7 +853,6 @@
                 <a href="https://www.louvre.fr/" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
             </div>
 
-            <!-- Notre-Dame -->
             <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
@@ -899,7 +866,6 @@
                 <a href="https://www.notredamedeparis.fr/" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
             </div>
 
-            <!-- Sacré-Cœur -->
             <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
@@ -913,7 +879,6 @@
                 <a href="https://www.sacre-coeur-montmartre.com/" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
             </div>
 
-            <!-- Musée d'Orsay -->
             <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
@@ -927,7 +892,6 @@
                 <a href="https://www.musee-orsay.fr/" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
             </div>
 
-            <!-- Sainte-Chapelle -->
             <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
@@ -941,7 +905,6 @@
                 <a href="https://www.sainte-chapelle.fr/" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
             </div>
 
-            <!-- Panthéon -->
             <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
@@ -955,7 +918,6 @@
                 <a href="https://www.paris-pantheon.fr/" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
             </div>
 
-            <!-- Invalides -->
             <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
@@ -969,7 +931,6 @@
                 <a href="https://www.musee-armee.fr/" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
             </div>
 
-            <!-- Opéra Garnier -->
             <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
@@ -983,7 +944,6 @@
                 <a href="https://www.operadeparis.fr/" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
             </div>
 
-            <!-- Pont Alexandre III -->
             <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
@@ -997,7 +957,6 @@
                 <a href="https://www.paris.fr/lieux/pont-alexandre-iii-6860" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
             </div>
 
-            <!-- Centre Pompidou -->
             <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
@@ -1011,7 +970,6 @@
                 <a href="https://www.centrepompidou.fr/" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
             </div>
 
-            <!-- Jardin du Luxembourg -->
             <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
@@ -1030,7 +988,6 @@
         <p class="text-center text-xs text-white/40 mt-6">Ces lieux sont des classiques, mais Paris a des milliers de trésors cachés à découvrir.</p>
     </div>
 
-    <!-- CETTE SEMAINE -->
     <div id="cette-semaine" class="max-w-screen-xl mx-auto px-6 pt-10 pb-8 bg-[#0B0F1C] rounded-3xl shadow-sm mt-4 border border-white/10">
         <div class="flex items-end justify-between mb-6">
             <div>
@@ -1038,7 +995,6 @@
                 <h2 class="section-title font-semibold tracking-tight text-white">Que faire cette semaine ?</h2>
             </div>
             
-            <!-- Quick filters -->
             <div class="hidden md:flex items-center gap-x-2 text-sm">
                 <button onclick="filterByDay('all')" class="filter-btn active px-4 py-1.5 border border-white/20 rounded-2xl text-sm font-medium" id="day-all">Tous les jours</button>
                 <button onclick="filterByDay('Lundi')" class="filter-btn px-4 py-1.5 border border-white/10 hover:border-white/30 rounded-2xl text-sm font-medium" id="day-Lundi">Lun</button>
@@ -1051,12 +1007,10 @@
             </div>
         </div>
 
-        <!-- Bandeau statut données -->
         <div id="live-data-banner" class="text-xs text-emerald-300 bg-emerald-900/30 border border-emerald-700/40 rounded-2xl px-4 py-2 mb-4">
             <span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse inline-block"></span> <strong>15 événements réels</strong> — Semaine du 1 au 7 juin 2026 • Sources : paris.fr, sortiraparis.com, lebonbon.fr</span>
         </div>
 
-        <!-- Advanced filters -->
         <div class="flex flex-wrap gap-2 mb-6">
             <div class="relative">
                 <input id="search-input" type="text" placeholder="Rechercher une activité..." 
@@ -1093,13 +1047,11 @@
             </button>
         </div>
 
-        <!-- Activities Grid + View Toggle -->
         <div class="flex items-center justify-between mb-3">
             <div class="text-sm font-medium text-slate-300">
                 <span id="results-count"></span>
             </div>
             
-            <!-- View Toggle -->
             <div class="view-toggle">
                 <button onclick="switchView('list')" id="view-list-btn" class="active">Liste</button>
                 <button onclick="switchView('map')" id="view-map-btn">Carte</button>
@@ -1107,13 +1059,11 @@
         </div>
 
         <div id="list-view">
-            <!-- Zone 1 : Événements ponctuels du jour sélectionné -->
             <div id="daily-events-section">
                 <div id="daily-events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 </div>
             </div>
 
-            <!-- Zone 2 : Événements continus (expos, festivals, toute la semaine) -->
             <div id="ongoing-section" class="mt-8 hidden">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="h-px flex-1 bg-white/10"></div>
@@ -1128,11 +1078,9 @@
                 </div>
             </div>
 
-            <!-- Ancien container gardé pour compatibilité avec le reste du JS -->
             <div id="activities-grid" class="hidden"></div>
         </div>
 
-        <!-- CARTE INTERACTIVE -->
         <div id="map-view" class="hidden">
             <div class="map-section premium-shadow">
                 <div class="px-6 py-4 border-b flex items-center justify-between" style="background-color: #111827; border-color: rgba(255,255,255,0.1);">
@@ -1155,7 +1103,6 @@
         </div>
     </div>
 
-    <!-- PARCOURS SECTION -->
     <div id="parcours" class="border-t border-b border-white/10 py-12" style="background-color: #0B0F1C;">
         <div class="max-w-screen-xl mx-auto px-6">
             <div class="flex items-end justify-between mb-7">
@@ -1168,12 +1115,10 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4" id="parcours-grid">
-                <!-- Populated by JS -->
-            </div>
+                </div>
         </div>
     </div>
 
-    <!-- GÉNÉRATEUR INTELLIGENT DE PARCOURS (importé de ParcoursGen) -->
     <div id="generateur" class="max-w-screen-xl mx-auto px-6 py-12">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-6">
             <div>
@@ -1191,7 +1136,6 @@
             </button>
         </div>
 
-        <!-- Generator Controls -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
             <div>
                 <label class="text-xs font-medium text-white/60 block mb-1">Style d’itinéraire</label>
@@ -1207,7 +1151,6 @@
             </div>
         </div>
 
-        <!-- Activity Selection inside Generator -->
         <div class="mb-6">
             <div class="flex items-center justify-between mb-3 px-1">
                 <div>
@@ -1224,11 +1167,9 @@
 
             <div id="generator-activity-pool" 
                  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[380px] overflow-auto p-3 bg-[#0B0F1C] border border-white/10 rounded-3xl">
-                <!-- Dynamically populated by JS -->
-            </div>
+                </div>
         </div>
 
-        <!-- Results -->
         <div id="generator-results" class="hidden bg-[#0B0F1C] border border-white/10 rounded-3xl p-6">
             <div class="flex justify-between items-center mb-4">
                 <div class="font-semibold">Itinéraire optimisé généré</div>
@@ -1248,7 +1189,6 @@
         <p class="text-center text-xs text-white/40 mt-4">L’algorithme crée un itinéraire d’une journée en optimisant l’ordre et les temps de déplacement réalistes à Paris.</p>
     </div>
 
-    <!-- PLANNING PERSONNEL -->
     <div id="planning" class="max-w-screen-xl mx-auto px-6 py-12 bg-[#0B0F1C] rounded-3xl border border-white/10">
         <div class="flex items-center justify-between mb-6">
             <div>
@@ -1266,11 +1206,9 @@
         </div>
 
         <div id="planning-content" class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-6 min-h-[200px]">
-            <!-- Dynamic planning content -->
-        </div>
+            </div>
     </div>
 
-    <!-- FOOTER / INFO -->
     <div class="border-t border-white/10" style="background-color: #070A12;">
         <div class="max-w-screen-xl mx-auto px-6 py-8 text-xs text-slate-300">
             <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
@@ -1289,16 +1227,13 @@
         </div>
     </div>
 
-    <!-- ACTIVITY MODAL -->
     <div id="activity-modal" onclick="if (event.target.id === 'activity-modal') closeModal()" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
         <div onclick="event.stopImmediatePropagation()" class="bg-[#0B0F1C] border border-white/10 w-full max-w-lg rounded-3xl overflow-hidden modal">
             <div id="modal-content">
-                <!-- JS injected -->
-            </div>
+                </div>
         </div>
     </div>
 
-    <!-- QUIZ MODAL -->
     <div id="quiz-modal" onclick="if (event.target.id === 'quiz-modal') closeQuiz()" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[110] flex items-center justify-center p-4">
         <div onclick="event.stopImmediatePropagation()" class="bg-[#0B0F1C] border border-white/10 w-full max-w-md rounded-3xl overflow-hidden">
             <div class="px-6 py-5 border-b flex items-center justify-between">
@@ -1306,8 +1241,7 @@
                 <button onclick="closeQuiz()" class="text-slate-300 hover:text-white">✕</button>
             </div>
             <div id="quiz-content" class="p-6">
-                <!-- JS content -->
-            </div>
+                </div>
         </div>
     </div>
 
@@ -1610,26 +1544,24 @@
         });
 
         // === PHOTOS RÉELLES DES LIEUX EXACTS (Unsplash, licence libre) ===
-        // Toutes ces URLs sont validées et correspondent visuellement aux endroits cités
         const activityImages = {
-            1:  "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&q=80",  // Tennis Roland-Garros court
-            2:  "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80", // Cabaret / scène nuit
-            3:  "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80", // Concert / musique contemporaine
-            4:  "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&q=80", // Street art coloré
-            5:  "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", // Jardin avec roses
-            6:  "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80", // Festival foule
-            7:  "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80", // Roseraie jardin
-            8:  "https://images.unsplash.com/photo-1549923746-c502d488b3ea?w=800&q=80",    // Nuit lumières Paris
-            9:  "https://images.unsplash.com/photo-1545809074-59472b3f5ecc?w=800&q=80",    // Sport raquette padel
-            10: "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800&q=80",    // Musée expo peinture
-            11: "https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=800&q=80", // Course à pied ville
-            12: "https://images.unsplash.com/photo-1585011664466-b7bbe92f34ef?w=800&q=80", // Pokémon coloré
-            13: "https://images.unsplash.com/photo-1560717789-0ac7c58ac90a?w=800&q=80",    // Jardin à la française
-            14: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=800&q=80", // Art contemporain expo
-            15: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80"  // Marché brocante
+            1:  "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&q=80",  
+            2:  "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80", 
+            3:  "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80", 
+            4:  "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&q=80", 
+            5:  "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", 
+            6:  "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80", 
+            7:  "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80", 
+            8:  "https://images.unsplash.com/photo-1549923746-c502d488b3ea?w=800&q=80",    
+            9:  "https://images.unsplash.com/photo-1545809074-59472b3f5ecc?w=800&q=80",    
+            10: "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800&q=80",    
+            11: "https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=800&q=80", 
+            12: "https://images.unsplash.com/photo-1585011664466-b7bbe92f34ef?w=800&q=80", 
+            13: "https://images.unsplash.com/photo-1560717789-0ac7c58ac90a?w=800&q=80",    
+            14: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=800&q=80", 
+            15: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80"  
         };
 
-        // Images de fallback par catégorie (pour les données live sans image officielle)
         const categoryImages = {
             'Culture':      "https://images.unsplash.com/photo-1564399579883-451a5d44ec08?w=800&q=80",
             'Histoire':     "https://images.unsplash.com/photo-1431274172761-fca41d930114?w=800&q=80",
@@ -1642,11 +1574,8 @@
         };
 
         function getActivityImage(activity) {
-            // 1. Image officielle depuis l'API (données live)
             if (activity._imageUrl) return activity._imageUrl;
-            // 2. Image mapée par ID (données de démo)
             if (activityImages[activity.id]) return activityImages[activity.id];
-            // 3. Fallback par catégorie
             return categoryImages[activity.category] || categoryImages['default'];
         }
 
@@ -1757,7 +1686,7 @@
         let currentView = 'list';
 
         function initMap() {
-            if (map) return; // already initialized
+            if (map) return; 
 
             map = L.map('leaflet-map', {
                 zoomControl: true,
@@ -1768,16 +1697,12 @@
                 className: 'map-tiles'
             }).addTo(map);
 
-            // Add initial markers
             updateMapMarkers(activities);
         }
-
-
 
         function updateMapMarkers(filteredActivities) {
             if (!map) return;
 
-            // Clear existing markers
             currentMarkers.forEach(m => map.removeLayer(m));
             currentMarkers = [];
 
@@ -1843,7 +1768,6 @@
                 bounds.push(activity.coordinates);
             });
 
-            // Auto fit bounds if we have points
             if (bounds.length > 0) {
                 const latLngBounds = L.latLngBounds(bounds);
                 map.fitBounds(latLngBounds, { padding: [30, 30], maxZoom: 15 });
@@ -1894,10 +1818,8 @@
                 listBtn.classList.remove('active');
                 mapBtn.classList.add('active');
 
-                // Initialize map on first open
                 setTimeout(() => {
                     initMap();
-                    // Apply current filters to map
                     const filtered = getCurrentFilteredActivities();
                     updateMapMarkers(filtered);
                 }, 80);
@@ -1911,9 +1833,8 @@
             const bannerEl   = document.getElementById('live-data-banner');
             const sidebarEl  = document.getElementById('sidebar-data-status');
 
-            // Calcul lundi → dimanche de la semaine en cours
             const now = new Date();
-            const dow = now.getDay(); // 0=dimanche
+            const dow = now.getDay(); 
             const monday = new Date(now);
             monday.setDate(now.getDate() - ((dow + 6) % 7));
             monday.setHours(0,0,0,0);
@@ -1925,8 +1846,6 @@
             const dateFrom = monday.toISOString().split('T')[0];
             const dateTo   = sunday.toISOString().split('T')[0];
 
-            // Appel API direct : Limite augmentée à 80 pour avoir beaucoup d'événements ponctuels
-            // Filtre : l'événement doit chevaucher notre semaine en cours
             const API = 'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/que-faire-a-paris-/records'
                 + `?limit=80&order_by=date_start%20ASC`
                 + `&where=date_start%20%3C%3D%20%27${dateTo}%27%20AND%20date_end%20%3E%3D%20%27${dateFrom}%27`;
@@ -1950,15 +1869,19 @@
 
                 const DAY_NAMES = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
 
-                // FINIE LA DUPLICATION ! 1 événement API = 1 seule carte
                 const liveActivities = records.map((r, i) => {
                     const startDate = r.date_start ? new Date(r.date_start) : new Date();
                     const endDate   = r.date_end ? new Date(r.date_end) : startDate;
                     
                     const diffDays = (endDate - startDate) / 86400000;
-                    const isMultiDay = diffDays > 1.5; // Plus d'un jour = multi-jours
+                    const isMultiDay = diffDays > 1.5; 
 
-                    const dayRaw = DAY_NAMES[startDate.getDay()];
+                    // --- MODIFICATION ICI : Répartition artificielle ---
+                    let dayRaw = DAY_NAMES[startDate.getDay()];
+                    if (isMultiDay) {
+                        dayRaw = DAY_NAMES[i % 7];
+                    }
+
                     const dateStr = startDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
                     const timeStr = r.date_start ? r.date_start.substring(11,16) : '10:00';
 
@@ -1973,7 +1896,6 @@
                         duration = diffDays > 6 ? 'Toute la semaine' : `${Math.ceil(diffDays)} jours`;
                     }
 
-                    // Calcul du prix
                     let price = 0, priceLabel = 'Gratuit';
                     const pt = (r.price_type || '').toLowerCase().trim();
                     const pd = (r.price_detail || '').trim();
@@ -1992,7 +1914,6 @@
                         }
                     }
 
-                    // Coordonnées GPS
                     let coords = [48.8566 + (Math.random()-0.5)*0.04, 2.3522 + (Math.random()-0.5)*0.04];
                     if (r.geo_point_2d?.lat) coords = [+r.geo_point_2d.lat, +r.geo_point_2d.lon];
 
@@ -2023,13 +1944,12 @@
                         _imageUrl: r.cover_url || null,
                         _sourceUrl: r.url || 'https://www.paris.fr/quefaire',
                         _isLive: true,
-                        startDate, // Gardé en mémoire pour le filtrage
-                        endDate,   // Gardé en mémoire pour le filtrage
+                        startDate, 
+                        endDate,   
                         isMultiDay
                     };
                 });
 
-                // Application des données
                 if (demoActivities.length === 0) demoActivities = activities.slice();
                 activities.length = 0;
                 liveActivities.forEach(a => activities.push(a));
@@ -2039,7 +1959,6 @@
                 renderGeneratorActivityPool();
                 if (currentView === 'map' && map) updateMapMarkers(activities);
 
-                // UI Banners
                 if (bannerEl) {
                     bannerEl.className = 'text-xs text-emerald-300 bg-emerald-900/30 border border-emerald-700/40 rounded-2xl px-4 py-2 mb-4';
                     bannerEl.innerHTML = `<span class="inline-flex items-center gap-1.5">
@@ -2082,29 +2001,28 @@
             let filtered = [...activities];
 
             if (currentFilters.day !== 'all') {
-                // Trouver la date exacte du jour cliqué
-                const now = new Date();
-                const dow = now.getDay();
-                const monday = new Date(now);
-                monday.setDate(now.getDate() - ((dow + 6) % 7));
-                monday.setHours(0,0,0,0);
-                
-                const WEEK_DAYS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+                const WEEK_DAYS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
                 const dayIndex = WEEK_DAYS.indexOf(currentFilters.day);
                 
-                const targetDate = new Date(monday);
-                targetDate.setDate(monday.getDate() + dayIndex);
-
                 filtered = filtered.filter(a => {
-                    // Si c'est un événement en direct avec des vraies dates
-                    if (a.startDate && a.endDate) {
-                        const start = new Date(a.startDate); start.setHours(0,0,0,0);
-                        const end = new Date(a.endDate); end.setHours(23,59,59,999);
-                        // On affiche si le jour sélectionné tombe PENDANT l'événement
-                        return targetDate >= start && targetDate <= end;
+                    // --- MODIFICATION ICI : Respect de la répartition ---
+                    if (a.isMultiDay || !a.startDate) {
+                        return a.dayRaw === currentFilters.day || a.day === currentFilters.day;
                     }
-                    // Fallback pour les données statiques
-                    return a.day === currentFilters.day || a.dayRaw === currentFilters.day;
+                    
+                    const now = new Date();
+                    const dow = now.getDay();
+                    const monday = new Date(now);
+                    monday.setDate(now.getDate() - ((dow + 6) % 7));
+                    monday.setHours(0,0,0,0);
+                    
+                    const targetDate = new Date(monday);
+                    targetDate.setDate(monday.getDate() + (dayIndex === 0 ? 6 : dayIndex - 1));
+
+                    const start = new Date(a.startDate); start.setHours(0,0,0,0);
+                    const end = new Date(a.endDate); end.setHours(23,59,59,999);
+                    
+                    return targetDate >= start && targetDate <= end;
                 });
             }
 
@@ -2135,28 +2053,33 @@
 
             if (!dailyGrid) return;
 
-            // Séparation ultra simple (il n'y a plus de doublons dans filteredActivities)
-            const daily = filteredActivities.filter(a => !a.isMultiDay);
-            const ongoing = filteredActivities.filter(a => a.isMultiDay);
+            let daily, ongoing;
+
+            if (currentFilters.day !== 'all') {
+                // --- MODIFICATION ICI : on affiche tout en grand sur le jour cliqué ---
+                daily = filteredActivities;
+                ongoing = [];
+            } else {
+                daily = filteredActivities.filter(a => !a.isMultiDay);
+                ongoing = filteredActivities.filter(a => a.isMultiDay);
+            }
 
             if (countEl) {
                 countEl.innerHTML = daily.length > 0
-                    ? `<span class="text-white font-semibold">${daily.length}</span> événement${daily.length > 1 ? 's' : ''} ponctuel${daily.length > 1 ? 's' : ''}`
+                    ? `<span class="text-white font-semibold">${daily.length}</span> événement${daily.length > 1 ? 's' : ''}`
                       + (ongoing.length > 0 ? ` <span class="text-slate-500">+ ${ongoing.length} en cours</span>` : '')
                     : (ongoing.length > 0 ? `<span class="text-slate-400">${ongoing.length} événements en cours</span>` : 'Aucun résultat');
             }
 
-            // Zone 1 : Les événements du jour même (ou de la semaine si "Tous les jours")
             dailyGrid.innerHTML = '';
             if (daily.length === 0) {
                 dailyGrid.innerHTML = `<div class="col-span-full py-6 text-center text-sm text-slate-400">
-                    Pas d'événement ponctuel aujourd'hui. Regardez "En ce moment" ci-dessous.
+                    Pas d'événement pour ce jour avec vos filtres.
                 </div>`;
             } else {
                 daily.forEach(a => renderCard(a, dailyGrid, false));
             }
 
-            // Zone 2 : Les expositions / festivals qui durent la semaine
             ongoingSection.classList.toggle('hidden', ongoing.length === 0);
             ongoingGrid.innerHTML = '';
             ongoing.forEach(a => renderCard(a, ongoingGrid, true));
@@ -2173,7 +2096,6 @@
             const wrapper = document.createElement('div');
 
             if (isOngoing) {
-                // Carte compacte horizontale pour les événements continus
                 wrapper.innerHTML = `
                 <div class="activity-card group bg-[#0d1424] border border-white/8 rounded-2xl overflow-hidden flex cursor-pointer" style="height:96px" onclick="showActivityModal(${activity.id})">
                     <div class="w-28 flex-shrink-0 bg-cover bg-center relative" style="background-image:url('${imgUrl}');background-color:#1a2035;">
@@ -2196,7 +2118,6 @@
                     </div>
                 </div>`;
             } else {
-                // Carte pleine pour les événements ponctuels
                 wrapper.innerHTML = `
                 <div class="activity-card bg-[#111827] border border-white/10 rounded-3xl overflow-hidden flex flex-col h-full cursor-pointer shadow-lg" onclick="showActivityModal(${activity.id})">
                     <div class="card-image rounded-t-3xl" id="card-img-${activity.id}" style="background-image:url('${imgUrl}');background-color:#1a2035;">
@@ -2254,7 +2175,6 @@
 
             applyFilters();
 
-            // If map is open, refresh markers too
             if (currentView === 'map' && map) {
                 const filtered = getCurrentFilteredActivities();
                 updateMapMarkers(filtered);
@@ -2262,7 +2182,6 @@
         }
 
         function filterByDay(day) {
-            // Update active button styles
             document.querySelectorAll('[id^="day-"]').forEach(btn => btn.classList.remove('active', 'border-slate-900'));
             document.querySelectorAll('[id^="day-"]').forEach(btn => btn.classList.add('border-slate-200'));
 
@@ -2281,10 +2200,8 @@
             const filtered = getCurrentFilteredActivities();
             renderActivities(filtered);
 
-            // Expose for the intelligent generator
             window.lastFilteredActivities = filtered;
 
-            // Sync map if currently visible
             if (currentView === 'map' && map) {
                 updateMapMarkers(filtered);
             }
@@ -2302,7 +2219,6 @@
 
             renderActivities(activities);
 
-            // Sync map
             if (currentView === 'map' && map) {
                 updateMapMarkers(activities);
             }
@@ -2314,13 +2230,11 @@
             if (!activity) return;
 
             const isPlanned = userPlanning.some(p => p.id === id);
-
             const modalImg = getActivityImage(activity);
             const isFav = userFavorites.includes(activity.id);
 
             const modalHTML = `
                 <div>
-                    <!-- Modal Image -->
                     <div class="h-48 w-full relative" style="background-image: url('${modalImg}'); background-size: cover; background-position: center;">
                         <div class="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40"></div>
                         <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center text-white text-2xl leading-none bg-black/30 hover:bg-black/50 rounded-full">×</button>
@@ -2393,7 +2307,6 @@
             const modal = document.getElementById('activity-modal');
             modal.classList.remove('flex');
             modal.classList.add('hidden');
-            // Refresh planning and grid in case we added something
             renderPlanning();
             applyFilters();
         }
@@ -2413,14 +2326,12 @@
 
             localStorage.setItem('parcoursParisPlanning', JSON.stringify(userPlanning));
 
-            // Refresh UI
             renderPlanning();
             
             if (!fromModal) {
                 applyFilters();
             }
 
-            // If called from card, we need to refresh the specific card (simple way: re-render all)
             if (element) {
                 applyFilters();
             }
@@ -2438,10 +2349,8 @@
 
             localStorage.setItem('parcoursParisFavorites', JSON.stringify(userFavorites));
 
-            // Refresh UI
             applyFilters();
 
-            // If element passed (from card), update it visually without full re-render
             if (element) {
                 const isNowFav = userFavorites.includes(activityId);
                 element.innerHTML = `<span class="text-lg leading-none ${isNowFav ? 'text-red-500' : 'text-slate-300 hover:text-slate-200'}">♥</span>`;
@@ -2464,7 +2373,6 @@
                 return;
             }
 
-            // Group by day
             const grouped = {};
             userPlanning.forEach(act => {
                 if (!grouped[act.day]) grouped[act.day] = [];
@@ -2626,11 +2534,9 @@
             const p = parcours.find(x => x.id === parcoursId);
             if (!p) return;
 
-            // Find corresponding activities and add them
             let added = 0;
 
             p.steps.forEach(step => {
-                // Try to match activity by location or title keywords
                 const matchingActivity = activities.find(a => 
                     a.location.toLowerCase().includes(step.location.toLowerCase().split(' ')[0]) ||
                     step.title.toLowerCase().includes(a.title.toLowerCase().split(' ')[0]) ||
@@ -2649,12 +2555,10 @@
 
             localStorage.setItem('parcoursParisPlanning', JSON.stringify(userPlanning));
             
-            // Close modal and refresh
             closeModal();
             renderPlanning();
             applyFilters();
 
-            // Nice toast
             showToast(`${added} activités du parcours ont été ajoutées à ton planning.`);
         }
 
@@ -2781,7 +2685,6 @@
         }
 
         function getQuizRecommendation() {
-            // Simple logic
             const {1: q1, 2: q2, 3: q3, 4: q4} = quizAnswers;
 
             if (q1 === 'culture' || q1 === 'histoire') return { id: 'p1', title: "Premier jour à Paris", subtitle: "Le parcours parfait pour bien commencer" };
@@ -2812,19 +2715,15 @@
         function initializeApp() {
             initTailwind();
 
-            // Les données sont déjà des vrais événements de la semaine (statiques + vérifiés)
-            // On garde une copie pour pouvoir revenir dessus si l'API enrichit les données
             if (demoActivities.length === 0) {
                 demoActivities = activities.slice();
             }
 
-            // Rendu initial avec les vraies données de la semaine
             renderActivities(activities);
             renderParcours();
             renderPlanning();
             updateHeroCounters();
 
-            // Tentative optionnelle d'enrichissement via l'API Paris Open Data
             loadFromParisOpenData({ silent: true }).then(success => {
                 updateHeroCounters();
                 if (success) {
@@ -2834,31 +2733,23 @@
                 }
             });
 
-            // Set default filter button active
             const allBtn = document.getElementById('day-all');
             if (allBtn) allBtn.classList.add('active', 'border-slate-900');
 
-            // Keyboard support for search
             const searchInput = document.getElementById('search-input');
             searchInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') filterActivities();
             });
 
-            // Welcome toast for first time visitors (demo)
             if (!localStorage.getItem('parcoursParisSeen')) {
                 setTimeout(() => {
-                    if (userPlanning.length === 0) {
-                        // Optional hint
-                    }
                     localStorage.setItem('parcoursParisSeen', 'true');
                 }, 6500);
             }
 
-            // Initialize generator internal selection (pre-select a good starting set)
             activities.slice(0, 8).forEach(a => generatorSelectedIds.add(a.id));
             renderGeneratorActivityPool();
 
-            // Restore normal visibility for all main sections (revert from previous SPA attempts)
             const mainSections = ['cette-semaine', 'parcours', 'incontournables', 'generateur', 'planning'];
             mainSections.forEach(id => {
                 const el = document.getElementById(id);
@@ -2944,7 +2835,7 @@
             modal.classList.add('flex');
         }
 
-        // ==================== GÉNÉRATEUR INTELLIGENT (importé de ParcoursGen) ====================
+        // ==================== GÉNÉRATEUR INTELLIGENT ====================
         let generatorMapInstance = null;
 
         function haversineDistance(lat1, lon1, lat2, lon2) {
@@ -2969,7 +2860,6 @@
             const style = options.style || 'balanced';
             const maxHours = options.maxHours || 8;
 
-            // Normalize coordinates from main app format (coordinates: [lat, lon])
             let acts = selectedActs.map(act => {
                 if (act.coordinates && Array.isArray(act.coordinates) && !act.lat) {
                     return { ...act, lat: act.coordinates[0], lon: act.coordinates[1] };
@@ -2977,7 +2867,6 @@
                 return act;
             });
 
-            // Filter only activities with valid coordinates
             acts = acts.filter(a => typeof a.lat === 'number' && typeof a.lon === 'number');
 
             if (acts.length < 2) return null;
@@ -3054,13 +2943,10 @@
             };
         }
 
-        // Note: The main generateSmartItinerary (with day grouping + time respect) is defined later in the file.
-
         function renderGeneratorResults(itinerary) {
             const container = document.getElementById('generator-results');
             container.classList.remove('hidden');
 
-            // Stats (simplified since it's one day now)
             const statsEl = document.getElementById('generator-stats');
             statsEl.innerHTML = `
                 <div class="bg-[#111827] rounded-2xl p-3 text-center border border-white/10">
@@ -3077,7 +2963,6 @@
                 </div>
             `;
 
-            // One-day logical route display (no day label, no activity duration)
             const daysEl = document.getElementById('generator-days');
             daysEl.innerHTML = '';
 
@@ -3113,7 +2998,6 @@
                 daysEl.appendChild(dayDiv);
             });
 
-            // Map
             renderGeneratorMap(itinerary);
         }
 
@@ -3152,9 +3036,7 @@
             const results = document.getElementById('generator-results');
             if (!results || results.classList.contains('hidden')) return alert("Génère d'abord un parcours.");
 
-            // Simple text export
             let text = "PARCOURS OPTIMISÉ - ParcoursParis\n\n";
-            // (We can improve this later - for now a basic version)
             alert("Fonction d'export avancée à venir. Pour l'instant, copie le contenu visuellement ou dis-moi si tu veux que je l'améliore.");
         }
 
@@ -3166,18 +3048,13 @@
             }
         }
 
-        // Simple SPA navigation - show only one main section
-        // Navigation is now simple anchor-based (scrolling). 
-        // SPA hiding logic has been disabled to restore normal page behavior.
         function showSection(sectionId) {
-            // Just scroll to the section (normal anchor behavior)
             const el = document.getElementById(sectionId);
             if (el) {
                 el.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
 
-        // Add the currently generated day to the personal planning
         function addGeneratedItineraryToPlanning(dayIndex) {
             if (!currentItinerary || !currentItinerary.days[dayIndex]) {
                 alert("Aucun parcours à ajouter.");
@@ -3187,13 +3064,11 @@
             const dayActivities = currentItinerary.days[dayIndex];
 
             dayActivities.forEach(act => {
-                // Avoid duplicates
                 if (!userPlanning.some(p => p.id === act.id)) {
                     userPlanning.push({ ...act });
                 }
             });
 
-            // Save and refresh planning view
             localStorage.setItem('parcoursParisPlanning', JSON.stringify(userPlanning));
             renderPlanning();
 
@@ -3254,9 +3129,7 @@
             renderGeneratorActivityPool();
         }
 
-        // Updated generator to use internal selection
         function generateSmartItinerary() {
-            // Use only the activities selected inside the generator
             let selected = activities.filter(a => generatorSelectedIds.has(a.id));
 
             if (selected.length < 2) {
@@ -3264,7 +3137,6 @@
                 return;
             }
 
-            // Normalize coordinates + duration
             selected = selected.map(act => {
                 let normalized = { ...act };
 
@@ -3285,7 +3157,6 @@
 
             const style = document.getElementById('gen-style').value;
 
-            // Group by original day (very important for realism)
             const byDay = {};
             selected.forEach(act => {
                 const d = act.day || "Jour inconnu";
@@ -3293,7 +3164,6 @@
                 byDay[d].push(act);
             });
 
-            // For each day, create a time-respecting + geographically logical route
             const dayRoutes = [];
             Object.keys(byDay).forEach(dayName => {
                 const dayActivities = byDay[dayName];
@@ -3308,7 +3178,6 @@
                 return;
             }
 
-            // Build the structure expected by the renderer
             const itinerary = {
                 days: dayRoutes.map(d => d.activities),
                 dayNames: dayRoutes.map(d => d.day),
@@ -3327,19 +3196,15 @@
             renderGeneratorResults(itinerary);
         }
 
-        // New improved function: respects original day + time order + geography
         function optimizeDayWithTime(dayActivities, style) {
             if (!dayActivities || dayActivities.length === 0) return [];
 
-            // 1. Sort primarily by time (very important)
             let sorted = [...dayActivities].sort((a, b) => {
                 const timeA = a.time || "23:59";
                 const timeB = b.time || "23:59";
                 return timeA.localeCompare(timeB);
             });
 
-            // 2. Light geographic improvement while respecting time windows
-            // We do a limited number of swaps if it significantly reduces travel without breaking time too much
             for (let pass = 0; pass < 2; pass++) {
                 for (let i = 0; i < sorted.length - 1; i++) {
                     const a = sorted[i];
@@ -3347,19 +3212,16 @@
 
                     const distCurrent = haversineDistance(a.lat, a.lon, b.lat, b.lon);
 
-                    // Check if swapping makes geographic sense
                     if (i > 0) {
                         const prev = sorted[i - 1];
                         const distSwapped = haversineDistance(prev.lat, prev.lon, b.lat, b.lon);
                         if (distSwapped < distCurrent * 0.7) {
-                            // Swap if big geographic gain
                             [sorted[i], sorted[i + 1]] = [sorted[i + 1], sorted[i]];
                         }
                     }
                 }
             }
 
-            // 3. Calculate realistic travel times
             let currentPos = { lat: sorted[0].lat, lon: sorted[0].lon };
 
             sorted.forEach((act, idx) => {
@@ -3374,7 +3236,7 @@
                 let travelMin = Math.ceil(dist * 16);
                 if (style === 'compact') travelMin = Math.ceil(dist * 13);
                 if (style === 'relaxed') travelMin = Math.ceil(dist * 20);
-                travelMin += 8; // realistic buffer
+                travelMin += 8; 
 
                 act._travelMin = Math.round(travelMin);
                 act._distance = dist.toFixed(1);
@@ -3384,12 +3246,10 @@
             return sorted;
         }
 
-        // Start the app
         // ============================================
         // ANIMATIONS JAVASCRIPT — ParcoursParis
         // ============================================
 
-        // --- Page loader ---
         function hideLoader() {
             const loader = document.getElementById('page-loader');
             if (loader) {
@@ -3398,14 +3258,13 @@
             }
         }
 
-        // --- Compteur animé (compte de 0 → target) ---
         function animateCounter(el, target, duration = 900) {
             if (!el || isNaN(target)) return;
             const start = performance.now();
             const startVal = 0;
             function step(now) {
                 const progress = Math.min((now - start) / duration, 1);
-                const ease = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+                const ease = 1 - Math.pow(1 - progress, 3);
                 el.textContent = Math.round(startVal + (target - startVal) * ease);
                 if (progress < 1) requestAnimationFrame(step);
                 else el.textContent = target;
@@ -3413,7 +3272,6 @@
             requestAnimationFrame(step);
         }
 
-        // --- Scroll reveal avec IntersectionObserver ---
         function initScrollReveal() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -3424,10 +3282,8 @@
                 });
             }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
-            // Observe tous les éléments reveal
             document.querySelectorAll('.reveal, .card-reveal').forEach(el => observer.observe(el));
 
-            // Observer les cards d'activités (ajoutées dynamiquement)
             const cardObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -3443,10 +3299,9 @@
                 cardObserver.observe(el);
             });
 
-            return cardObserver; // on le réutilise après re-render
+            return cardObserver; 
         }
 
-        // --- Observer les nouvelles cards après re-render des activités ---
         let _cardObserver = null;
         function observeNewCards() {
             if (!_cardObserver) {
@@ -3468,7 +3323,6 @@
             });
         }
 
-        // --- Parallax léger sur le hero au scroll ---
         function initHeroParallax() {
             const heroBg = document.querySelector('#home-top .bg-cover');
             if (!heroBg) return;
@@ -3480,7 +3334,6 @@
             }, { passive: true });
         }
 
-        // --- Sidebar : highlight du lien actif selon le scroll ---
         function initSidebarScroll() {
             const sections = ['home-top','cette-semaine','parcours','incontournables','generateur','planning'];
             const links = document.querySelectorAll('.sidebar-link');
@@ -3498,7 +3351,6 @@
             }, { passive: true });
         }
 
-        // --- Mise à jour des compteurs hero avec animation ---
         const _origUpdateHeroCounters = updateHeroCounters;
         window.updateHeroCounters = function() {
             const total = activities.length;
@@ -3509,7 +3361,6 @@
             if (hf) animateCounter(hf, free,  800);
         };
 
-        // --- Hook : observer les cards après chaque renderActivities ---
         const _origRenderActivities = renderActivities;
         window.renderActivities = function(list) {
             _origRenderActivities(list);
@@ -3518,18 +3369,12 @@
 
         window.onload = initializeApp;
 
-        // Séquence d'initialisation des animations
         document.addEventListener('DOMContentLoaded', () => {
             initHeroParallax();
             initSidebarScroll();
-
-            // Scroll reveal initial
             setTimeout(initScrollReveal, 300);
-
-            // Masque le loader une fois le DOM prêt
             setTimeout(hideLoader, 400);
         });
     </script>
-    </div> <!-- end main-content -->
-</body>
+    </div> </body>
 </html>
