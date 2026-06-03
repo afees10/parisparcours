@@ -6,7 +6,7 @@
     <title>ParcoursParis • Paris 2026</title>
 
     <!-- SEO & Social Sharing -->
-    <meta name="description" content="Application pour découvrir Paris : activités et parcours pour la semaine du 25-31 mai 2026.">
+    <meta name="description" content="Application pour découvrir Paris : activités et parcours pour la semaine du 1-7 juin 2026.">
     <meta property="og:title" content="ParcoursParis • Paris">
     <meta property="og:description" content="Découvre Paris facilement avec des activités sélectionnées et des parcours prêts à l'emploi.">
     <meta property="og:image" content="https://picsum.photos/id/1016/1200/630">
@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:wght@700&amp;display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap');
         
         :root {
             --primary: #0F172A;
@@ -298,27 +298,299 @@
         }
 
         @media (max-width: 1024px) {
-            .sidebar {
-                display: none;
-            }
-            .main-content {
-                margin-left: 0;
-            }
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; }
+        }
+
+        /* ============================================
+           ANIMATIONS SYSTEM — ParcoursParis
+        ============================================ */
+
+        /* --- Hero : entrée du texte en cascade --- */
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.92); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        .hero-badge   { animation: fadeSlideUp 0.6s cubic-bezier(.22,1,.36,1) 0.1s both; }
+        .hero-title   { animation: fadeSlideUp 0.7s cubic-bezier(.22,1,.36,1) 0.25s both; }
+        .hero-desc    { animation: fadeSlideUp 0.7s cubic-bezier(.22,1,.36,1) 0.40s both; }
+        .hero-buttons { animation: fadeSlideUp 0.7s cubic-bezier(.22,1,.36,1) 0.52s both; }
+        .hero-stats   { animation: fadeSlideUp 0.7s cubic-bezier(.22,1,.36,1) 0.65s both; }
+        .hero-logos   { animation: scaleIn    0.8s cubic-bezier(.22,1,.36,1) 0.45s both; }
+
+        /* --- Particules flottantes dans le hero --- */
+        @keyframes float1 {
+            0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.4; }
+            33%       { transform: translateY(-18px) translateX(8px); opacity: 0.7; }
+            66%       { transform: translateY(-8px) translateX(-6px); opacity: 0.5; }
+        }
+        @keyframes float2 {
+            0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.3; }
+            50%       { transform: translateY(-22px) translateX(-10px); opacity: 0.6; }
+        }
+        @keyframes float3 {
+            0%, 100% { transform: translateY(0px); opacity: 0.25; }
+            40%       { transform: translateY(-14px) translateX(12px); opacity: 0.55; }
+            80%       { transform: translateY(-6px) translateX(-4px); opacity: 0.35; }
+        }
+
+        .particle { position: absolute; border-radius: 50%; pointer-events: none; }
+        .p1  { width:3px;  height:3px;  background:#FF5C00; top:18%; left:72%; animation: float1 5.2s ease-in-out infinite; }
+        .p2  { width:2px;  height:2px;  background:#fff;    top:32%; left:85%; animation: float2 6.8s ease-in-out infinite 1s; }
+        .p3  { width:4px;  height:4px;  background:#FF5C00; top:55%; left:78%; animation: float3 7.1s ease-in-out infinite 0.4s; opacity:0.3; }
+        .p4  { width:2px;  height:2px;  background:#fff;    top:70%; left:65%; animation: float1 4.9s ease-in-out infinite 2s; }
+        .p5  { width:3px;  height:3px;  background:#FF5C00; top:22%; left:90%; animation: float2 5.5s ease-in-out infinite 0.8s; opacity:0.4; }
+        .p6  { width:2px;  height:2px;  background:#fff;    top:80%; left:82%; animation: float3 8.2s ease-in-out infinite 1.5s; }
+        .p7  { width:5px;  height:5px;  background:rgba(255,92,0,0.2); top:42%; left:93%; animation: float1 9s ease-in-out infinite 3s; border-radius:2px; }
+        .p8  { width:2px;  height:2px;  background:#fff;    top:60%; left:58%; animation: float2 6.1s ease-in-out infinite 2.5s; opacity:0.2; }
+
+        /* --- Étoile scintillante --- */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; transform: scale(0.8); }
+            50%       { opacity: 0.7; transform: scale(1.2); }
+        }
+        .star {
+            position: absolute; pointer-events: none;
+            width: 2px; height: 2px; background: white; border-radius: 50%;
+        }
+        .s1 { top: 12%; left: 60%; animation: twinkle 2.8s ease-in-out infinite; }
+        .s2 { top: 28%; left: 75%; animation: twinkle 3.5s ease-in-out infinite 0.8s; }
+        .s3 { top: 48%; left: 88%; animation: twinkle 2.2s ease-in-out infinite 1.4s; }
+        .s4 { top: 68%; left: 70%; animation: twinkle 4.1s ease-in-out infinite 0.3s; }
+        .s5 { top: 15%; left: 95%; animation: twinkle 3.0s ease-in-out infinite 2.1s; }
+
+        /* --- Logo flottant --- */
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-6px); }
+        }
+        .hero-logos > div { animation: floatCard 4s ease-in-out infinite; }
+
+        /* --- Scroll reveal --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.65s cubic-bezier(.22,1,.36,1), transform 0.65s cubic-bezier(.22,1,.36,1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.08s; }
+        .reveal-delay-2 { transition-delay: 0.16s; }
+        .reveal-delay-3 { transition-delay: 0.24s; }
+
+        /* --- Cards : entrée au scroll --- */
+        .card-reveal {
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+            transition: opacity 0.5s cubic-bezier(.22,1,.36,1), transform 0.5s cubic-bezier(.22,1,.36,1);
+        }
+        .card-reveal.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* --- Activity card glow on hover --- */
+        .activity-card {
+            transition: all 0.28s cubic-bezier(0.4, 0.0, 0.2, 1);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(circle at 50% 0%, rgba(255,92,0,0.08), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .activity-card:hover::before { opacity: 1; }
+        .activity-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            border-color: rgba(255,92,0,0.35);
+            box-shadow: 0 24px 48px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,92,0,0.15);
+        }
+
+        /* --- Sidebar link indicator animé --- */
+        .sidebar-link {
+            position: relative;
+            overflow: hidden;
+        }
+        .sidebar-link::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 50%;
+            transform: translateY(-50%) scaleY(0);
+            width: 3px; height: 60%;
+            background: #FF5C00;
+            border-radius: 0 2px 2px 0;
+            transition: transform 0.2s ease;
+        }
+        .sidebar-link:hover::after { transform: translateY(-50%) scaleY(1); }
+        .sidebar-link.active::after { transform: translateY(-50%) scaleY(0); }
+
+        /* --- Shimmer sur les badges de statut --- */
+        @keyframes shimmer {
+            0%   { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .shimmer-text {
+            background: linear-gradient(90deg, #FF5C00 25%, #ffaa77 50%, #FF5C00 75%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+
+        /* --- Stats bar pulse --- */
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,92,0,0); }
+            50%       { box-shadow: 0 0 12px 3px rgba(255,92,0,0.15); }
+        }
+
+        /* --- Section headers slide in --- */
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* --- Boutons ripple --- */
+        .btn-ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-ripple::after {
+            content: '';
+            position: absolute;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            transform: scale(0);
+            top: 50%; left: 50%;
+            margin: -50px 0 0 -50px;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            opacity: 0;
+        }
+        .btn-ripple:active::after {
+            transform: scale(2.5);
+            opacity: 0;
+            transition: 0s;
+        }
+
+        /* --- Parcours cards --- */
+        .parcours-card {
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .parcours-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.4);
+            border-color: rgba(255,92,0,0.3) !important;
+        }
+
+        /* --- Incontournables hover lift --- */
+        .inco-card {
+            transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+        }
+        .inco-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255,92,0,0.4) !important;
+            box-shadow: 0 12px 32px -8px rgba(255,92,0,0.15);
+        }
+
+        /* --- Compteur hero spin-up --- */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .count-anim { animation: countUp 0.5s ease both; }
+
+        /* --- Barre météo glide --- */
+        @keyframes glideIn {
+            from { opacity: 0; transform: translateX(-12px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        .stats-bar-item { animation: glideIn 0.5s ease both; }
+        .stats-bar-item:nth-child(2) { animation-delay: 0.15s; }
+
+        /* --- Page load overlay fade out --- */
+        #page-loader {
+            position: fixed; inset: 0; z-index: 9999;
+            background: #070A12;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+        #page-loader.done { opacity: 0; pointer-events: none; }
+
+        @keyframes loaderPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50%       { transform: scale(1.15); opacity: 0.7; }
+        }
+        #page-loader .loader-logo {
+            animation: loaderPulse 0.9s ease-in-out infinite;
         }
     </style>
 </head>
 <body class="bg-[#070A12] text-white">
+
+    <!-- Page loader -->
+    <div id="page-loader">
+        <div class="loader-logo flex flex-col items-center gap-3">
+            <div class="w-14 h-14 bg-[#FF5C00] rounded-2xl flex items-center justify-center">
+                <span class="text-white text-4xl font-bold tracking-tighter">PP</span>
+            </div>
+            <span class="text-white/40 text-sm font-medium tracking-widest uppercase">Chargement…</span>
+        </div>
+    </div>
     <!-- VERTICAL SIDEBAR NAV (left) -->
     <aside class="sidebar fixed top-0 left-0 h-screen flex flex-col z-50 hidden lg:flex">
         <!-- Logo -->
         <div class="px-6 py-7 border-b border-white/10">
-            <div class="flex items-center gap-x-3">
+            <div class="flex items-center gap-x-3 mb-4">
                 <div class="w-11 h-11 bg-[#FF5C00] rounded-2xl flex items-center justify-center flex-shrink-0">
                     <span class="text-white text-3xl font-bold tracking-tighter">PP</span>
                 </div>
                 <div class="leading-none">
                     <div class="font-semibold text-2xl tracking-tighter">Parcours<span class="text-[#FF5C00]">Paris</span></div>
                 </div>
+            </div>
+            <!-- Logos partenaires -->
+            <div class="flex items-center gap-3 bg-white rounded-xl px-3 py-2">
+                <!-- ISAE-Supmeca -->
+                <svg viewBox="0 0 120 60" class="h-8 flex-shrink-0" xmlns="http://www.w3.org/2000/svg">
+                    <text x="2" y="22" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#2D3358" letter-spacing="2">Isae</text>
+                    <line x1="2" y1="30" x2="118" y2="30" stroke="#E8421A" stroke-width="2.5"/>
+                    <text x="2" y="50" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#2D3358" letter-spacing="1">supméca</text>
+                    <!-- Bird silhouette simplified -->
+                    <path d="M72 8 Q80 3 90 6 Q95 8 92 12 Q88 10 82 11 Z" fill="#2D3358"/>
+                    <path d="M88 5 L96 2 L94 8 Z" fill="#2D3358"/>
+                </svg>
+                <div class="w-px h-8 bg-gray-300"></div>
+                <!-- UIMM / Mécavenir -->
+                <svg viewBox="0 0 130 55" class="h-8 flex-shrink-0" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="50" height="55" fill="#0078BF"/>
+                    <rect x="0" y="28" width="50" height="27" fill="#E8421A"/>
+                    <text x="3" y="16" font-family="Arial,sans-serif" font-size="11" font-weight="900" fill="white">UIMM</text>
+                    <text x="2" y="26" font-family="Arial,sans-serif" font-size="5" fill="white">PÔLE FORMATION</text>
+                    <text x="2" y="38" font-family="Arial,sans-serif" font-size="5.5" font-weight="700" fill="white">LA FABRIQUE</text>
+                    <text x="2" y="47" font-family="Arial,sans-serif" font-size="5.5" font-weight="700" fill="white">DE L'AVENIR</text>
+                    <text x="56" y="20" font-family="Arial,sans-serif" font-size="11" font-weight="900" fill="#0078BF">MECAVENIR</text>
+                    <line x1="55" y1="25" x2="128" y2="25" stroke="#0078BF" stroke-width="1"/>
+                    <text x="56" y="36" font-family="Arial,sans-serif" font-size="6" fill="#444">L'excellence</text>
+                    <text x="56" y="45" font-family="Arial,sans-serif" font-size="6" fill="#444">par l'apprentissage</text>
+                </svg>
             </div>
         </div>
 
@@ -351,9 +623,9 @@
         <!-- Bottom section -->
         <div class="p-4 border-t border-white/10 mt-auto">
             <div class="bg-white/5 rounded-2xl p-3 text-xs mb-3">
-                <div class="flex items-center gap-2 text-emerald-400">
+                <div class="flex items-center gap-2 text-emerald-400" id="sidebar-data-status">
                     <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                    <span class="font-medium">Semaine 25-31 mai 2026</span>
+                    <span class="font-medium">15 événements • 1–7 juin 2026</span>
                 </div>
             </div>
 
@@ -372,7 +644,18 @@
             </div>
             <span class="font-semibold tracking-tighter text-xl">Parcours<span class="text-[#FF5C00]">Paris</span></span>
         </div>
-        <button onclick="showQuiz()" class="text-sm px-3 py-1.5 bg-white/10 rounded-xl">Quiz</button>
+        <div class="flex items-center gap-2">
+            <!-- Logos partenaires mobile -->
+            <div class="flex items-center gap-1.5 bg-white rounded-lg px-2 py-1">
+                <span class="text-[#2D3358] font-bold text-[9px] tracking-wide leading-tight">Isae<br><span class="text-[8px] font-semibold">supméca</span></span>
+                <div class="w-px h-5 bg-gray-300"></div>
+                <div class="flex flex-col leading-none">
+                    <span class="bg-[#0078BF] text-white font-bold text-[8px] px-1 rounded-sm">UIMM</span>
+                    <span class="text-[#0078BF] font-bold text-[7px] mt-0.5">MECAVENIR</span>
+                </div>
+            </div>
+            <button onclick="showQuiz()" class="text-sm px-3 py-1.5 bg-white/10 rounded-xl">Quiz</button>
+        </div>
     </div>
 
     <!-- MAIN CONTENT (shifted for sidebar) -->
@@ -384,65 +667,122 @@
         <!-- Background with real Paris imagery (Eiffel Tower focused) -->
         <div class="absolute inset-0 pointer-events-none">
             
-            <!-- Main Paris photo with strong Eiffel Tower presence -->
+            <!-- Main Paris photo — opacité augmentée pour plus de visibilité -->
             <div class="absolute inset-0 bg-cover bg-center"
                  style="background-image: url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1600&q=80'); 
-                        opacity: 0.28; 
-                        filter: contrast(1.15) brightness(0.58) saturate(0.65);">
+                        opacity: 0.52; 
+                        filter: contrast(1.05) brightness(0.7) saturate(0.8);">
             </div>
             
-            <!-- Dark overlays for readability and depth -->
-            <div class="absolute inset-0 bg-gradient-to-r from-[#0B0F1C] via-[#0B0F1C]/75 to-transparent"></div>
-            <div class="absolute inset-0 bg-gradient-to-b from-[#0B0F1C]/40 via-transparent to-[#070A12]"></div>
-            <div class="absolute inset-0 bg-gradient-to-l from-[#0B0F1C]/30 to-transparent"></div>
-            
+            <!-- Dégradé gauche fort pour lisibilité du texte -->
+            <div class="absolute inset-0 bg-gradient-to-r from-[#0B0F1C] via-[#0B0F1C]/80 to-transparent"></div>
+            <!-- Dégradé haut/bas léger -->
+            <div class="absolute inset-0 bg-gradient-to-b from-[#0B0F1C]/30 via-transparent to-[#070A12]"></div>
+
+            <!-- Particules flottantes -->
+            <div class="particle p1"></div>
+            <div class="particle p2"></div>
+            <div class="particle p3"></div>
+            <div class="particle p4"></div>
+            <div class="particle p5"></div>
+            <div class="particle p6"></div>
+            <div class="particle p7"></div>
+            <div class="particle p8"></div>
+
+            <!-- Étoiles scintillantes -->
+            <div class="star s1"></div>
+            <div class="star s2"></div>
+            <div class="star s3"></div>
+            <div class="star s4"></div>
+            <div class="star s5"></div>
         </div>
 
         <div class="max-w-screen-xl mx-auto px-6 pt-14 pb-16 relative z-10">
-            <div class="max-w-3xl">
+            <div class="flex items-start justify-between gap-12">
                 
-                <!-- Badge -->
-                <div class="inline-flex items-center gap-x-2 mb-6">
-                    <div class="flex items-center bg-white/10 backdrop-blur px-4 h-8 rounded-2xl text-sm font-medium tracking-wide border border-white/20">
-                        <span class="text-[var(--school-accent)] mr-2">●</span> 
-                        Paris • 2026
+                <!-- Colonne gauche : texte -->
+                <div class="max-w-xl">
+                    <!-- Badge -->
+                    <div class="hero-badge inline-flex items-center gap-x-2 mb-6">
+                        <div class="flex items-center bg-white/10 backdrop-blur px-4 h-8 rounded-2xl text-sm font-medium tracking-wide border border-white/20">
+                            <span class="text-[var(--school-accent)] mr-2">●</span> 
+                            Paris • 2026
+                        </div>
                     </div>
-                </div>
-                
-                <h1 class="text-6xl md:text-[72px] leading-[1.0] tracking-[-0.045em] font-semibold heading-serif mb-6">
-                    Paris, simplement.<br>
-                    <span class="text-[var(--school-accent)] text-3xl md:text-[38px] font-medium tracking-tight">À ton rythme.</span>
-                </h1>
-                
-                <p class="text-xl text-slate-300 max-w-md mb-9">
-                    Activités et événements réels de la Ville de Paris + parcours prêts à suivre.
-                </p>
+                    
+                    <h1 class="hero-title text-6xl md:text-[72px] leading-[1.0] tracking-[-0.045em] font-semibold heading-serif mb-6">
+                        Paris, cette semaine.<br>
+                        <span class="text-[var(--school-accent)] text-3xl md:text-[38px] font-medium tracking-tight">1 — 7 juin 2026.</span>
+                    </h1>
+                    
+                    <p class="hero-desc text-xl text-slate-300 max-w-md mb-9">
+                        Roland-Garros, Nuit Blanche, We Love Green, Rendez-vous aux Jardins… Les vrais événements de la semaine, avec parcours prêts à suivre.
+                    </p>
 
-                <div class="flex flex-wrap gap-4">
-                    <a href="#cette-semaine" 
-                       class="inline-flex items-center justify-center px-9 h-13 bg-[var(--school-accent)] hover:bg-[var(--school-accent-dark)] text-white font-semibold rounded-3xl transition-all active:scale-[0.985] text-[15px]">
-                        Découvrir cette semaine
-                    </a>
-                    <a href="#parcours" 
-                       class="inline-flex items-center justify-center px-9 h-13 bg-white/10 hover:bg-white/15 border border-white/30 backdrop-blur font-semibold rounded-3xl transition-all text-[15px]">
-                        Explorer les parcours
-                    </a>
+                    <div class="hero-buttons flex flex-wrap gap-4">
+                        <a href="#cette-semaine" 
+                           class="btn-ripple inline-flex items-center justify-center px-9 h-13 bg-[var(--school-accent)] hover:bg-[var(--school-accent-dark)] text-white font-semibold rounded-3xl transition-all active:scale-[0.985] text-[15px]">
+                            Découvrir cette semaine
+                        </a>
+                        <a href="#parcours" 
+                           class="btn-ripple inline-flex items-center justify-center px-9 h-13 bg-white/10 hover:bg-white/15 border border-white/30 backdrop-blur font-semibold rounded-3xl transition-all text-[15px]">
+                            Explorer les parcours
+                        </a>
+                    </div>
+
+                    <div class="hero-stats mt-12 grid grid-cols-3 gap-8 max-w-md text-sm">
+                        <div>
+                            <div class="font-semibold text-4xl tracking-[-1.5px] text-white" id="hero-count">—</div>
+                            <div class="text-[var(--school-muted)] mt-1 leading-tight">événements<br>cette semaine</div>
+                        </div>
+                        <div>
+                            <div class="font-semibold text-4xl tracking-[-1.5px] text-white">5</div>
+                            <div class="text-[var(--school-muted)] mt-1 leading-tight">parcours<br>thématiques</div>
+                        </div>
+                        <div>
+                            <div class="font-semibold text-4xl tracking-[-1.5px] text-white" id="hero-free">—</div>
+                            <div class="text-[var(--school-muted)] mt-1 leading-tight">activités<br>100% gratuites</div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="mt-12 grid grid-cols-3 gap-8 max-w-md text-sm">
-                    <div>
-                        <div class="font-semibold text-4xl tracking-[-1.5px] text-white">18</div>
-                        <div class="text-[var(--school-muted)] mt-1 leading-tight">activités cette<br>semaine</div>
-                    </div>
-                    <div>
-                        <div class="font-semibold text-4xl tracking-[-1.5px] text-white">5</div>
-                        <div class="text-[var(--school-muted)] mt-1 leading-tight">parcours<br>thématiques</div>
-                    </div>
-                    <div>
-                        <div class="font-semibold text-4xl tracking-[-1.5px] text-white">67%</div>
-                        <div class="text-[var(--school-muted)] mt-1 leading-tight">activités<br>à moins de 10€</div>
+                <!-- Colonne droite : logos partenaires (desktop uniquement) -->
+                <div class="hero-logos hidden lg:flex flex-col items-end justify-start pt-4 gap-4 flex-shrink-0">
+                    <div class="bg-white/95 backdrop-blur rounded-2xl px-5 py-4 shadow-xl flex flex-col items-center gap-3">
+                        <div class="text-[10px] text-gray-400 uppercase tracking-widest font-semibold">Projet réalisé à</div>
+                        <!-- ISAE-Supmeca -->
+                        <div class="flex flex-col items-center">
+                            <svg viewBox="0 0 180 72" class="w-44" xmlns="http://www.w3.org/2000/svg">
+                                <text x="4" y="30" font-family="Arial,sans-serif" font-size="26" font-weight="700" fill="#2D3358" letter-spacing="3">Isae</text>
+                                <!-- oiseau simplifié -->
+                                <path d="M100 10 Q115 4 128 8 Q134 11 130 16 Q124 13 116 15 L105 18 Z" fill="#2D3358"/>
+                                <path d="M125 5 L138 1 L135 10 Z" fill="#2D3358"/>
+                                <path d="M105 18 Q112 22 120 19" stroke="#2D3358" stroke-width="1.5" fill="none"/>
+                                <line x1="4" y1="40" x2="174" y2="40" stroke="#E8421A" stroke-width="3.5"/>
+                                <text x="4" y="66" font-family="Arial,sans-serif" font-size="23" font-weight="700" fill="#2D3358" letter-spacing="2">supméca</text>
+                            </svg>
+                        </div>
+                        <div class="w-full h-px bg-gray-200"></div>
+                        <!-- UIMM Mécavenir -->
+                        <div class="flex items-center gap-3">
+                            <svg viewBox="0 0 58 60" class="h-12" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0" y="0" width="58" height="60" rx="4" fill="#0078BF"/>
+                                <rect x="0" y="32" width="58" height="28" rx="4" fill="#E8421A"/>
+                                <rect x="0" y="32" width="58" height="5" fill="#E8421A"/>
+                                <text x="5" y="20" font-family="Arial,sans-serif" font-size="14" font-weight="900" fill="white" letter-spacing="1">UIMM</text>
+                                <text x="5" y="30" font-family="Arial,sans-serif" font-size="5.5" fill="white" letter-spacing="0.3">PÔLE FORMATION IDF</text>
+                                <text x="5" y="42" font-family="Arial,sans-serif" font-size="6" font-weight="700" fill="white">LA FABRIQUE</text>
+                                <text x="5" y="52" font-family="Arial,sans-serif" font-size="6" font-weight="700" fill="white">DE L'AVENIR</text>
+                            </svg>
+                            <div class="flex flex-col">
+                                <span class="text-[#0078BF] font-black text-base tracking-wide leading-none">MECAVENIR</span>
+                                <div class="h-px bg-[#0078BF] mt-1 mb-1 w-full"></div>
+                                <span class="text-gray-500 text-[10px] leading-tight">L'excellence<br>par l'apprentissage</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -452,7 +792,7 @@
         <div class="max-w-screen-xl mx-auto px-6 py-4">
             <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-sm text-slate-300">
                 <div class="flex items-center gap-x-2">
-                    <span class="font-medium">Semaine du 25 au 31 mai 2026</span>
+                    <span class="font-medium">Semaine du 1 au 7 juin 2026</span>
                     <span class="text-white/30">•</span>
                     <span class="text-[var(--school-accent)] font-medium">Météo : 19-24°C, ensoleillé</span>
                 </div>
@@ -504,7 +844,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             
             <!-- Tour Eiffel -->
-            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-5 hover:border-[#FF5C00]/40 transition-colors">
+            <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
                         <h3 class="font-semibold text-lg">Tour Eiffel</h3>
@@ -518,7 +858,7 @@
             </div>
 
             <!-- Arc de Triomphe -->
-            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-5 hover:border-[#FF5C00]/40 transition-colors">
+            <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
                         <h3 class="font-semibold text-lg">Arc de Triomphe</h3>
@@ -532,7 +872,7 @@
             </div>
 
             <!-- Louvre -->
-            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-5 hover:border-[#FF5C00]/40 transition-colors">
+            <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
                         <h3 class="font-semibold text-lg">Musée du Louvre</h3>
@@ -546,7 +886,7 @@
             </div>
 
             <!-- Notre-Dame -->
-            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-5 hover:border-[#FF5C00]/40 transition-colors">
+            <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
                         <h3 class="font-semibold text-lg">Cathédrale Notre-Dame</h3>
@@ -560,7 +900,7 @@
             </div>
 
             <!-- Sacré-Cœur -->
-            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-5 hover:border-[#FF5C00]/40 transition-colors">
+            <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
                         <h3 class="font-semibold text-lg">Sacré-Cœur</h3>
@@ -574,7 +914,7 @@
             </div>
 
             <!-- Musée d'Orsay -->
-            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-5 hover:border-[#FF5C00]/40 transition-colors">
+            <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
                         <h3 class="font-semibold text-lg">Musée d’Orsay</h3>
@@ -588,7 +928,7 @@
             </div>
 
             <!-- Sainte-Chapelle -->
-            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-5 hover:border-[#FF5C00]/40 transition-colors">
+            <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
                         <h3 class="font-semibold text-lg">Sainte-Chapelle</h3>
@@ -602,7 +942,7 @@
             </div>
 
             <!-- Panthéon -->
-            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-5 hover:border-[#FF5C00]/40 transition-colors">
+            <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
                         <h3 class="font-semibold text-lg">Panthéon</h3>
@@ -616,7 +956,7 @@
             </div>
 
             <!-- Invalides -->
-            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-5 hover:border-[#FF5C00]/40 transition-colors">
+            <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
                         <h3 class="font-semibold text-lg">Hôtel des Invalides</h3>
@@ -630,7 +970,7 @@
             </div>
 
             <!-- Opéra Garnier -->
-            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-5 hover:border-[#FF5C00]/40 transition-colors">
+            <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
                         <h3 class="font-semibold text-lg">Opéra Garnier</h3>
@@ -644,7 +984,7 @@
             </div>
 
             <!-- Pont Alexandre III -->
-            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-5 hover:border-[#FF5C00]/40 transition-colors">
+            <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
                         <h3 class="font-semibold text-lg">Pont Alexandre III</h3>
@@ -654,11 +994,11 @@
                 </div>
                 <p class="text-sm text-slate-300 mt-3">Le plus beau pont de Paris. Dorures, statues et vue parfaite sur les Invalides et la Tour Eiffel.</p>
                 <div class="text-xs text-white/60 mt-2">Idéal pour les photos romantiques.</div>
-                <a href="https://www.parisinfo.com/" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
+                <a href="https://www.paris.fr/lieux/pont-alexandre-iii-6860" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
             </div>
 
             <!-- Centre Pompidou -->
-            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-5 hover:border-[#FF5C00]/40 transition-colors">
+            <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
                         <h3 class="font-semibold text-lg">Centre Pompidou</h3>
@@ -672,7 +1012,7 @@
             </div>
 
             <!-- Jardin du Luxembourg -->
-            <div class="bg-[#0B0F1C] border border-white/10 rounded-3xl p-5 hover:border-[#FF5C00]/40 transition-colors">
+            <div class="inco-card reveal bg-[#0B0F1C] border border-white/10 rounded-3xl p-5">
                 <div class="flex items-start justify-between">
                     <div>
                         <h3 class="font-semibold text-lg">Jardin du Luxembourg</h3>
@@ -682,7 +1022,7 @@
                 </div>
                 <p class="text-sm text-slate-300 mt-3">Le plus beau jardin public de Paris. Chaises vertes, bassin, palais et ambiance parisienne authentique.</p>
                 <div class="text-xs text-white/60 mt-2">Parfait pour se reposer et lire.</div>
-                <a href="https://www.paris.fr/" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
+                <a href="https://www.senat.fr/visite/jardin/" target="_blank" class="text-xs text-[#FF5C00] hover:underline mt-2 inline-block">En savoir plus →</a>
             </div>
 
         </div>
@@ -709,6 +1049,11 @@
                 <button onclick="filterByDay('Samedi')" class="filter-btn px-4 py-1.5 border border-white/10 hover:border-white/30 rounded-2xl text-sm font-medium" id="day-Samedi">Sam</button>
                 <button onclick="filterByDay('Dimanche')" class="filter-btn px-4 py-1.5 border border-white/10 hover:border-white/30 rounded-2xl text-sm font-medium" id="day-Dimanche">Dim</button>
             </div>
+        </div>
+
+        <!-- Bandeau statut données -->
+        <div id="live-data-banner" class="text-xs text-emerald-300 bg-emerald-900/30 border border-emerald-700/40 rounded-2xl px-4 py-2 mb-4">
+            <span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse inline-block"></span> <strong>15 événements réels</strong> — Semaine du 1 au 7 juin 2026 • Sources : paris.fr, sortiraparis.com, lebonbon.fr</span>
         </div>
 
         <!-- Advanced filters -->
@@ -762,9 +1107,29 @@
         </div>
 
         <div id="list-view">
-            <div id="activities-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                <!-- Populated dynamically by JS -->
+            <!-- Zone 1 : Événements ponctuels du jour sélectionné -->
+            <div id="daily-events-section">
+                <div id="daily-events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                </div>
             </div>
+
+            <!-- Zone 2 : Événements continus (expos, festivals, toute la semaine) -->
+            <div id="ongoing-section" class="mt-8 hidden">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="h-px flex-1 bg-white/10"></div>
+                    <div class="flex items-center gap-2 px-4 py-1.5 bg-white/5 border border-white/10 rounded-2xl">
+                        <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse inline-block"></span>
+                        <span class="text-xs font-semibold text-slate-300 uppercase tracking-widest">En ce moment à Paris</span>
+                    </div>
+                    <div class="h-px flex-1 bg-white/10"></div>
+                </div>
+                <p class="text-xs text-slate-500 mb-4 text-center">Expositions, festivals et événements disponibles toute la semaine</p>
+                <div id="ongoing-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                </div>
+            </div>
+
+            <!-- Ancien container gardé pour compatibilité avec le reste du JS -->
+            <div id="activities-grid" class="hidden"></div>
         </div>
 
         <!-- CARTE INTERACTIVE -->
@@ -914,12 +1279,9 @@
                 </div>
 
                 <div class="flex items-center gap-x-3">
-                    <button onclick="loadFromParisOpenData()" 
+                    <button onclick="loadFromParisOpenData().then(ok => showToast(ok ? '✅ Données mises à jour !' : '⚠️ Indisponible, réessaie plus tard'))" 
                             class="flex items-center gap-x-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-2xl text-xs font-medium transition-colors">
                         <span>🔄 Forcer une nouvelle tentative</span>
-                    </button>
-                    <button onclick="showDataSources()" class="px-4 py-2 border border-white/20 hover:bg-white/10 rounded-2xl text-xs font-medium transition-colors text-white">
-                        Comment automatiser
                     </button>
                     <button onclick="showAbout()" class="hover:text-white underline text-xs">À propos</button>
                 </div>
@@ -950,116 +1312,431 @@
     </div>
 
     <script>
-        // ==================== DATA ====================
-        let activities = [];
+        // ==================== DATA — ÉVÉNEMENTS RÉELS semaine 1-7 juin 2026 ====================
+        const activities = [
+            {
+                id: 1,
+                title: "Roland-Garros 2026 – Demi-finales",
+                day: "Lundi",
+                date: "1 juin",
+                time: "11:00",
+                duration: "Toute la journée",
+                category: "Sport",
+                price: 25,
+                priceLabel: "25€+ (selon tribune)",
+                location: "Stade Roland-Garros, Porte d'Auteuil",
+                arrondissement: "16e",
+                description: "La deuxième semaine de Roland-Garros bat son plein : demi-finales messieurs et dames, ambiance électrique sur les courts Philippe-Chatrier et Suzanne-Lenglen. Le plus grand tournoi de tennis sur terre battue du monde, à deux pas de chez toi.",
+                spots: "Billets en vente sur le site officiel",
+                studentDiscount: false,
+                coordinates: [48.8472, 2.2490],
+                metro: "Porte d'Auteuil (10)",
+                tips: "Les courts annexes (Simonne-Mathieu, n°14) sont moins chers et parfois plus intenses. Arrive tôt pour les files d'attente."
+            },
+            {
+                id: 2,
+                title: "Cabaret queer La Bouche – Curieux Transfo",
+                day: "Mardi",
+                date: "2 juin",
+                time: "19:00",
+                duration: "2h",
+                category: "Sorties",
+                price: 0,
+                priceLabel: "Gratuit",
+                location: "Transfo – Emmaüs Solidarité, 36 rue Jacques Louvel Tessier",
+                arrondissement: "10e",
+                description: "La Bouche, cabaret queer fondé par Mascare, Soa de Muse, Bili Bellegarde et Grand Soir, prend d'assaut la Bouche Transfo pour une soirée en plein air : piano, voix, néons, lipsync et récits personnels. Un show multidisciplinaire, sexy, punk et politique. Accès libre.",
+                spots: "Entrée libre",
+                studentDiscount: false,
+                coordinates: [48.8680, 2.3650],
+                metro: "Goncourt (11)",
+                tips: "Événement en plein air, prévois une veste. Arrive à l'heure pour trouver une bonne place."
+            },
+            {
+                id: 3,
+                title: "Festival ManiFeste – Art & Science à l'Ircam",
+                day: "Mercredi",
+                date: "3 juin",
+                time: "19:30",
+                duration: "2h30",
+                category: "Culture",
+                price: 15,
+                priceLabel: "15€ (tarif réduit dispo)",
+                location: "Ircam, 1 place Igor Stravinsky",
+                arrondissement: "4e",
+                description: "Le festival ManiFeste revient pour 30 événements de haute volée : installations lumineuses, projections, concerts, opéra et chorégraphies spectaculaires. Art et technologie au plus haut niveau à l'Ircam, place Igor Stravinsky. Du 3 au 27 juin 2026.",
+                spots: "Réservation conseillée",
+                studentDiscount: true,
+                coordinates: [48.8596, 2.3516],
+                metro: "Rambuteau (11)",
+                tips: "Programme complet sur ircam.fr. Les billets tarif réduit sont disponibles avec carte étudiant."
+            },
+            {
+                id: 4,
+                title: "Beyond the Streets – Expo graffiti & street art",
+                day: "Jeudi",
+                date: "4 juin",
+                time: "10:00",
+                duration: "2h",
+                category: "Art",
+                price: 18,
+                priceLabel: "18€ (tarif réduit 14€)",
+                location: "Grande Halle de la Villette, 211 av. Jean Jaurès",
+                arrondissement: "19e",
+                description: "Sur 3 600 m², une centaine d'artistes internationaux et français investissent la Grande Halle de la Villette avec des œuvres inédites, installations immersives et archives rares. Le parcours raconte comment le graffiti a quitté l'underground pour influencer durablement la culture contemporaine. Jusqu'à fin août.",
+                spots: "Ouvert tous les jours",
+                studentDiscount: true,
+                coordinates: [48.8937, 2.3937],
+                metro: "Porte de Pantin (5)",
+                tips: "Compte 2h minimum pour tout voir. Le café de la Grande Halle est parfait pour une pause. Pas d'appareils photo professionnels."
+            },
+            {
+                id: 5,
+                title: "Rendez-vous aux Jardins – Jardins secrets de Paris",
+                day: "Vendredi",
+                date: "5 juin",
+                time: "14:00",
+                duration: "3 jours",
+                category: "Nature",
+                price: 0,
+                priceLabel: "Gratuit",
+                location: "Jardins publics et privés de Paris",
+                arrondissement: "Toute la ville",
+                description: "Les 5, 6 et 7 juin, plus de 100 jardins parisiens ouvrent leurs portes, dont certains habituellement fermés au public. Cette 23e édition a pour thème « la vue ». Jardins des hôtels particuliers, cours d'immeubles, jardins d'artistes : une balade unique dans le Paris végétal.",
+                spots: "Accès libre selon les sites",
+                studentDiscount: false,
+                coordinates: [48.8566, 2.3522],
+                metro: "Selon le jardin choisi",
+                tips: "Consulte le programme complet sur rendezvousauxjardins.fr. Les jardins privés sont souvent les plus beaux et rarement accessibles."
+            },
+            {
+                id: 6,
+                title: "We Love Green Festival – Bois de Vincennes",
+                day: "Vendredi",
+                date: "5 juin",
+                time: "15:00",
+                duration: "3 jours",
+                category: "Sorties",
+                price: 45,
+                priceLabel: "45€/jour (pass 3j dispo)",
+                location: "Pelouse de Reuilly, Bois de Vincennes",
+                arrondissement: "12e",
+                description: "We Love Green lance la saison des festivals parisiens : rap, électro, pop internationale dans le Bois de Vincennes. Du 5 au 7 juin 2026, une programmation éclectique pour tous les goûts avec des artistes de renommée internationale, des espaces food de qualité et une démarche écoresponsable.",
+                spots: "Billets disponibles sur welovegreen.fr",
+                studentDiscount: false,
+                coordinates: [48.8369, 2.4089],
+                metro: "Porte Dorée (8) ou navettes festival",
+                tips: "Prends le métro ligne 8 jusqu'à Porte Dorée. Amène ta gourde (eaux gratuites sur place). Le camping est disponible sur réservation."
+            },
+            {
+                id: 7,
+                title: "Roseraie du Parc de Bagatelle – Rose Weekend",
+                day: "Samedi",
+                date: "6 juin",
+                time: "09:30",
+                duration: "3h",
+                category: "Nature",
+                price: 7,
+                priceLabel: "7€ (gratuit -26 ans dimanche)",
+                location: "Parc de Bagatelle, Bois de Boulogne",
+                arrondissement: "16e",
+                description: "La roseraie de Bagatelle est en pleine floraison début juin avec plus de 10 000 rosiers de 1 200 variétés. Pour le Rose Weekend, des visites guidées, ateliers et animations spéciales ont lieu au cœur de l'un des plus beaux parcs de Paris. Un moment suspendu hors du temps.",
+                spots: "Visite libre ou guidée",
+                studentDiscount: false,
+                coordinates: [48.8651, 2.2489],
+                metro: "Pont de Neuilly (1) + bus 43",
+                tips: "Arrive tôt le matin (9h-11h) pour la lumière et avant les foules. Le café du pavillon Bagatelle sert un brunch le week-end."
+            },
+            {
+                id: 8,
+                title: "Nuit Blanche 2026 – Barbara Butch 'L'Amour'",
+                day: "Samedi",
+                date: "6 juin",
+                time: "18:00",
+                duration: "Toute la nuit",
+                category: "Sorties",
+                price: 0,
+                priceLabel: "100% Gratuit",
+                location: "Toute la ville de Paris",
+                arrondissement: "Toute la ville",
+                description: "La 25e édition anniversaire de la Nuit Blanche est dirigée par Barbara Butch, DJ et reine de la nuit, qui choisit l'amour comme thème universel. À partir de 18h, l'art contemporain s'installe partout : performances, installations, projections, concerts. 100% gratuit, toute la nuit.",
+                spots: "Entrée libre partout",
+                studentDiscount: false,
+                coordinates: [48.8566, 2.3522],
+                metro: "Selon les sites",
+                tips: "Consulte la carte interactive sur paris.fr/nuitblanche. Prévois des chaussures confortables. Les musées nationaux sont gratuits cette nuit-là."
+            },
+            {
+                id: 9,
+                title: "Remontada Padel – Pied de la Tour Eiffel",
+                day: "Samedi",
+                date: "6 juin",
+                time: "10:00",
+                duration: "3 jours",
+                category: "Sport",
+                price: 0,
+                priceLabel: "Gratuit (spectateurs)",
+                location: "Champ-de-Mars, pied de la Tour Eiffel",
+                arrondissement: "7e",
+                description: "Du 5 au 7 juin, le plus grand événement de padel grand public d'Europe s'installe au pied de la Tour Eiffel. Tournois ouverts à tous, initiation, matchs de démonstration avec des joueurs pro. Un sport entre tennis et squash dans le cadre le plus iconique de Paris.",
+                spots: "Accès libre pour les spectateurs",
+                studentDiscount: false,
+                coordinates: [48.8552, 2.2945],
+                metro: "Champ-de-Mars – Tour Eiffel (RER C)",
+                tips: "Profites-en pour t'initier gratuitement. Les créneaux pour jouer sont à réserver sur le site de l'événement."
+            },
+            {
+                id: 10,
+                title: "Expo 'Visages d'artistes' – Petit Palais",
+                day: "Samedi",
+                date: "6 juin",
+                time: "10:00",
+                duration: "1h30",
+                category: "Culture",
+                price: 0,
+                priceLabel: "Gratuit",
+                location: "Petit Palais, 2 avenue Winston Churchill",
+                arrondissement: "8e",
+                description: "De Courbet à Annette Messager, l'autoportrait s'expose sous toutes ses formes au Petit Palais : peinture, sculpture, photographie du XIXe siècle à aujourd'hui. Des artistes femmes contemporaines réinventent le genre. L'expo dure jusqu'au 19 juillet. Entrée gratuite, musée municipal.",
+                spots: "Entrée libre",
+                studentDiscount: false,
+                coordinates: [48.8661, 2.3133],
+                metro: "Champs-Élysées – Clemenceau (1,13)",
+                tips: "Le Petit Palais est gratuit en permanence (collections permanentes et la plupart des expos). La cour intérieure est magnifique pour une pause."
+            },
+            {
+                id: 11,
+                title: "adidas 10K Paris – Course dans les rues",
+                day: "Dimanche",
+                date: "7 juin",
+                time: "09:00",
+                duration: "2h",
+                category: "Sport",
+                price: 35,
+                priceLabel: "35€ (inscription obligatoire)",
+                location: "Départ : Champ-de-Mars",
+                arrondissement: "7e",
+                description: "Le 7 juin, l'adidas 10K Paris revient dans les rues de la capitale pour un parcours longeant les plus beaux monuments. Mêlant sport, culture et valeurs humaines, la course traverse Paris en beauté et reverse une partie des inscriptions à des associations. Spectateurs bienvenus gratuitement.",
+                spots: "Inscriptions sur adidas10kparis.fr",
+                studentDiscount: false,
+                coordinates: [48.8552, 2.2945],
+                metro: "Champ-de-Mars – Tour Eiffel (RER C)",
+                tips: "Même si tu ne cours pas, le parcours est magnifique à observer. Le départ et l'arrivée sont festifs, ambiance garantie !"
+            },
+            {
+                id: 12,
+                title: "Expo Pokémon 30 ans – Musée en Herbe",
+                day: "Mercredi",
+                date: "3 juin",
+                time: "10:00",
+                duration: "1h30",
+                category: "Culture",
+                price: 10,
+                priceLabel: "10€ (6€ enfant)",
+                location: "Musée en Herbe, 23 rue de l'Arbre-Sec",
+                arrondissement: "1e",
+                description: "Pikachu et ses amis fêtent leurs 30 ans ! Le Musée en Herbe se transforme en terrain d'aventures Pokémon pour tous les âges : la visite devient un jeu, de l'univers de l'enfance à des œuvres inspirées des grands maîtres. Jusqu'au 31 décembre 2026.",
+                spots: "Sur réservation conseillée",
+                studentDiscount: true,
+                coordinates: [48.8604, 2.3441],
+                metro: "Louvre – Rivoli (1)",
+                tips: "Super activité si tu es avec des amis nostalgiques ou une famille. Durée conseillée 1h à 1h30."
+            },
+            {
+                id: 13,
+                title: "Rendez-vous aux jardins – Jardin du Palais-Royal",
+                day: "Dimanche",
+                date: "7 juin",
+                time: "10:00",
+                duration: "2h",
+                category: "Nature",
+                price: 0,
+                priceLabel: "Gratuit",
+                location: "Jardin du Palais-Royal, Place du Palais-Royal",
+                arrondissement: "1e",
+                description: "Dans le cadre des Rendez-vous aux Jardins, le Jardin du Palais-Royal propose des visites commentées par les jardiniers de la Ville de Paris. Découvre les essences rares, l'histoire du jardin et les secrets de son entretien. Un des plus beaux jardins à la française de Paris.",
+                spots: "Accès libre, visites guidées en groupe",
+                studentDiscount: false,
+                coordinates: [48.8637, 2.3369],
+                metro: "Palais-Royal – Musée du Louvre (1,7)",
+                tips: "Les colonnes de Buren dans la cour d'honneur sont iconiques. Arrive un peu avant la visite guidée pour être dans le premier groupe."
+            },
+            {
+                id: 14,
+                title: "Expo 'Virages Vierges' – Palais de Tokyo",
+                day: "Jeudi",
+                date: "4 juin",
+                time: "12:00",
+                duration: "2h",
+                category: "Art",
+                price: 14,
+                priceLabel: "14€ (10€ moins de 26 ans)",
+                location: "Palais de Tokyo, 13 avenue du Président Wilson",
+                arrondissement: "16e",
+                description: "Pauline Curnier Jardin présente 'Virages Vierges' au Palais de Tokyo : une traversée sensorielle où les récits, les corps et les croyances vacillent. Images troublantes, rituels réinventés. Une exposition personnelle puissante dans l'un des plus grands centres d'art contemporain d'Europe. Jusqu'au 19 septembre.",
+                spots: "Ouvert mer-lun 12h-22h",
+                studentDiscount: true,
+                coordinates: [48.8641, 2.2990],
+                metro: "Iéna (9)",
+                tips: "Le Palais de Tokyo est ouvert jusqu'à 22h du mercredi au lundi. Soirées du jeudi idéales pour éviter la foule du week-end."
+            },
+            {
+                id: 15,
+                title: "Brocante de Pentecôte – Marché aux Puces Saint-Ouen",
+                day: "Dimanche",
+                date: "7 juin",
+                time: "09:00",
+                duration: "4h",
+                category: "Gastronomie",
+                price: 0,
+                priceLabel: "Gratuit (entrée)",
+                location: "Marché aux Puces de Saint-Ouen",
+                arrondissement: "Saint-Ouen (93)",
+                description: "Le week-end de Pentecôte est traditionellement le plus grand week-end de brocante de l'année au Marché aux Puces de Saint-Ouen. Des dizaines de brocanteurs exceptionnels se joignent aux marchands habituels. Le plus grand marché aux puces du monde, avec ses 3 000 exposants, est en ébullition.",
+                spots: "Ouvert sam-lun 9h-18h",
+                studentDiscount: false,
+                coordinates: [48.9016, 2.3503],
+                metro: "Garibaldi ou Porte de Clignancourt (13)",
+                tips: "Va tôt le matin pour les meilleures trouvailles. Amène du cash (beaucoup de marchands n'acceptent pas les cartes). Les allées Serpette et Biron sont les plus premium."
+            }
+        ]
+
+        // Marque automatiquement les événements multi-jours dans les données statiques
+        activities.forEach(a => {
+            if (a.isMultiDay === undefined) {
+                const d = (a.duration || '').toLowerCase();
+                a.isMultiDay = d.includes('jour') || d.includes('semaine') || d.includes('toute') || d.includes('nuit');
+            }
+        });
 
         // === PHOTOS RÉELLES DES LIEUX EXACTS (Unsplash, licence libre) ===
         // Toutes ces URLs sont validées et correspondent visuellement aux endroits cités
         const activityImages = {
-            1: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80",   // Trocadéro + Eiffel
-            2: "https://images.unsplash.com/photo-1520986606214-8b456906c813?w=800&q=80",   // Ruelles médiévales – Quartier Latin
-            3: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80",       // Atelier cuisine française
-            4: "https://images.unsplash.com/photo-1533669955142-6a73332af4db?w=800&q=80",   // Grand hall / architecture élégante (représente l'exposition au Petit Palais)
-            5: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800&q=80",   // Soirée jeux étudiants
-            6: "https://images.unsplash.com/photo-1520984032042-162d526883e0?w=800&q=80",   // Balade vélo le long des Canaux de Paris
-            7: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80",   // Concert Parc de la Villette
-            8: "https://images.unsplash.com/photo-1499002238440-d264edd596ec?w=800&q=80",   // Fresques street art colorées (Belleville / Rue Dénoyez)
-            9: "https://images.unsplash.com/photo-1590071089561-320d31e3db43?w=800&q=80",   // Sainte-Chapelle
-            10: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80",  // Ambiance marché aux puces / street food (Saint-Ouen)
-            11: "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?w=800&q=80",     // Pelouse Est + chaises vertes – Jardin du Luxembourg (EXACT)
-            12: "https://images.unsplash.com/photo-1507679799987-c73779587db7?w=800&q=80",   // Théâtre
-            13: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=800&q=80",   // Street food coréenne
-            14: "https://images.unsplash.com/photo-1569949381669-ecf31ae8e613?w=800&q=80",   // Musée d'Orsay
-            15: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80"       // Yoga extérieur
+            1:  "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&q=80",  // Tennis Roland-Garros court
+            2:  "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80", // Cabaret / scène nuit
+            3:  "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80", // Concert / musique contemporaine
+            4:  "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&q=80", // Street art coloré
+            5:  "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", // Jardin avec roses
+            6:  "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80", // Festival foule
+            7:  "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80", // Roseraie jardin
+            8:  "https://images.unsplash.com/photo-1549923746-c502d488b3ea?w=800&q=80",    // Nuit lumières Paris
+            9:  "https://images.unsplash.com/photo-1545809074-59472b3f5ecc?w=800&q=80",    // Sport raquette padel
+            10: "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800&q=80",    // Musée expo peinture
+            11: "https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=800&q=80", // Course à pied ville
+            12: "https://images.unsplash.com/photo-1585011664466-b7bbe92f34ef?w=800&q=80", // Pokémon coloré
+            13: "https://images.unsplash.com/photo-1560717789-0ac7c58ac90a?w=800&q=80",    // Jardin à la française
+            14: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=800&q=80", // Art contemporain expo
+            15: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=800&q=80"  // Marché brocante
         };
+
+        // Images de fallback par catégorie (pour les données live sans image officielle)
+        const categoryImages = {
+            'Culture':      "https://images.unsplash.com/photo-1564399579883-451a5d44ec08?w=800&q=80",
+            'Histoire':     "https://images.unsplash.com/photo-1431274172761-fca41d930114?w=800&q=80",
+            'Nature':       "https://images.unsplash.com/photo-1560717789-0ac7c58ac90a?w=800&q=80",
+            'Gastronomie':  "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80",
+            'Sorties':      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80",
+            'Sport':        "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
+            'Art':          "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&q=80",
+            'default':      "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&q=80"
+        };
+
+        function getActivityImage(activity) {
+            // 1. Image officielle depuis l'API (données live)
+            if (activity._imageUrl) return activity._imageUrl;
+            // 2. Image mapée par ID (données de démo)
+            if (activityImages[activity.id]) return activityImages[activity.id];
+            // 3. Fallback par catégorie
+            return categoryImages[activity.category] || categoryImages['default'];
+        }
 
         const parcours = [
             {
                 id: "p1",
-                title: "Premier jour à Paris",
-                subtitle: "Les incontournables sans stress",
-                duration: "1 journée",
+                title: "Nuit Blanche en solo",
+                subtitle: "La nuit la plus folle de l'année — 100% gratuit",
+                duration: "Soirée & nuit (18h → 6h)",
                 difficulty: "Facile",
-                budget: "18-25€",
+                budget: "0€ (tout gratuit !)",
                 color: "bg-[var(--school-accent)]",
-                description: "Le parcours idéal pour ton premier jour. Tu rentres le soir en te disant que Paris est vraiment magique.",
+                description: "Samedi 6 juin, Barbara Butch prend la direction artistique de la 25e Nuit Blanche sur le thème de l'amour. Installations, concerts, performances dans toute la ville. Le meilleur soir de l'année pour découvrir Paris autrement.",
                 steps: [
-                    { time: "09:30", title: "Petit-déjeuner + vue", location: "Café de la Nouvelle Mairie (5e)", duration: "45 min", cost: "6€" },
-                    { time: "10:30", title: "Sainte-Chapelle", location: "Île de la Cité", duration: "1h", cost: "11,50€" },
-                    { time: "12:00", title: "Déjeuner dans le Marais", location: "L'As du Falafel ou Miznon", duration: "1h", cost: "8-10€" },
-                    { time: "14:00", title: "Centre Pompidou (vue + expo)", location: "4e", duration: "1h45", cost: "14€ (étudiant)" },
-                    { time: "17:30", title: "Promenade Berges de Seine", location: "Du Louvre au Pont Neuf", duration: "1h", cost: "Gratuit" }
+                    { time: "18:00", title: "Repas avant la nuit – Marché des Enfants-Rouges", location: "3e, rue de Bretagne", duration: "1h", cost: "8-12€" },
+                    { time: "19:30", title: "Premières installations Nuit Blanche", location: "Centre de Paris – Hôtel de Ville / Marais", duration: "2h", cost: "Gratuit" },
+                    { time: "22:00", title: "Performances artistiques nocturnes", location: "Parcours selon la carte paris.fr", duration: "2h", cost: "Gratuit" },
+                    { time: "00:30", title: "Musées ouverts toute la nuit", location: "Musée d'Art Moderne, Palais de Tokyo…", duration: "1h30", cost: "Gratuit" },
+                    { time: "02:30", title: "Déambulation jusqu'à l'aube", location: "Rives de Seine illuminées", duration: "Libre", cost: "Gratuit" }
                 ],
-                tags: ["Premiers pas", "Culture", "Incontournable"]
+                tags: ["Gratuit", "Nuit Blanche", "Art contemporain", "Unique"]
             },
             {
                 id: "p2",
-                title: "Paris Vert & Détente",
-                subtitle: "Nature, canaux et respiration",
-                duration: "1 journée",
+                title: "Week-end Festival & Nature",
+                subtitle: "We Love Green + Roseraie de Bagatelle",
+                duration: "Samedi (journée entière)",
                 difficulty: "Facile",
-                budget: "8-15€",
+                budget: "50-60€",
                 color: "bg-emerald-700",
-                description: "Pour quand tu as besoin de calme et de verdure. Parfait après les premiers jours intenses à Paris.",
+                description: "Le samedi parfait de début juin : la matinée dans la plus belle roseraie de Paris en pleine floraison, l'après-midi et la soirée au festival We Love Green dans le Bois de Vincennes. Deux ambiances, une journée inoubliable.",
                 steps: [
-                    { time: "10:00", title: "Parc des Buttes-Chaumont", location: "19e", duration: "1h15", cost: "Gratuit" },
-                    { time: "11:45", title: "Canal de l'Ourcq à pied", location: "Jusqu'à la Villette", duration: "45 min", cost: "Gratuit" },
-                    { time: "12:45", title: "Pique-nique au Parc de la Villette", location: "Prairie du Triangle", duration: "1h", cost: "8€" },
-                    { time: "15:00", title: "Cité des Sciences (jardins extérieurs)", location: "19e", duration: "1h", cost: "Gratuit" },
-                    { time: "17:00", title: "Canal Saint-Martin (retour)", location: "10e", duration: "1h30", cost: "Gratuit" }
+                    { time: "09:30", title: "Roseraie de Bagatelle – Rose Weekend", location: "Parc de Bagatelle, Bois de Boulogne, 16e", duration: "2h", cost: "7€" },
+                    { time: "12:00", title: "Pique-nique dans le Bois de Boulogne", location: "Pelouse près du lac", duration: "1h", cost: "8€ (picnic)" },
+                    { time: "14:30", title: "Trajet vers le Bois de Vincennes", location: "Métro ligne 1 → ligne 8", duration: "45 min", cost: "Métro" },
+                    { time: "15:30", title: "We Love Green Festival", location: "Pelouse de Reuilly, 12e", duration: "Soirée", cost: "45€" }
                 ],
-                tags: ["Nature", "Calme", "Pique-nique"]
+                tags: ["Nature", "Festival", "Musique", "Plein air"]
             },
             {
                 id: "p3",
-                title: "Soirée Étudiante",
-                subtitle: "Rencontres et vie nocturne douce",
-                duration: "Soirée (18h-minuit)",
+                title: "Art & Création contemporaine",
+                subtitle: "Street art + Expo + Palais de Tokyo",
+                duration: "1 journée",
                 difficulty: "Moyen",
-                budget: "10-20€",
+                budget: "24-28€",
                 color: "bg-violet-600",
-                description: "Le parcours parfait pour rencontrer d'autres étudiants sans te retrouver dans une boîte bruyante.",
+                description: "Pour les amateurs d'art sous toutes ses formes : de l'expo graffiti géante de la Grande Halle à l'art sensoriel du Palais de Tokyo, en passant par ManiFeste à l'Ircam. La scène artistique parisienne à son meilleur.",
                 steps: [
-                    { time: "18:30", title: "Apéro Canal Saint-Martin", location: "Chez Prune ou Le Petit Cambodge", duration: "1h", cost: "6-8€" },
-                    { time: "20:00", title: "Soirée jeux – Café des Arts", location: "10e", duration: "2h30", cost: "Gratuit" },
-                    { time: "22:45", title: "Bar à vin étudiant (Le Baron Rouge)", location: "12e", duration: "1h", cost: "5-7€" }
+                    { time: "10:00", title: "Beyond the Streets – Expo graffiti", location: "Grande Halle de la Villette, 19e", duration: "2h", cost: "14€ (réduit)" },
+                    { time: "12:30", title: "Déjeuner au Parc de la Villette", location: "Food trucks / brasserie du parc", duration: "1h", cost: "10€" },
+                    { time: "14:30", title: "Virages Vierges – Palais de Tokyo", location: "13 av. Président Wilson, 16e", duration: "1h30", cost: "10€ (–26 ans)" },
+                    { time: "19:30", title: "Festival ManiFeste – concert Ircam", location: "Place Igor Stravinsky, 4e", duration: "2h", cost: "15€ (réduit)" }
                 ],
-                tags: ["Rencontres", "Soirée", "International"]
+                tags: ["Art contemporain", "Street art", "Expo", "Concert"]
             },
             {
                 id: "p4",
-                title: "Street Art & Créativité",
-                subtitle: "Belleville et la nouvelle scène parisienne",
-                duration: "Demi-journée + soirée",
-                difficulty: "Moyen",
-                budget: "15-22€",
+                title: "Sport & Grand Air à Paris",
+                subtitle: "Tennis + Padel + Course dans les rues",
+                duration: "Week-end sportif",
+                difficulty: "Sportif",
+                budget: "35-60€",
                 color: "bg-orange-600",
-                description: "Pour ceux qui veulent voir la vraie création contemporaine et comprendre Paris au-delà des monuments.",
+                description: "Ce week-end, Paris est une salle de sport géante. Samedi : tennis à Roland-Garros et padel au pied de la Tour Eiffel. Dimanche : l'adidas 10K Paris dans les plus belles rues de la capitale. Pour les actifs.",
                 steps: [
-                    { time: "10:30", title: "Atelier Street Art Belleville", location: "20e", duration: "2h30", cost: "12€" },
-                    { time: "13:30", title: "Déjeuner rue de Belleville", location: "20e", duration: "1h", cost: "7€" },
-                    { time: "15:00", title: "Balade Street Art (rue Dénoyez + alentours)", location: "20e", duration: "1h15", cost: "Gratuit" },
-                    { time: "19:00", title: "Concert émergent au 100ECS", location: "11e", duration: "2h", cost: "8-12€" }
+                    { time: "Lun-Ven", title: "Roland-Garros – Demi-finales", location: "Stade Roland-Garros, 16e", duration: "Journée", cost: "25€+" },
+                    { time: "Sam 10:00", title: "Remontada Padel (initiation)", location: "Champ-de-Mars, 7e", duration: "1h", cost: "Gratuit (spectateur)" },
+                    { time: "Sam 14:00", title: "Rendez-vous aux Jardins – balade active", location: "Jardins de Paris (toute la ville)", duration: "2h", cost: "Gratuit" },
+                    { time: "Dim 09:00", title: "adidas 10K Paris (ou spectateur)", location: "Départ Champ-de-Mars, 7e", duration: "1-2h", cost: "Gratuit (spectateur)" }
                 ],
-                tags: ["Art", "Créativité", "Quartier vivant"]
+                tags: ["Sport", "Roland-Garros", "Course", "Padel"]
             },
             {
                 id: "p5",
-                title: "Week-end Classique Ralentit",
-                subtitle: "Les plus beaux spots sans la foule",
-                duration: "Samedi ou Dimanche",
+                title: "Jardins secrets & Musées gratuits",
+                subtitle: "Le meilleur de Paris pour 0€ ou presque",
+                duration: "Dimanche (journée)",
                 difficulty: "Facile",
-                budget: "12-20€",
+                budget: "0-10€",
                 color: "bg-rose-600",
-                description: "Un week-end doux et esthétique. Idéal pour prendre de belles photos et te sentir vraiment à Paris.",
+                description: "Profite des Rendez-vous aux Jardins pour découvrir des jardins privés normalement fermés, puis enchaîne avec le Petit Palais (gratuit) et ses expositions. Un dimanche typiquement parisien sans se ruiner.",
                 steps: [
-                    { time: "08:45", title: "Jardin du Luxembourg au lever du jour", location: "6e", duration: "50 min", cost: "Gratuit" },
-                    { time: "10:00", title: "Sainte-Chapelle (créneau calme)", location: "1er", duration: "1h", cost: "11,50€" },
-                    { time: "12:00", title: "Brunch / déjeuner Île Saint-Louis", location: "4e", duration: "1h", cost: "9-12€" },
-                    { time: "15:00", title: "Musée d'Orsay (après-midi calme)", location: "7e", duration: "1h45", cost: "13€" },
-                    { time: "18:30", title: "Golden hour – Pont Alexandre III", location: "7e/8e", duration: "45 min", cost: "Gratuit" }
+                    { time: "10:00", title: "Rendez-vous aux Jardins – Palais-Royal", location: "Jardin du Palais-Royal, 1e", duration: "1h30", cost: "Gratuit" },
+                    { time: "12:00", title: "Déjeuner place de la Concorde", location: "Sandwicherie / boulangerie", duration: "45 min", cost: "6-9€" },
+                    { time: "13:30", title: "Expo Visages d'artistes – Petit Palais", location: "2 av. Winston Churchill, 8e", duration: "1h30", cost: "Gratuit" },
+                    { time: "15:30", title: "Expo Pokémon 30 ans – Musée en Herbe", location: "23 rue de l'Arbre-Sec, 1e", duration: "1h30", cost: "10€" },
+                    { time: "17:30", title: "Brocante Pentecôte – Saint-Ouen", location: "Marché aux Puces de Saint-Ouen", duration: "1h30", cost: "Entrée gratuite" }
                 ],
-                tags: ["Photos", "Classique", "Calme"]
+                tags: ["Gratuit", "Jardins", "Musées", "Brocante"]
             }
         ];
 
@@ -1123,7 +1800,7 @@
                     })
                 });
 
-                const popupImg = activityImages[activity.id] || 'https://picsum.photos/id/1015/600/400';
+                const popupImg = getActivityImage(activity);
                 const popupContent = `
                     <div style="width: 260px; padding: 0; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                         <div style="height: 92px; background-image: url('${popupImg}'); background-size: cover; background-position: center; position: relative;">
@@ -1227,18 +1904,215 @@
             }
         }
 
+        // ==================== CHARGEMENT DIRECT PARIS OPEN DATA ====================
+        let demoActivities = [];
+
+        async function loadFromParisOpenData({ silent = false } = {}) {
+            const bannerEl   = document.getElementById('live-data-banner');
+            const sidebarEl  = document.getElementById('sidebar-data-status');
+
+            // Calcul lundi → dimanche de la semaine en cours
+            const now = new Date();
+            const dow = now.getDay(); // 0=dimanche
+            const monday = new Date(now);
+            monday.setDate(now.getDate() - ((dow + 6) % 7));
+            monday.setHours(0,0,0,0);
+            
+            const sunday = new Date(monday);
+            sunday.setDate(monday.getDate() + 6);
+            sunday.setHours(23,59,59,999);
+
+            const dateFrom = monday.toISOString().split('T')[0];
+            const dateTo   = sunday.toISOString().split('T')[0];
+
+            // Appel API direct : Limite augmentée à 80 pour avoir beaucoup d'événements ponctuels
+            // Filtre : l'événement doit chevaucher notre semaine en cours
+            const API = 'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/que-faire-a-paris-/records'
+                + `?limit=80&order_by=date_start%20ASC`
+                + `&where=date_start%20%3C%3D%20%27${dateTo}%27%20AND%20date_end%20%3E%3D%20%27${dateFrom}%27`;
+
+            try {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), 10000);
+
+                const res = await fetch(API, {
+                    headers: { 'Accept': 'application/json' },
+                    signal: controller.signal
+                });
+                clearTimeout(timer);
+
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+                const json = await res.json();
+                const records = (json.results || []).filter(r => r.title && r.title.trim().length > 3);
+
+                if (records.length === 0) throw new Error('0 résultats');
+
+                const DAY_NAMES = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+
+                // FINIE LA DUPLICATION ! 1 événement API = 1 seule carte
+                const liveActivities = records.map((r, i) => {
+                    const startDate = r.date_start ? new Date(r.date_start) : new Date();
+                    const endDate   = r.date_end ? new Date(r.date_end) : startDate;
+                    
+                    const diffDays = (endDate - startDate) / 86400000;
+                    const isMultiDay = diffDays > 1.5; // Plus d'un jour = multi-jours
+
+                    const dayRaw = DAY_NAMES[startDate.getDay()];
+                    const dateStr = startDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+                    const timeStr = r.date_start ? r.date_start.substring(11,16) : '10:00';
+
+                    let duration = isMultiDay ? 'Plusieurs jours' : 'Quelques heures';
+                    if (!isMultiDay && r.date_end && r.date_start) {
+                        const h = (endDate - startDate) / 3600000;
+                        if (h > 0 && h < 24) {
+                            const hh = Math.floor(h), mm = Math.round((h-hh)*60);
+                            duration = hh > 0 ? (mm > 0 ? `${hh}h${mm}` : `${hh}h`) : `${mm}min`;
+                        }
+                    } else if (isMultiDay) {
+                        duration = diffDays > 6 ? 'Toute la semaine' : `${Math.ceil(diffDays)} jours`;
+                    }
+
+                    // Calcul du prix
+                    let price = 0, priceLabel = 'Gratuit';
+                    const pt = (r.price_type || '').toLowerCase().trim();
+                    const pd = (r.price_detail || '').trim();
+                    if (pt && pt !== 'gratuit' && pt !== 'non renseigné' && pt !== '') {
+                        const match = pd.match(/(\d+(?:[.,]\d+)?)/);
+                        const raw = match ? parseFloat(match[1].replace(',', '.')) : 0;
+                        if (raw > 0 && raw < 500) { 
+                            price = raw;
+                            priceLabel = `${raw}€`;
+                        } else if (pt.includes('payant')) {
+                            price = 10;
+                            priceLabel = 'Payant';
+                        }
+                        if (pd.toLowerCase().includes('étudiant') || pd.toLowerCase().includes('reduit')) {
+                            priceLabel += ' (réduit dispo)';
+                        }
+                    }
+
+                    // Coordonnées GPS
+                    let coords = [48.8566 + (Math.random()-0.5)*0.04, 2.3522 + (Math.random()-0.5)*0.04];
+                    if (r.geo_point_2d?.lat) coords = [+r.geo_point_2d.lat, +r.geo_point_2d.lon];
+
+                    let arrdt = 'Paris';
+                    if (r.address_zipcode) {
+                        const n = parseInt(String(r.address_zipcode).slice(-2), 10);
+                        if (n >= 1 && n <= 20) arrdt = `${n}e`;
+                    }
+
+                    const desc = (r.description || r.lead_text || 'Événement proposé par la Ville de Paris.')
+                        .replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().substring(0, 320);
+
+                    return {
+                        id: 200 + i, 
+                        title: r.title.trim(),
+                        day: isMultiDay ? 'Toute la semaine' : dayRaw,
+                        dayRaw: dayRaw, 
+                        date: dateStr, 
+                        time: timeStr, 
+                        duration,
+                        category: mapCategory(r.category || r.tags || ''),
+                        price, priceLabel,
+                        location: r.address_name || r.place_name || r.address_street || 'Paris',
+                        arrondissement: arrdt, description: desc,
+                        spots: 'Selon disponibilité', studentDiscount: price === 0,
+                        coordinates: coords, metro: r.transport || '',
+                        tips: `Source : Ville de Paris • ${dateStr}`,
+                        _imageUrl: r.cover_url || null,
+                        _sourceUrl: r.url || 'https://www.paris.fr/quefaire',
+                        _isLive: true,
+                        startDate, // Gardé en mémoire pour le filtrage
+                        endDate,   // Gardé en mémoire pour le filtrage
+                        isMultiDay
+                    };
+                });
+
+                // Application des données
+                if (demoActivities.length === 0) demoActivities = activities.slice();
+                activities.length = 0;
+                liveActivities.forEach(a => activities.push(a));
+                isUsingLiveData = true;
+
+                resetFilters();
+                renderGeneratorActivityPool();
+                if (currentView === 'map' && map) updateMapMarkers(activities);
+
+                // UI Banners
+                if (bannerEl) {
+                    bannerEl.className = 'text-xs text-emerald-300 bg-emerald-900/30 border border-emerald-700/40 rounded-2xl px-4 py-2 mb-4';
+                    bannerEl.innerHTML = `<span class="inline-flex items-center gap-1.5">
+                        <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse inline-block"></span>
+                        <strong>${liveActivities.length} événements en direct</strong> — 
+                        <a href="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/" target="_blank" class="underline">Paris Open Data</a>
+                        &nbsp;• Semaine ${dateFrom} → ${dateTo}
+                        &nbsp;<button onclick="loadFromParisOpenData()" class="underline opacity-50 hover:opacity-100 ml-2">↻ Actualiser</button>
+                    </span>`;
+                }
+                if (sidebarEl) {
+                    sidebarEl.className = 'flex items-center gap-2 text-emerald-400';
+                    sidebarEl.innerHTML = `<div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                        <span class="font-medium">${liveActivities.length} en direct</span>`;
+                }
+
+                if (!silent) showToast(`${liveActivities.length} événements chargés depuis Paris Open Data ✓`);
+                return true;
+
+            } catch (err) {
+                console.info('[ParcoursParis] Données live indisponibles :', err.message);
+                return false;
+            }
+        }
+
+        function mapCategory(rawCategory) {
+            const cat = (rawCategory || '').toLowerCase();
+            if (cat.includes('musée') || cat.includes('exposition') || cat.includes('culture')) return 'Culture';
+            if (cat.includes('concert') || cat.includes('spectacle') || cat.includes('soirée')) return 'Sorties';
+            if (cat.includes('visite') || cat.includes('histoire') || cat.includes('patrimoine')) return 'Histoire';
+            if (cat.includes('atelier') || cat.includes('cuisine') || cat.includes('gastronomie')) return 'Gastronomie';
+            if (cat.includes('sport') || cat.includes('yoga') || cat.includes('randonnée')) return 'Sport';
+            if (cat.includes('nature') || cat.includes('parc') || cat.includes('jardin')) return 'Nature';
+            if (cat.includes('street') || cat.includes('art') || cat.includes('graffiti')) return 'Art';
+            return 'Culture';
+        }
+
+        // ==================== FONCTION DE FILTRAGE INTELLIGENTE ====================
         function getCurrentFilteredActivities() {
             let filtered = [...activities];
 
             if (currentFilters.day !== 'all') {
-                filtered = filtered.filter(a => a.day === currentFilters.day);
+                // Trouver la date exacte du jour cliqué
+                const now = new Date();
+                const dow = now.getDay();
+                const monday = new Date(now);
+                monday.setDate(now.getDate() - ((dow + 6) % 7));
+                monday.setHours(0,0,0,0);
+                
+                const WEEK_DAYS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+                const dayIndex = WEEK_DAYS.indexOf(currentFilters.day);
+                
+                const targetDate = new Date(monday);
+                targetDate.setDate(monday.getDate() + dayIndex);
+
+                filtered = filtered.filter(a => {
+                    // Si c'est un événement en direct avec des vraies dates
+                    if (a.startDate && a.endDate) {
+                        const start = new Date(a.startDate); start.setHours(0,0,0,0);
+                        const end = new Date(a.endDate); end.setHours(23,59,59,999);
+                        // On affiche si le jour sélectionné tombe PENDANT l'événement
+                        return targetDate >= start && targetDate <= end;
+                    }
+                    // Fallback pour les données statiques
+                    return a.day === currentFilters.day || a.dayRaw === currentFilters.day;
+                });
             }
+
             if (currentFilters.search) {
-                const s = currentFilters.search.toLowerCase();
                 filtered = filtered.filter(a => 
-                    a.title.toLowerCase().includes(s) || 
-                    a.description.toLowerCase().includes(s) ||
-                    a.location.toLowerCase().includes(s)
+                    a.title.toLowerCase().includes(currentFilters.search) || 
+                    a.description.toLowerCase().includes(currentFilters.search) ||
+                    a.location.toLowerCase().includes(currentFilters.search)
                 );
             }
             if (currentFilters.category) {
@@ -1252,93 +2126,107 @@
             return filtered;
         }
 
-        // ==================== RENDER ACTIVITIES ====================
+        // ==================== RENDU SANS DUPLICATION ====================
         function renderActivities(filteredActivities) {
-            const container = document.getElementById('activities-grid');
-            container.innerHTML = '';
+            const dailyGrid      = document.getElementById('daily-events-grid');
+            const ongoingGrid    = document.getElementById('ongoing-grid');
+            const ongoingSection = document.getElementById('ongoing-section');
+            const countEl        = document.getElementById('results-count');
 
-            // Update results count
-            const countEl = document.getElementById('results-count');
+            if (!dailyGrid) return;
+
+            // Séparation ultra simple (il n'y a plus de doublons dans filteredActivities)
+            const daily = filteredActivities.filter(a => !a.isMultiDay);
+            const ongoing = filteredActivities.filter(a => a.isMultiDay);
+
             if (countEl) {
-                countEl.innerHTML = `${filteredActivities.length} activité${filteredActivities.length > 1 ? 's' : ''} trouvée${filteredActivities.length > 1 ? 's' : ''}`;
+                countEl.innerHTML = daily.length > 0
+                    ? `<span class="text-white font-semibold">${daily.length}</span> événement${daily.length > 1 ? 's' : ''} ponctuel${daily.length > 1 ? 's' : ''}`
+                      + (ongoing.length > 0 ? ` <span class="text-slate-500">+ ${ongoing.length} en cours</span>` : '')
+                    : (ongoing.length > 0 ? `<span class="text-slate-400">${ongoing.length} événements en cours</span>` : 'Aucun résultat');
             }
 
-            if (filteredActivities.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full py-10 text-center">
-                        <p class="text-slate-300">Aucune activité ne correspond à tes filtres.</p>
-                        <button onclick="resetFilters()" class="mt-4 text-sm text-[var(--school-accent)] font-medium hover:underline">Réinitialiser les filtres</button>
+            // Zone 1 : Les événements du jour même (ou de la semaine si "Tous les jours")
+            dailyGrid.innerHTML = '';
+            if (daily.length === 0) {
+                dailyGrid.innerHTML = `<div class="col-span-full py-6 text-center text-sm text-slate-400">
+                    Pas d'événement ponctuel aujourd'hui. Regardez "En ce moment" ci-dessous.
+                </div>`;
+            } else {
+                daily.forEach(a => renderCard(a, dailyGrid, false));
+            }
+
+            // Zone 2 : Les expositions / festivals qui durent la semaine
+            ongoingSection.classList.toggle('hidden', ongoing.length === 0);
+            ongoingGrid.innerHTML = '';
+            ongoing.forEach(a => renderCard(a, ongoingGrid, true));
+
+            if (currentView === 'map' && map) updateMapMarkers(filteredActivities);
+            requestAnimationFrame(() => observeNewCards());
+        }
+
+        function renderCard(activity, container, isOngoing) {
+            const isInPlanning = userPlanning.some(p => p.id === activity.id);
+            const imgUrl = getActivityImage(activity);
+            const isFavorite = userFavorites.includes(activity.id);
+            const catColor = getCategoryColor(activity.category);
+            const wrapper = document.createElement('div');
+
+            if (isOngoing) {
+                // Carte compacte horizontale pour les événements continus
+                wrapper.innerHTML = `
+                <div class="activity-card group bg-[#0d1424] border border-white/8 rounded-2xl overflow-hidden flex cursor-pointer" style="height:96px" onclick="showActivityModal(${activity.id})">
+                    <div class="w-28 flex-shrink-0 bg-cover bg-center relative" style="background-image:url('${imgUrl}');background-color:#1a2035;">
+                        <img src="${imgUrl}" style="display:none" onerror="this.parentElement.style.backgroundImage='url(${categoryImages[activity.category]||categoryImages.default})'">
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent to-[#0d1424]/40"></div>
+                        <span class="absolute bottom-2 left-2 tag ${catColor} text-[9px]">${activity.category}</span>
                     </div>
-                `;
-                // Also update map if visible
-                if (currentView === 'map' && map) {
-                    updateMapMarkers([]);
-                }
-                return;
-            }
-
-            filteredActivities.forEach(activity => {
-                const isInPlanning = userPlanning.some(p => p.id === activity.id);
-                
-                const imgUrl =
-activity.image ||
-'https://picsum.photos/id/1015/600/400';
-                const isFavorite = userFavorites.includes(activity.id);
-
-                const cardHTML = `
-                    <div class="activity-card bg-[#111827] border border-white/10 rounded-3xl overflow-hidden flex flex-col h-full cursor-pointer shadow-lg" onclick="showActivityModal(${activity.id})">
-                        <!-- Image Header -->
-                        <div class="card-image rounded-t-3xl" style="background-image: url('${imgUrl}')">
-                            <div class="price-badge px-3 py-1 text-[11px] font-bold rounded-full shadow-md ${activity.price === 0 ? 'bg-[#FF5C00] text-white' : 'bg-black text-white'} border border-white/30">
-                                ${activity.priceLabel}
-                            </div>
-                            
-                            <!-- Favorite Heart -->
-                            <button onclick="event.stopImmediatePropagation(); toggleFavorite(${activity.id}, this)" 
-                                    class="absolute top-3 left-3 w-8 h-8 flex items-center justify-center rounded-full bg-black/60 backdrop-blur hover:bg-black/80 transition-all">
-                                <span class="text-lg leading-none ${isFavorite ? 'text-red-500' : 'text-slate-300 hover:text-slate-200'}">♥</span>
+                    <div class="px-3 py-2.5 flex flex-col justify-between flex-1 min-w-0">
+                        <div>
+                            <h3 class="font-semibold text-[12.5px] leading-tight text-white line-clamp-2 group-hover:text-[#FF5C00] transition-colors">${activity.title}</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5 truncate">📍 ${activity.location}</p>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-bold ${activity.price===0?'text-[#FF5C00]':'text-slate-300'}">${activity.priceLabel}</span>
+                            <button onclick="event.stopImmediatePropagation(); togglePlanning(${activity.id}, this); renderActivities(getCurrentFilteredActivities());"
+                                class="text-[10px] px-2.5 py-1 rounded-lg font-semibold transition-all ${isInPlanning?'bg-emerald-600/30 text-emerald-400':'bg-white/10 hover:bg-[#FF5C00] text-slate-300 hover:text-white'}">
+                                ${isInPlanning ? '✓' : '+ Planning'}
                             </button>
-
-                            <div class="absolute bottom-3 left-3">
-                                <span class="tag ${getCategoryColor(activity.category)} shadow-sm">${activity.category}</span>
-                            </div>
-                        </div>
-
-                        <div class="px-4 pt-4 pb-3 flex-1 flex flex-col">
-                            <div class="flex items-start justify-between gap-2 mb-1.5">
-                                <h3 class="font-semibold text-[15.5px] leading-tight tracking-[-0.015em] line-clamp-2 flex-1 pr-1 text-white">${activity.title}</h3>
-                            </div>
-                            
-                            <div class="flex items-center text-xs text-slate-300 mb-3">
-                                <span class="font-medium tabular-nums">${activity.time}</span>
-                                <span class="mx-1.5 text-slate-300">•</span>
-                                <span>${activity.duration}</span>
-                            </div>
-
-                            <div class="flex items-center text-sm text-slate-200 mb-auto">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 mr-1.5 flex-shrink-0 text-[var(--school-accent)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314-11.314z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                                <span class="line-clamp-1 text-xs">${activity.location}</span>
-                            </div>
-                        </div>
-
-                        <div class="mt-auto border-t border-white/10 px-4 py-3.5 flex items-center justify-between bg-white/5 text-xs">
-                            <div class="font-medium text-slate-300">
-                                ${activity.arrondissement}
-                            </div>
-                            
-                            <div class="flex items-center gap-x-1" onclick="event.stopImmediatePropagation(); togglePlanning(${activity.id}, this)">
-                                <button class="text-xs font-semibold px-4 h-8 rounded-2xl flex items-center transition-all active:scale-[0.985] ${isInPlanning ? 'bg-[var(--school-accent)] text-white' : 'bg-white/10 border border-white/20 hover:bg-white/20 text-white'}">
-                                    ${isInPlanning ? '✓ Dans le planning' : '+ Ajouter'}
-                                </button>
-                            </div>
                         </div>
                     </div>
-                `;
-                container.innerHTML += cardHTML;
-            });
+                </div>`;
+            } else {
+                // Carte pleine pour les événements ponctuels
+                wrapper.innerHTML = `
+                <div class="activity-card bg-[#111827] border border-white/10 rounded-3xl overflow-hidden flex flex-col h-full cursor-pointer shadow-lg" onclick="showActivityModal(${activity.id})">
+                    <div class="card-image rounded-t-3xl" id="card-img-${activity.id}" style="background-image:url('${imgUrl}');background-color:#1a2035;">
+                        <img src="${imgUrl}" style="display:none" onerror="document.getElementById('card-img-${activity.id}')&&(document.getElementById('card-img-${activity.id}').style.backgroundImage='url(${categoryImages[activity.category]||categoryImages.default})')">
+                        <div class="price-badge px-3 py-1 text-[11px] font-bold rounded-full shadow-md ${activity.price===0?'bg-[#FF5C00] text-white':'bg-black text-white'} border border-white/30">${activity.priceLabel}</div>
+                        <button onclick="event.stopImmediatePropagation(); toggleFavorite(${activity.id}, this)"
+                                class="absolute top-3 left-3 w-8 h-8 flex items-center justify-center rounded-full bg-black/60 backdrop-blur hover:bg-black/80 transition-all">
+                            <span class="text-lg leading-none ${isFavorite?'text-red-500':'text-slate-300'}">♥</span>
+                        </button>
+                        <div class="absolute bottom-3 left-3"><span class="tag ${catColor} shadow-sm">${activity.category}</span></div>
+                    </div>
+                    <div class="px-4 pt-4 pb-3 flex-1 flex flex-col">
+                        <h3 class="font-semibold text-[15px] leading-tight tracking-tight line-clamp-2 text-white mb-1.5">${activity.title}</h3>
+                        <div class="flex items-center text-xs text-slate-300 mb-2">
+                            <span class="font-semibold text-white">${activity.day} ${activity.time}</span>
+                            <span class="mx-1.5 text-white/20">•</span>
+                            <span>${activity.duration}</span>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed line-clamp-2 flex-1">${activity.description}</p>
+                        <div class="mt-3 flex items-center justify-between">
+                            <span class="text-xs text-slate-500 truncate max-w-[120px]">📍 ${activity.location}</span>
+                            <button onclick="event.stopImmediatePropagation(); togglePlanning(${activity.id}, this); renderActivities(getCurrentFilteredActivities());"
+                                    class="px-3 py-1.5 text-[11px] font-semibold rounded-xl transition-all ${isInPlanning?'bg-emerald-600/30 text-emerald-400':'bg-[var(--school-accent)] hover:bg-[var(--school-accent-dark)] text-white'}">
+                                ${isInPlanning ? '✓ Ajouté' : '+ Ajouter'}
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+            }
+            container.appendChild(wrapper.firstElementChild);
         }
 
         function getCategoryColor(category) {
@@ -1390,34 +2278,7 @@ activity.image ||
         }
 
         function applyFilters() {
-            let filtered = [...activities];
-
-            if (currentFilters.day !== 'all') {
-                filtered = filtered.filter(a => a.day === currentFilters.day);
-            }
-
-            if (currentFilters.search) {
-                filtered = filtered.filter(a => 
-                    a.title.toLowerCase().includes(currentFilters.search) || 
-                    a.description.toLowerCase().includes(currentFilters.search) ||
-                    a.location.toLowerCase().includes(currentFilters.search)
-                );
-            }
-
-            if (currentFilters.category) {
-                filtered = filtered.filter(a => a.category === currentFilters.category);
-            }
-
-            if (currentFilters.price) {
-                if (currentFilters.price === 'gratuit') {
-                    filtered = filtered.filter(a => a.price === 0);
-                } else if (currentFilters.price === 'low') {
-                    filtered = filtered.filter(a => a.price > 0 && a.price < 10);
-                } else if (currentFilters.price === 'medium') {
-                    filtered = filtered.filter(a => a.price >= 10 && a.price <= 20);
-                }
-            }
-
+            const filtered = getCurrentFilteredActivities();
             renderActivities(filtered);
 
             // Expose for the intelligent generator
@@ -1454,9 +2315,7 @@ activity.image ||
 
             const isPlanned = userPlanning.some(p => p.id === id);
 
-            const modalImg =
-activity.image ||
-'https://picsum.photos/id/1015/600/400';
+            const modalImg = getActivityImage(activity);
             const isFav = userFavorites.includes(activity.id);
 
             const modalHTML = `
@@ -1507,6 +2366,8 @@ activity.image ||
                         <span class="font-semibold text-amber-800">Conseil étudiant :</span> 
                         <span class="text-amber-700">${activity.tips}</span>
                     </div>
+                    ${activity._sourceUrl ? `<div class="mt-3"><a href="${activity._sourceUrl}" target="_blank" rel="noopener" class="text-xs text-[var(--school-accent)] hover:underline">Voir sur le site officiel de la Ville de Paris →</a></div>` : ''}
+                    ${activity._isLive ? `<div class="mt-2 text-[10px] text-emerald-400 flex items-center gap-1"><span class="w-1.5 h-1.5 bg-emerald-400 rounded-full inline-block"></span>Donnée en direct • Paris Open Data</div>` : ''}
                 </div>
 
                 <div class="border-t px-6 py-4 flex items-center justify-between gap-3" style="background-color: #111827;">
@@ -1587,184 +2448,6 @@ activity.image ||
             }
         }
 
-        // ==================== DONNÉES ORIGINELLES DE DÉMO (belles + photos réelles) ====================
-        let demoActivities = [];
-
-        // ==================== LIVE DATA FROM PARIS OPEN DATA ====================
-        async function loadFromParisOpenData({ silent = false } = {}) {
-
-    const statusEl = document.getElementById('data-status');
-
-    if (!silent && statusEl) {
-        statusEl.innerHTML = 'Chargement des activités de la semaine...';
-    }
-
-    try {
-
-        const response = await fetch(
-            'https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/que-faire-a-paris-/records?limit=50'
-        );
-
-        if (!response.ok) {
-            throw new Error('Erreur API');
-        }
-
-        const json = await response.json();
-
-        const events = json.results || [];
-
-        activities.length = 0;
-
-        const jours = [
-            'Dimanche',
-            'Lundi',
-            'Mardi',
-            'Mercredi',
-            'Jeudi',
-            'Vendredi',
-            'Samedi'
-        ];
-
-        events.forEach((event, index) => {
-
-            const start = new Date(event.date_start);
-
-            activities.push({
-
-                id: 1000 + index,
-
-                title:
-                    event.title ||
-                    'Événement Paris',
-
-                day:
-                    jours[start.getDay()],
-
-                date:
-                    start.toLocaleDateString(
-                        'fr-FR',
-                        {
-                            day: 'numeric',
-                            month: 'long'
-                        }
-                    ),
-
-                time:
-                    start.toLocaleTimeString(
-                        'fr-FR',
-                        {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        }
-                    ),
-
-                duration: 'Variable',
-
-                category:
-                    mapCategory(
-                        event.tags ||
-                        event.category ||
-                        ''
-                    ),
-
-                price:
-                    event.price_type === 'gratuit'
-                    ? 0
-                    : 10,
-
-                priceLabel:
-                    event.price_type ||
-                    'Voir détails',
-
-                location:
-                    event.address_name ||
-                    event.place_name ||
-                    'Paris',
-
-                arrondissement:
-                    event.address_zipcode ||
-                    'Paris',
-
-                description:
-                    (
-                        event.lead_text ||
-                        event.description ||
-                        ''
-                    )
-                    .replace(/<[^>]*>/g,'')
-                    .substring(0,250),
-
-                spots:
-                    'Voir organisateur',
-
-                studentDiscount:
-                    true,
-
-                coordinates:
-                    (
-                        event.latitude &&
-                        event.longitude
-                    )
-                    ? [
-                        parseFloat(event.latitude),
-                        parseFloat(event.longitude)
-                    ]
-                    : null,
-
-                metro:
-                    event.transport ||
-                    'Voir fiche',
-
-                tips:
-                    'Source officielle Ville de Paris',
-
-                image:
-                    event.cover_url ||
-                    event.image ||
-                    'https://images.unsplash.com/photo-1502602898657-3e91760cbb34'
-            });
-
-        });
-
-        renderActivities(activities);
-
-        updateMapMarkers(activities);
-
-        renderGeneratorActivityPool();
-
-        if (statusEl) {
-            statusEl.innerHTML =
-                `✓ ${activities.length} activités réelles chargées`;
-        }
-
-        return true;
-
-    }
-    catch(error) {
-
-        console.error(error);
-
-        if(statusEl){
-            statusEl.innerHTML =
-            'Impossible de charger les activités';
-        }
-
-        return false;
-    }
-}
-
-        function mapCategory(rawCategory) {
-            const cat = (rawCategory || '').toLowerCase();
-            if (cat.includes('musée') || cat.includes('exposition') || cat.includes('culture')) return 'Culture';
-            if (cat.includes('concert') || cat.includes('spectacle') || cat.includes('soirée')) return 'Sorties';
-            if (cat.includes('visite') || cat.includes('histoire') || cat.includes('patrimoine')) return 'Histoire';
-            if (cat.includes('atelier') || cat.includes('cuisine') || cat.includes('gastronomie')) return 'Gastronomie';
-            if (cat.includes('sport') || cat.includes('yoga') || cat.includes('randonnée')) return 'Sport';
-            if (cat.includes('nature') || cat.includes('parc') || cat.includes('jardin')) return 'Nature';
-            if (cat.includes('street') || cat.includes('art') || cat.includes('graffiti')) return 'Art';
-            return 'Culture';
-        }
-
         function renderPlanning() {
             const container = document.getElementById('planning-content');
 
@@ -1788,7 +2471,7 @@ activity.image ||
                 grouped[act.day].push(act);
             });
 
-            const daysOrder = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+            const daysOrder = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche', 'Toute la semaine'];
             
             let html = `<div class="space-y-6">`;
 
@@ -1842,7 +2525,7 @@ activity.image ||
                 return;
             }
 
-            const content = `PARCOURSPARIS - Mon planning semaine 25-31 mai 2026\n\n` +
+            const content = `PARCOURSPARIS - Mon planning semaine 1-7 juin 2026\n\n` +
                 userPlanning.map(a => `${a.day} ${a.date} — ${a.time} | ${a.title}\n   ${a.location} | ${a.priceLabel}\n`).join('\n');
 
             const blob = new Blob([content], { type: 'text/plain' });
@@ -2117,28 +2800,39 @@ activity.image ||
         }
 
         // ==================== INITIALIZATION ====================
+        function updateHeroCounters() {
+            const total = activities.length;
+            const free  = activities.filter(a => a.price === 0).length;
+            const hc = document.getElementById('hero-count');
+            const hf = document.getElementById('hero-free');
+            if (hc) hc.textContent = total;
+            if (hf) hf.textContent = free;
+        }
+
         function initializeApp() {
             initTailwind();
 
-            // Sauvegarde des données de démo originales (belles photos + curation)
+            // Les données sont déjà des vrais événements de la semaine (statiques + vérifiés)
+            // On garde une copie pour pouvoir revenir dessus si l'API enrichit les données
             if (demoActivities.length === 0) {
                 demoActivities = activities.slice();
             }
 
-            // Rendu initial rapide avec les données de démo (fiable pour présentation)
-            renderActivities([]);
+            // Rendu initial avec les vraies données de la semaine
+            renderActivities(activities);
             renderParcours();
             renderPlanning();
+            updateHeroCounters();
 
-            const statusEl = document.getElementById('data-status');
-
-            // === AUTOMATISATION : Tentative de chargement des données officielles au démarrage ===
-            if (statusEl) {
-                statusEl.innerHTML = 'Chargement automatique des données réelles...';
-            }
-
-            // On tente en arrière-plan après un court délai (UI reste fluide)
-            await loadFromParisOpenData();
+            // Tentative optionnelle d'enrichissement via l'API Paris Open Data
+            loadFromParisOpenData({ silent: true }).then(success => {
+                updateHeroCounters();
+                if (success) {
+                    console.log(`%c[ParcoursParis] ✅ ${activities.length} événements enrichis depuis Paris Open Data`, 'color:#10b981');
+                } else {
+                    console.log('%c[ParcoursParis] ℹ️ Données curatorées de la semaine 1-7 juin 2026 utilisées', 'color:#10b981');
+                }
+            });
 
             // Set default filter button active
             const allBtn = document.getElementById('day-all');
@@ -2191,7 +2885,7 @@ activity.image ||
                         <div>
                             <div class="font-semibold text-slate-200 mb-1">Fonctionnalités principales</div>
                             <ul class="list-disc pl-5 space-y-0.5">
-                                <li>15 activités pour la semaine du 25 au 31 mai 2026</li>
+                                <li>15 activités réelles pour la semaine du 1 au 7 juin 2026</li>
                                 <li>5 parcours thématiques prêts à l’emploi</li>
                                 <li>Carte interactive + synchronisation filtres</li>
                                 <li>Favoris + Planning personnel</li>
@@ -2199,7 +2893,7 @@ activity.image ||
                             </ul>
                         </div>
                         
-                        <p class="text-xs pt-3 text-slate-300">Prototype développé en HTML + Tailwind + JavaScript pur. Déploiement possible sur Vercel/Netlify en 30 secondes.</p>
+                        <p class="text-xs pt-3 text-slate-300">Application développée dans le cadre du cours de Management de Projet — ISAE-Supmeca / UIMM Mécavenir, 2026.</p>
                     </div>
                 </div>
                 <div class="border-t px-6 py-4 bg-slate-50 text-xs text-slate-300">
@@ -2691,7 +3385,150 @@ activity.image ||
         }
 
         // Start the app
+        // ============================================
+        // ANIMATIONS JAVASCRIPT — ParcoursParis
+        // ============================================
+
+        // --- Page loader ---
+        function hideLoader() {
+            const loader = document.getElementById('page-loader');
+            if (loader) {
+                loader.classList.add('done');
+                setTimeout(() => loader.remove(), 600);
+            }
+        }
+
+        // --- Compteur animé (compte de 0 → target) ---
+        function animateCounter(el, target, duration = 900) {
+            if (!el || isNaN(target)) return;
+            const start = performance.now();
+            const startVal = 0;
+            function step(now) {
+                const progress = Math.min((now - start) / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+                el.textContent = Math.round(startVal + (target - startVal) * ease);
+                if (progress < 1) requestAnimationFrame(step);
+                else el.textContent = target;
+            }
+            requestAnimationFrame(step);
+        }
+
+        // --- Scroll reveal avec IntersectionObserver ---
+        function initScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+            // Observe tous les éléments reveal
+            document.querySelectorAll('.reveal, .card-reveal').forEach(el => observer.observe(el));
+
+            // Observer les cards d'activités (ajoutées dynamiquement)
+            const cardObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        cardObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+
+            document.querySelectorAll('.activity-card').forEach((el, i) => {
+                el.classList.add('card-reveal');
+                el.style.transitionDelay = `${Math.min(i * 0.06, 0.4)}s`;
+                cardObserver.observe(el);
+            });
+
+            return cardObserver; // on le réutilise après re-render
+        }
+
+        // --- Observer les nouvelles cards après re-render des activités ---
+        let _cardObserver = null;
+        function observeNewCards() {
+            if (!_cardObserver) {
+                _cardObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            _cardObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.05, rootMargin: '0px 0px -10px 0px' });
+            }
+            document.querySelectorAll('.activity-card:not(.visible)').forEach((el, i) => {
+                if (!el.classList.contains('card-reveal')) {
+                    el.classList.add('card-reveal');
+                    el.style.transitionDelay = `${Math.min(i * 0.05, 0.35)}s`;
+                }
+                _cardObserver.observe(el);
+            });
+        }
+
+        // --- Parallax léger sur le hero au scroll ---
+        function initHeroParallax() {
+            const heroBg = document.querySelector('#home-top .bg-cover');
+            if (!heroBg) return;
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                if (scrollY < 600) {
+                    heroBg.style.transform = `translateY(${scrollY * 0.22}px)`;
+                }
+            }, { passive: true });
+        }
+
+        // --- Sidebar : highlight du lien actif selon le scroll ---
+        function initSidebarScroll() {
+            const sections = ['home-top','cette-semaine','parcours','incontournables','generateur','planning'];
+            const links = document.querySelectorAll('.sidebar-link');
+
+            window.addEventListener('scroll', () => {
+                let current = 'home-top';
+                sections.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && window.scrollY >= el.offsetTop - 120) current = id;
+                });
+                links.forEach(link => {
+                    const href = link.getAttribute('href')?.replace('#','');
+                    link.classList.toggle('active', href === current);
+                });
+            }, { passive: true });
+        }
+
+        // --- Mise à jour des compteurs hero avec animation ---
+        const _origUpdateHeroCounters = updateHeroCounters;
+        window.updateHeroCounters = function() {
+            const total = activities.length;
+            const free  = activities.filter(a => a.price === 0).length;
+            const hc = document.getElementById('hero-count');
+            const hf = document.getElementById('hero-free');
+            if (hc) animateCounter(hc, total, 800);
+            if (hf) animateCounter(hf, free,  800);
+        };
+
+        // --- Hook : observer les cards après chaque renderActivities ---
+        const _origRenderActivities = renderActivities;
+        window.renderActivities = function(list) {
+            _origRenderActivities(list);
+            requestAnimationFrame(() => observeNewCards());
+        };
+
         window.onload = initializeApp;
+
+        // Séquence d'initialisation des animations
+        document.addEventListener('DOMContentLoaded', () => {
+            initHeroParallax();
+            initSidebarScroll();
+
+            // Scroll reveal initial
+            setTimeout(initScrollReveal, 300);
+
+            // Masque le loader une fois le DOM prêt
+            setTimeout(hideLoader, 400);
+        });
     </script>
     </div> <!-- end main-content -->
 </body>
