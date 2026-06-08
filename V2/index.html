@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ParcoursParis • Paris 2026</title>
 
-    <meta name="description" content="Application pour découvrir Paris : activités et parcours pour la semaine du 1-7 juin 2026.">
+    <meta name="description" content="Application pour découvrir Paris : activités et parcours pour la semaine du 7-14 juin 2026.">
     <meta property="og:title" content="ParcoursParis • Paris">
     <meta property="og:description" content="Découvre Paris facilement avec des activités sélectionnées et des parcours prêts à l'emploi.">
     <meta property="og:image" content="https://picsum.photos/id/1016/1200/630">
@@ -1233,7 +1233,7 @@
     </div>
 
     <script>
-        // ==================== DATA — ÉVÉNEMENTS RÉELS semaine 1-7 juin 2026 ====================
+        // ==================== DATA — ÉVÉNEMENTS RÉELS semaine 7-14 juin 2026 ====================
         const activities = [
             {
                 id: 1,
@@ -2445,7 +2445,7 @@
                 return;
             }
 
-            const content = `PARCOURSPARIS - Mon planning semaine 1-7 juin 2026\n\n` +
+            const content = `PARCOURSPARIS - Mon planning semaine 7-14 juin 2026\n\n` +
                 userPlanning.map(a => `${a.day} ${a.date} — ${a.time} | ${a.title}\n   ${a.location} | ${a.priceLabel}\n`).join('\n');
 
             const blob = new Blob([content], { type: 'text/plain' });
@@ -3075,7 +3075,7 @@
                 if (success) {
                     console.log(`%c[ParcoursParis] ✅ ${activities.length} événements enrichis depuis Paris Open Data`, 'color:#10b981');
                 } else {
-                    console.log('%c[ParcoursParis] ℹ️ Données curatorées de la semaine 1-7 juin 2026 utilisées', 'color:#10b981');
+                    console.log('%c[ParcoursParis] ℹ️ Données curatorées de la semaine 7-14 juin 2026 utilisées', 'color:#10b981');
                 }
             });
 
